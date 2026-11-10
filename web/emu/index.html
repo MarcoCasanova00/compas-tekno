@@ -107,10 +107,33 @@ addEventListener("keydown", (e) => {
   if (e.code === "Space") { e.preventDefault(); fwPlay(); }
 });
 // transport bar: reliable stop-then-start so the engine never stays BUSY
+let fwPlaying = false, fwRetries = 0, fwWant = false;
 function fwStop() { send({ type: "cmd", cmd: 2, a: 0, b: 0 }); }
+function fwStart() { send({ type: "cmd", cmd: 1, a: 0, b: 0 }); }
 function fwPlay() {
+  fwWant = true; fwRetries = 0;
   fwStop();
-  setTimeout(() => send({ type: "cmd", cmd: 1, a: 0, b: 0 }), 90);
+  setTimeout(() => fwStart(), 90);
+  if (!fwWatch) fwWatch = setInterval(fwWatchdog, 500);
+}
+function fwWatchdog() {
+  if (!node) return;
+  const playing = node.port && 0; // polled below via cmd status? we rely on retained flag
+  if (!fwWant) return;
+  // ask transport for playing flag (web_seq_playing) through a status command
+  send({ type: "getstatus" });
+}
+let fwWatch = null;
+// worklet replies to getstatus by reusing cmd channel in page:
+function fwGotStatus(playing) {
+  fwPlaying = !!playing;
+  if (fwWant && !fwPlaying && fwRetries < 4) {
+    fwRetries++;
+    fwStop();
+    setTimeout(() => fwStart(), 120);
+  } else if (fwWant && fwPlaying) {
+    fwWant = false;
+  }
 }
 function addTransport() {
   const bar = document.createElement("div");
@@ -224,6 +247,7 @@ $("go").addEventListener("click", async () => {
     const m = e.data;
     if (m.type === "ready") { ids = m.ids; $("start").hidden = true; }
     else if (m.type === "error") $("go").textContent = "Error: " + m.message;
+    else if (m.type === "status") fwGotStatus(m.playing);
     else if (m.type === "frame") { if (m.fb) draw(m.fb); if (m.leds) lights(m.leds); if (m.kbMode !== undefined) setKbMode(m.kbMode); }
   };
   const wasm = await (await fetch("emu.wasm?v=" + V)).arrayBuffer();
