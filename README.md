@@ -20,6 +20,8 @@ A tekno conversion of **Compás** — the rhythm-section firmware for the M-VAVE
 
 ## Try it in the browser
 
+[![Try the emulator](https://img.shields.io/badge/Try%20it%20in%20the%20browser-ff7a00.svg)](https://marcocasanova00.github.io/compas-tekno/)
+
 The emulator runs the **full firmware build** — `board.c` + `panel.c` +
 `stage.c` + `engine.c` (the real board UI and audio engine) compiled to
 WebAssembly with a simulated FM-1 (framebuffer LCD, keys, encoders). The LCD
@@ -63,3 +65,19 @@ The modified bank sources live in `board/727-sources.json` + `board/727-levels.j
   samples may violate the packs' licenses** — if you publish or sell a build,
   replace `web/emu/bank.json` / the bank sources with samples you have rights to
   distribute (e.g., CC0 one-shots), keeping the same slot layout.
+
+## Install on the hardware
+
+`firmware/compas-tekno.fwsc` is the flashable package for the M-VAVE FM-1
+(identity `FM-1_710`, JieLi chip key `0x980F`), built with the JieLi PI32v2
+toolchain against the exact Felucca v1.6 BSP that upstream Compás pins
+(`tools/build_device.py` → `app.bin`, plus the Felucca update loader and SDK
+SPL, `tools/fm1pkg_make.py`).
+
+- `firmware/compas-tekno.fwsc` — the installable package (USB update).
+- `firmware/compas-tekno-app.bin` — the raw app image (for tools that take a binary).
+- `firmware/compas-tekno-ota.bin` — the update loader.
+- `firmware/compas-tekno-app.dis` — disassembly for verification.
+
+Flash it the same way you flash Felucca/Amaru OS on the FM-1 (USB
+install/transporter tooling).
