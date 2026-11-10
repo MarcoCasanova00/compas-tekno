@@ -104,8 +104,27 @@ function setButtons() { send({ type: "buttons", mask: translateLabels(buttons | 
 function setKeys() { send({ type: "keys", mask: keys }); }
 // direct transport: Space = PLAY via engine command
 addEventListener("keydown", (e) => {
-  if (e.code === "Space") { e.preventDefault(); send({ type: "cmd", cmd: 1, a: 0, b: 0 }); }
+  if (e.code === "Space") { e.preventDefault(); fwPlay(); }
 });
+// transport bar: reliable stop-then-start so the engine never stays BUSY
+function fwStop() { send({ type: "cmd", cmd: 2, a: 0, b: 0 }); }
+function fwPlay() {
+  fwStop();
+  setTimeout(() => send({ type: "cmd", cmd: 1, a: 0, b: 0 }), 90);
+}
+function addTransport() {
+  const bar = document.createElement("div");
+  bar.style.cssText = "display:flex;gap:8px;justify-content:center;margin:10px 0;grid-column:1 / -1;";
+  for (const [label, fn] of [["▶ PLAY", fwPlay], ["■ STOP", fwStop]]) {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.className = "b";
+    b.onclick = fn;
+    bar.appendChild(b);
+  }
+  document.querySelector(".keys")?.before(bar);
+}
+addTransport();
 
 // ------------------------------------------------------------------ controls
 for (const [box, roles] of [[$("kl"), [0, 1, 2]], [$("kr"), [3, 4, 5, 6]]])
