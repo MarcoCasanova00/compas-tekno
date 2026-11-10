@@ -1,282 +1,235 @@
 <!doctype html>
 <!-- SPDX-License-Identifier: GPL-3.0-only
-     Compás TEKNO — FM-1-style browser emulator running the real firmware engine
-     (src/engine.c + packed bank compiled to WASM). Layout follows the FM-23
-     emulator's device frame. -->
+     Copyright (C) 2026 M-Vave-OP1 contributors
+     The browser emulator follows X0X's (charlesvestal/fm1-x0x, GPL-3.0), as M-Vave-OP1's did. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Compás TEKNO — FM-1 emulator</title>
+<title>Compás TEKNO — full firmware emulator</title>
 <style>
-:root { --bg:#e9e9ec; --fg:#111; --dim:#5a5a60; --body:#1d1d1f; --part:#2c2c30;
-        --edge:#45454a; --label:#d6d6d8; --lit:#fff4d6; --ink-lit:#1d1d1f;
-        --screen:#0a0a0d; --scr-dim:#2a2a30; color-scheme:light; }
+:root { --bg: #e9e9ec; --fg: #111; --dim: #5a5a60; --body: #1d1d1f; --part: #2c2c30; --edge: #45454a;
+        --label: #d6d6d8; --lit: #fff4d6; --ink-lit: #1d1d1f; color-scheme: light; }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --bg:#0d0d0f; --fg:#eee; --dim:#9a9aa0; color-scheme:dark; }
+  :root:not([data-theme="light"]) { --bg: #0d0d0f; --fg: #eee; --dim: #9a9aa0; color-scheme: dark; }
 }
-:root[data-theme="dark"] { --bg:#0d0d0f; --fg:#eee; --dim:#9a9aa0; color-scheme:dark; }
-html, body { background:var(--bg); }
-body { margin:0; color:var(--fg); font:13px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif; }
-main { max-width:760px; margin:0 auto; padding:24px 16px 32px; }
-h1 { font-size:18px; letter-spacing:2px; margin:0 0 2px; }
-h1 span { color:#d98a00; }
-p.sub { color:var(--dim); margin:0 0 14px; font-size:12px; }
-.device { position:relative; background:var(--body); border-radius:18px; padding:16px;
-          display:grid; gap:14px; grid-template-columns:1fr auto 1fr; align-items:start;
-          user-select:none; -webkit-user-select:none; }
-.screen { grid-column:2; width:min(60vw,320px); aspect-ratio:16/9; background:var(--screen);
-          border-radius:8px; border:1px solid var(--edge); padding:8px; box-shadow:inset 0 0 24px #0008; }
-#lcd { width:100%; height:100%; image-rendering:pixelated; display:block; }
-.knobs { display:grid; grid-template-columns:repeat(2, auto); gap:12px; justify-content:center; }
-.knob { display:grid; justify-items:center; gap:4px; color:var(--label); font-size:10px; }
-.knob .dial { width:54px; height:54px; border-radius:50%; position:relative;
-               background:radial-gradient(circle at 50% 38%, #44444c, #19191d 68%);
-               border:2px solid var(--edge); cursor:ns-resize; touch-action:none; }
-.knob .dial .tick { position:absolute; left:50%; top:5px; width:2px; height:9px;
-                     background:#ffce54; transform-origin:1px 22px; }
-.knob .val { font-size:15px; font-weight:600; color:var(--label); }
-.btns { grid-column:1 / -1; display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
-button.b { font:600 11px/1 inherit; color:var(--label); background:var(--part);
-           border:1px solid var(--edge); border-radius:8px; padding:12px 0;
-           cursor:pointer; touch-action:none; }
-button.b.lit { background:var(--lit); color:var(--ink-lit); }
-button.b:disabled { opacity:.4; cursor:default; }
-.keys { grid-column:1 / -1; display:grid; grid-template-columns:repeat(32, 1fr); gap:3px; }
-.keys .k { aspect-ratio:1; border:1px solid var(--edge); border-radius:4px; background:#0c0c0d;
-           cursor:pointer; }
-.keys .k.on { background:#ffb000; border-color:#ffb000; box-shadow:0 0 8px #ffb00055; }
-.keys .k.cur { outline:2px solid #ffffff55; }
-.start { position:absolute; inset:0; display:grid; place-content:center;
-         background:rgba(0,0,0,.55); border-radius:18px; z-index:5; }
-.start[hidden] { display:none; }
-.start button { font:inherit; font-size:17px; padding:12px 28px; background:#fff; color:#000;
-                border:0; border-radius:8px; cursor:pointer; }
-p.help, footer { color:var(--dim); text-align:center; margin:12px 0 0; }
-kbd { font:600 11px ui-monospace,Menlo,monospace; border:1px solid var(--dim);
-      border-radius:3px; padding:0 4px; }
-@media (max-width:560px) {
-  .device { grid-template-columns:1fr; }
-  .screen { grid-column:1; justify-self:center; width:100%; max-width:320px; }
-  .btns { grid-template-columns:repeat(3, 1fr); }
-  .keys { grid-template-columns:repeat(16, 1fr); }
+:root[data-theme="dark"] { --bg: #0d0d0f; --fg: #eee; --dim: #9a9aa0; color-scheme: dark; }
+html, body { background: var(--bg); }
+body { margin: 0; color: var(--fg); font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+main { max-width: 760px; margin: 0 auto; padding: 24px 16px 32px; }
+.device { position: relative; background: var(--body); border-radius: 18px; padding: 16px; display: grid; gap: 14px;
+          grid-template-columns: 1fr auto 1fr; align-items: start; user-select: none; -webkit-user-select: none; }
+canvas { grid-column: 2; width: min(60vw, 300px); aspect-ratio: 1; image-rendering: pixelated; background: #000;
+         border-radius: 4px; }
+.knobs { display: grid; grid-template-columns: repeat(2, auto); gap: 10px; justify-content: center; }
+.knobs.right { grid-template-columns: repeat(2, auto); }
+.knob { display: grid; justify-items: center; gap: 2px; color: var(--label); font-size: 10px; }
+.knob span { width: 44px; height: 44px; border-radius: 50%; background: var(--part); border: 2px solid var(--edge);
+             cursor: ns-resize; touch-action: none; }
+.btns { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+button.b { font: 600 11px/1 inherit; color: var(--label); background: var(--part); border: 1px solid var(--edge);
+           border-radius: 8px; padding: 12px 0; cursor: pointer; touch-action: none; }
+button.b.lit { background: var(--lit); color: var(--ink-lit); }
+.keys { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(27, 1fr); gap: 3px; height: 96px; }
+.keys button { border: 1px solid var(--edge); border-radius: 4px; background: #0c0c0d; cursor: pointer; padding: 0;
+               touch-action: none; }
+.keys button.sharp { background: #232326; height: 70%; }
+.keys button.lit { background: var(--lit); }
+.keys button.drum { background: #1a1a1f; border-color: #55555e; }
+.keys button.bass { background: #0e1a26; border-color: #2e5f8a; }
+.keys button.lead { background: #1c1026; border-color: #7a4da0; }
+.keys button.drum.sharp { background: #26262d; }
+.keys button.bass.sharp { background: #15283a; }
+.keys button.lead.sharp { background: #2a1a38; }
+.keys button.lit, .keys button.sharp.lit { background: var(--lit); border-color: var(--lit); }
+.keys button.drum.lit { border-color: var(--lit); }
+.keys button.bass.lit { border-color: var(--lit); }
+.keys button.lead.lit { border-color: var(--lit); }
+.zone-caps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(27, 1fr); gap: 3px;
+              margin-bottom: 3px; }
+.zone-caps span { font: 600 10px/1.2 ui-monospace, Menlo, monospace; color: var(--dim); text-align: center;
+                  letter-spacing: 1px; padding: 2px 0 0; border-top: 1px solid var(--edge); }
+.start { position: absolute; inset: 0; display: grid; place-content: center; background: rgba(0, 0, 0, .55);
+         border-radius: 18px; }
+.start[hidden] { display: none; }
+.start button { font: inherit; font-size: 17px; padding: 12px 28px; background: #fff; color: #000; border: 0;
+                border-radius: 8px; cursor: pointer; }
+p.help, footer { color: var(--dim); text-align: center; margin: 14px 0 0; }
+kbd { font: 600 11px ui-monospace, Menlo, monospace; border: 1px solid var(--dim); border-radius: 3px; padding: 0 4px; }
+@media (max-width: 560px) {
+  .device { grid-template-columns: 1fr; }
+  canvas { grid-column: 1; justify-self: center; width: 100%; max-width: 300px; }
+  .btns { grid-template-columns: repeat(4, 1fr); }
+  .keys { grid-template-columns: repeat(14, 1fr); height: auto; grid-auto-rows: 52px; }
 }
 </style>
 </head>
 <body>
 <main>
-  <h1>Compás <span>TEKNO</span> — FM-1 emulator</h1>
-  <p class="sub">Runs the real firmware engine (WASM) · UFO French/tribe bank</p>
-
   <div class="device" id="device">
-    <div class="knobs" id="knobLeft">
-      <div class="knob"><div class="dial" id="dialBpm"><div class="tick"></div></div>BPM<span class="val" id="bpmval">155</span></div>
-      <div class="knob"><div class="dial" id="dialVol"><div class="tick"></div></div>VOL<span class="val" id="volval">85</span></div>
-    </div>
-    <div class="screen"><canvas id="lcd" width="320" height="180"></canvas></div>
-    <div class="knobs" id="knobRight"></div>
-
-    <div class="btns">
-      <button class="b" id="play" disabled>▶ PLAY</button>
-      <button class="b" id="prev" disabled>⟨ PREV</button>
-      <button class="b" id="next" disabled>NEXT ⟩</button>
-      <button class="b" id="presetName" disabled>—</button>
-      <button class="b" id="theme">THEME</button>
-    </div>
-
+    <div class="knobs" id="kl"></div>
+    <canvas id="screen" width="240" height="240" role="img" aria-label="The FM-1 screen"></canvas>
+    <div class="knobs right" id="kr"></div>
+    <div class="btns" id="btns"></div>
+    <div class="zone-caps"><span id="kbcap" style="grid-column: 1 / -1; color: #5f8fb4">KEYBOARD = BASS</span></div>
     <div class="keys" id="keys"></div>
-    <div class="start" id="start"><button id="startBtn">Start emulator</button></div>
+    <div class="start" id="start"><button id="go" type="button">Switch on</button></div>
   </div>
-
-  <p class="help">Drag the knobs vertically · <kbd>PLAY</kbd> starts the engine ·
-     <kbd>⟨ PREV / NEXT ⟩</kbd> change preset · theme button toggles light/dark</p>
-  <footer>
-    Modified <a href="https://github.com/TexasRADIO/compas-firmware">Compás</a> (GPL-3.0)
-    · <a href="https://github.com/MarcoCasanova00/compas-tekno">repo</a>
-  </footer>
+  <p class="help">The whole keyboard plays the selected instrument (DRUMS / BASS / LEAD · ALGO button cycles). Knobs: drag up / down or scroll ·
+    <kbd>Shift</kbd>-click holds a button · MIDI IN from WebMIDI when the browser allows it</p>
+  <footer>Compás TEKNO full firmware · tekno bank · <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL-3.0</a> · built on Felucca
+    (Leo Kuroshita, Hügelton Instruments) and M-Vave-OP1 · browser build after charlesvestal's X0X ·
+    M-VAVE and FM-1 are trademarks of their respective owners.</footer>
 </main>
-<script>
-const $ = id => document.getElementById(id);
-const CP_START=1, CP_STOP=2, CP_STUDY=3, CP_BPM=9, CP_FEEL=10;
-const ST_POSITION=4;
+<script type="module">
+// panel.c's labels (bit = label) and encoder roles
+const LABELS = ["FX", "SCL", "ENV", "LFO", "EDIT", "GLO", "HOME", "SAVE", "ARP", "SEQ", "PLAY", "REC", "OCT-", "OCT+"];
+const ROLES = ["SELECT", "ALGORITHM", "PRESETS", "KNOB 1", "KNOB 2", "KNOB 3", "KNOB 4"];
+const SHARP = new Set([1, 3, 5, 8, 10, 13, 15, 17, 20, 22, 25]);   // key k = k semitones above F3
+const KEYMAP = "zsxdcfvbhnjm,l.;/q2w3e4rt6y7u8i9op";              // computer keys -> note keys 0..
+const $ = (id) => document.getElementById(id);
+const V = "@BUILD@";                 // cache-buster: bumped per build (make_site.py)
+let node = null, ids = [], buttons = 0, held = 0, keys = 0;
 
-let fw, presets = [], cur = 0, playing = false;
-let ctx, node, gain;
-let renderTimer = null, posTimer = null;
-let bpm = 155, vol = 85;
+function send(m) { if (node) node.port.postMessage(m); }
+function setButtons() { send({ type: "buttons", mask: buttons | held }); }
+function setKeys() { send({ type: "keys", mask: keys }); }
 
-/* ---------- dot-matrix font ---------- */
-const F = {
-  A:[0x1F,0x11,0x1F,0x11,0x11], B:[0x1E,0x11,0x1E,0x11,0x1E],
-  C:[0x0F,0x10,0x10,0x10,0x0F], D:[0x1E,0x11,0x11,0x11,0x1E],
-  E:[0x1F,0x10,0x1E,0x10,0x1F], F:[0x1F,0x10,0x1E,0x10,0x10],
-  G:[0x0F,0x10,0x17,0x11,0x0F], H:[0x11,0x11,0x1F,0x11,0x11],
-  I:[0x1F,0x04,0x04,0x04,0x1F], J:[0x07,0x02,0x02,0x12,0x0C],
-  K:[0x11,0x12,0x1C,0x12,0x11], L:[0x10,0x10,0x10,0x10,0x1F],
-  M:[0x11,0x1B,0x15,0x11,0x11], N:[0x11,0x19,0x15,0x13,0x11],
-  O:[0x0E,0x11,0x11,0x11,0x0E], P:[0x1E,0x11,0x1E,0x10,0x10],
-  Q:[0x0E,0x11,0x15,0x12,0x0D], R:[0x1E,0x11,0x1E,0x12,0x11],
-  S:[0x0F,0x10,0x0E,0x01,0x1E], T:[0x1F,0x04,0x04,0x04,0x04],
-  U:[0x11,0x11,0x11,0x11,0x0E], V:[0x11,0x11,0x11,0x0A,0x04],
-  W:[0x11,0x11,0x15,0x1B,0x11], X:[0x11,0x0A,0x04,0x0A,0x11],
-  Y:[0x11,0x0A,0x04,0x04,0x04], Z:[0x1F,0x02,0x04,0x08,0x1F],
-  '0':[0x0E,0x11,0x13,0x15,0x0E], '1':[0x04,0x0C,0x04,0x04,0x0E],
-  '2':[0x0E,0x11,0x02,0x04,0x1F], '3':[0x1E,0x01,0x0E,0x01,0x1E],
-  '4':[0x02,0x06,0x0A,0x1F,0x02], '5':[0x1F,0x10,0x1E,0x01,0x1E],
-  '6':[0x0E,0x10,0x1E,0x11,0x0E], '7':[0x1F,0x01,0x02,0x04,0x04],
-  '8':[0x0E,0x11,0x0E,0x11,0x0E], '9':[0x0E,0x11,0x0F,0x01,0x0E],
-  ' ':[0,0,0,0,0], '-':[0,0,0x1F,0,0], '.':[0,0,0,0,0x04],
-  ':':[0,0x04,0,0x04,0], '>':[0x08,0x10,0x1F,0x10,0x08],
-  '<':[0x04,0x02,0x1F,0x02,0x04], '|':[0x04,0x04,0x04,0x04,0x04],
-};
-let dark = true;
-function lcdText(c, text, x, y, mode) {
-  c.fillStyle = mode === 1 ? '#ffd980' : (mode === 2 ? '#c89a3c' : '#8a6a2c');
-  for (const ch of String(text).toUpperCase()) {
-    const g = F[ch] || F[' '];
-    for (let col = 0; col < 5; col++) for (let row = 0; row < 7; row++)
-      if (g[col] & (1 << (6 - row))) c.fillRect(x + col * 3, y + row * 3, 3, 3);
-    x += 21;
+// ------------------------------------------------------------------ controls
+for (const [box, roles] of [[$("kl"), [0, 1, 2]], [$("kr"), [3, 4, 5, 6]]])
+  for (const r of roles) {
+    const k = document.createElement("label");
+    k.className = "knob";
+    k.innerHTML = `<span role="slider" tabindex="0" aria-label="${ROLES[r]}"></span>${ROLES[r]}`;
+    const s = k.firstChild;
+    let y0 = null, acc = 0;
+    s.addEventListener("pointerdown", (e) => { y0 = e.clientY; acc = 0; s.setPointerCapture(e.pointerId); });
+    s.addEventListener("pointermove", (e) => {
+      if (y0 === null) return;
+      acc += (y0 - e.clientY) / 8; y0 = e.clientY;
+      const n = Math.trunc(acc);
+      if (n) { acc -= n; send({ type: "enc", role: r, n }); }
+    });
+    s.addEventListener("pointerup", () => { y0 = null; });
+    s.addEventListener("wheel", (e) => { e.preventDefault(); send({ type: "enc", role: r, n: e.deltaY < 0 ? 1 : -1 }); });
+    s.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowUp" || e.key === "ArrowRight") send({ type: "enc", role: r, n: 1 });
+      if (e.key === "ArrowDown" || e.key === "ArrowLeft") send({ type: "enc", role: r, n: -1 });
+    });
+    box.append(k);
   }
-}
-const lcd = $('lcd'), lctx = lcd.getContext('2d');
-function drawLcd() {
-  lctx.clearRect(0, 0, lcd.width, lcd.height);
-  lctx.fillStyle = '#3a2f1c'; lctx.fillRect(0, 0, lcd.width, lcd.height);
-  const t = presets[cur] ? presets[cur].title : 'COMPAS TEKNO';
-  lcdText(lctx, t, 18, 24, 1);
-  lcdText(lctx, playing ? '> RUN' : '> STOP', 18, 84, 2);
-  lcdText(lctx, 'BPM ' + bpm, 18, 126, 2);
-  if (presets[cur]) lcdText(lctx, 'STEPS ' + presets[cur].steps, 196, 126, 2);
-}
+const btnEls = LABELS.map((name, b) => {
+  const e = document.createElement("button");
+  e.className = "b"; e.type = "button"; e.textContent = name;
+  e.addEventListener("pointerdown", (ev) => {
+    if (ev.shiftKey) held ^= 1 << b; else buttons |= 1 << b;
+    setButtons();
+  });
+  const up = () => { buttons &= ~(1 << b); setButtons(); };
+  e.addEventListener("pointerup", up);
+  e.addEventListener("pointerleave", up);
+  $("btns").append(e);
+  return e;
+});
+const keyEls = Array.from({ length: 27 }, (_, k) => {
+  const e = document.createElement("button");
+  e.type = "button"; e.setAttribute("aria-label", `key ${k}`);
+  e.className = SHARP.has(k) ? "sharp" : "";
+  if (k < 8) e.dataset.drum = "1";
+  e.addEventListener("pointerdown", () => { keys |= 1 << k; setKeys(); });
+  const up = () => { keys &= ~(1 << k); setKeys(); };
+  e.addEventListener("pointerup", up);
+  e.addEventListener("pointerleave", up);
+  $("keys").append(e);
+  return e;
+});
+addEventListener("keydown", (e) => {
+  const k = KEYMAP.indexOf(e.key.toLowerCase());
+  if (k >= 0 && k < 27 && !e.repeat && !e.metaKey && !e.ctrlKey) { keys |= 1 << k; setKeys(); }
+});
+addEventListener("keyup", (e) => {
+  const k = KEYMAP.indexOf(e.key.toLowerCase());
+  if (k >= 0 && k < 27) { keys &= ~(1 << k); setKeys(); }
+});
 
-/* ---------- keys grid ---------- */
-let keyEls = [];
-function buildKeys() {
-  const box = $('keys'); box.innerHTML = '';
-  keyEls = [];
-  if (!presets[cur]) return;
-  const steps = presets[cur].steps, p = presets[cur].parts;
-  for (let r = 0; r < p.length; r++) {
-    for (let i = 0; i < steps; i++) {
-      const d = document.createElement('div');
-      d.className = 'k';
-      if (p[r].base[i]) d.classList.add('on');
-      d.title = p[r].name;
-      box.appendChild(d); keyEls.push(d);
-    }
+// ------------------------------------------------------------------ screen, LEDs
+const ctx = $("screen").getContext("2d"), img = ctx.createImageData(240, 240);
+function draw(fb) {
+  const d = img.data;
+  for (let i = 0; i < fb.length; i++) {
+    const c = fb[i];
+    d[4 * i] = ((c >> 11) * 255) / 31; d[4 * i + 1] = (((c >> 5) & 63) * 255) / 63; d[4 * i + 2] = ((c & 31) * 255) / 31;
+    d[4 * i + 3] = 255;
   }
+  ctx.putImageData(img, 0, 0);
 }
-function updateKeys() {
-  if (!presets[cur]) return;
-  const steps = presets[cur].steps;
-  const pos = fw ? fw.fw_status(ST_POSITION) : 0;
-  keyEls.forEach((el, i) => el.classList.toggle('cur', (i % steps) === (pos % steps)));
+const KB_NAMES = ["DRUMS", "BASS", "LEAD"];
+const KB_COLORS = ["#8b8b94", "#5f8fb4", "#a06fbe"];
+let kbMode = -1;
+function setKbMode(mode) {
+  if (mode === kbMode) return;
+  kbMode = mode;
+  const cls = ["drum", "bass", "lead"][mode] || "";
+  keyEls.forEach((e) => {
+    e.classList.remove("drum", "bass", "lead");
+    if (cls) e.classList.add(cls);
+  });
+  const cap = document.getElementById("kbcap");
+  if (cap) { cap.textContent = "KEYBOARD = " + KB_NAMES[mode]; cap.style.color = KB_COLORS[mode]; }
+}
+function lights(leds) {
+  btnEls.forEach((e, b) => e.classList.toggle("lit", !!leds[ids[b]]));
+  keyEls.forEach((e, k) => e.classList.toggle("lit", !!leds[14 + k]));
 }
 
-/* ---------- knobs ---------- */
-function knobAngle(el, v, min, max) {
-  const a = -135 + (v - min) / (max - min) * 270;
-  el.querySelector('.tick').style.transform = `translateX(-50%) rotate(${a}deg)`;
-}
-function attachKnob(id, min, max, cb) {
-  const el = $(id);
-  let drag = null;
-  el.addEventListener('pointerdown', e => {
-    drag = { y: e.clientY, v: parseFloat(el.dataset.v) || min };
-    el.setPointerCapture(e.pointerId);
-  });
-  el.addEventListener('pointermove', e => {
-    if (!drag) return;
-    const dv = (drag.y - e.clientY) / 90 * (max - min);
-    const v = Math.max(min, Math.min(max, Math.round(drag.v + dv)));
-    el.dataset.v = v; knobAngle(el, v, min, max); cb(v);
-  });
-  el.addEventListener('pointerup', () => { drag = null; });
-  el.dataset.v = min; knobAngle(el, min, min, max);
-}
-
-/* ---------- engine ---------- */
-async function boot() {
-  const wasm = await fetch('emu.wasm').then(r => r.arrayBuffer());
-  ({ instance: { exports: fw } } = await WebAssembly.instantiate(wasm, {}));
-  presets = await fetch('studies_fw.json').then(r => r.json());
-  if (fw.fw_init(44100) !== 0) { alert('engine init failed'); return; }
-  fw.fw_command(CP_FEEL, 30, 0);
-  $('play').disabled = false; $('prev').disabled = false; $('next').disabled = false;
-  buildKeys(); drawLcd();
-  const tekno = presets.findIndex(p => p.title === 'TRIBAL TEKNO');
-  setPreset(tekno >= 0 ? tekno : 0);
-  $('play').onclick = onPlay;
-  $('prev').onclick = () => setPreset((cur + presets.length - 1) % presets.length);
-  $('next').onclick = () => setPreset((cur + 1) % presets.length);
-  $('theme').onclick = () => {
-    dark = !dark;
-    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+// ------------------------------------------------------------------ start
+$("go").addEventListener("click", async () => {
+  $("go").disabled = true;
+  const ac = new AudioContext({ sampleRate: 44100 });
+  await ac.audioWorklet.addModule("worklet.js?v=" + V);
+  node = new AudioWorkletNode(ac, "fm1-emu", { outputChannelCount: [2] });
+  node.connect(ac.destination);
+  node.port.onmessage = (e) => {
+    const m = e.data;
+    if (m.type === "ready") { ids = m.ids; $("start").hidden = true; }
+    else if (m.type === "error") $("go").textContent = "Error: " + m.message;
+    else if (m.type === "frame") { if (m.fb) draw(m.fb); if (m.leds) lights(m.leds); if (m.kbMode !== undefined) setKbMode(m.kbMode); }
   };
-  attachKnob('dialBpm', 140, 165, v => {
-    bpm = v; $('bpmval').textContent = v; drawLcd();
-    if (fw) fw.fw_command(CP_BPM, v, 0);
-  });
-  attachKnob('dialVol', 0, 100, v => {
-    vol = v; $('volval').textContent = v;
-    if (gain) gain.gain.value = v / 100;
-  });
-  $('dialBpm').dataset.v = 155; knobAngle($('dialBpm'), 155, 140, 165);
-  $('dialVol').dataset.v = 85; knobAngle($('dialVol'), 85, 0, 100);
-  $('startBtn').onclick = () => { $('start').hidden = true; beginAudio(); };
-}
-function setPreset(i) {
-  const wasPlaying = playing;
-  if (wasPlaying) stopAudio();
-  cur = i;
-  fw.fw_command(CP_STUDY, presets[cur].index, 0);
-  $('presetName').textContent = presets[cur].title;
-  buildKeys(); drawLcd();
-  if (wasPlaying) startAudio();
-}
-async function beginAudio() {
-  if (!ctx) {
-    ctx = new AudioContext({ sampleRate: 44100 });
-    gain = ctx.createGain(); gain.gain.value = vol / 100;
-    gain.connect(ctx.destination);
-  }
-  if (ctx.state === 'suspended') await ctx.resume();
-}
-function onPlay() {
-  beginAudio().then(() => {
-    if (playing) { stopAudio(); return; }
-    (async () => {
-      if (!node) {
-        await ctx.audioWorklet.addModule('worklet.js');
-        node = new AudioWorkletNode(ctx, 'fw-player');
-        node.connect(gain);
-      }
-      fw.fw_command(CP_START, 0, 0);
-      playing = true;
-      $('play').textContent = '■ STOP'; $('play').classList.add('lit');
-      drawLcd();
-      renderTimer = setInterval(() => {
-        for (let i = 0; i < 4; i++) {
-          fw.fw_render(256);
-          const buf = new Float32Array(256);
-          for (let j = 0; j < 256; j++) buf[j] = fw.fw_pcm(j) / 32768;
-          node.port.postMessage(buf, [buf.buffer]);
-        }
-      }, 25);
-      posTimer = setInterval(updateKeys, 50);
-    })();
-  });
-}
-function stopAudio() {
-  if (renderTimer) { clearInterval(renderTimer); renderTimer = null; }
-  if (posTimer) { clearInterval(posTimer); posTimer = null; }
-  if (fw) fw.fw_command(CP_STOP, 0, 0);
-  playing = false;
-  $('play').textContent = '▶ PLAY'; $('play').classList.remove('lit');
-  drawLcd(); updateKeys();
-}
-boot();
+  const wasm = await (await fetch("emu.wasm?v=" + V)).arrayBuffer();
+  node.port.postMessage({ type: "load", wasm }, [wasm]);
+  document.addEventListener("visibilitychange", () => send({ type: "visible", on: !document.hidden }));
+  if (navigator.requestMIDIAccess)
+    navigator.requestMIDIAccess().then((midi) => {
+      const hook = (i) => { i.onmidimessage = (e) => { if (e.data[0] < 0xF0) send({ type: "midi", data: Array.from(e.data) }); }; };
+      midi.inputs.forEach(hook);
+      midi.onstatechange = (e) => { if (e.port.type === "input") hook(e.port); };
+    }).catch(() => {});
+});
 </script>
+<details class="guide" open>
+  <summary>FM‑23 Guide (buttons · pages · gestures)</summary>
+  <ul>
+    <li>All parameter pages work the same: <b>SELECT</b> moves the cursor · <b>ALGORITHM</b> edits it · <b>KNOB 1–4</b> edit the visible rows (names, not numbers)</li>
+    <li><b>HOME</b>: transport, <b>INSTRUMENT</b> row / <b>ALGO encoder</b> = keyboard instrument (DRUMS → BASS → LEAD), tempo/swing/master, drum pads + bass/lead strip</li>
+    <li><b>SEQ</b>: pattern matrix · keys toggle steps · <b>REC+key</b> cycles velocity · LANE 6 = chain editor · AUTO = per-step automation</li>
+    <li><b>EDIT</b> cycles the SOUND tabs: BASS → LEAD → DRUMS → LAYER — ENGINE (voice name), filters/drive/level, PORTA, ARCH, VOICE, ANALOG</li>
+    <li>Engines: BASS 0 classic / 1 B01 / 2 B02 / 3 B03 / 4 B04 acid (default) · LEAD 0 classic / 1 L01 / 2 L02 / 3 L05 / 4 L07 / 5 L03 / 6 L04 / 7 L06 scream (default)</li>
+    <li>INSTRUMENT (HOME): 0 DRUMS · 1 BASS · 2 LEAD — the whole keyboard plays the one instrument, no splits</li>
+    <li>VOICE (LEAD tab): 0 RETRIG / 1 LEGATO / 2 UNISON · ANALOG (LAYER): per-voice drift · PORTA: glide · ARCH: SINGLE/DUAL/STACK</li>
+    <li><b>ENV / LFO</b> open the MOD page for the voice selected in SOUND: ATTACK/RELEASE/DECAY/PITCH and ON/RATE/DEPTH/SHAPE</li>
+    <li><b>ARP</b>: ON, STYLE, HOLD (drone), OCTAVE · <b>FX</b>: DELAY, REVERB, DRIVE, TYPE · <b>GLO</b>: ROOT, SCALE, MIDI CLK</li>
+    <li><b>GEN</b> (SCL): SEED / SCALE / STYLE / MODE — twist to generate; tap any pad to GENERATE now; MODE=1 builds the 8-cell song chain</li>
+    <li><b>PLAY</b> start/stop · <b>REC</b> = loop pedal anywhere except SEQ (record → stop+loop → clear) · <b>SAVE</b> saves the current page's data</li>
+    <li>TD‑3 lanes: SLIDE (glide, cross-pattern) and GATE (note length) travel with patterns</li>
+    <li><b>OCT− + OCT+ held 5 s</b> = recovery (UBOOT) — never used for anything else</li>
+  </ul>
+</details>
+<style>
+  .guide { margin: 14px auto 0; max-width: 860px; border: 1px solid var(--edge); padding: 10px 14px;
+           font: 12px/1.5 ui-monospace, "Courier New", monospace; color: var(--fg); background: #0a0a0b; }
+  .guide summary { cursor: pointer; font-weight: 700; letter-spacing: 1px; color: var(--fg); }
+  .guide ul { margin: 8px 0 0; padding-left: 18px; }
+  .guide li { margin: 3px 0; }
+</style>
 </body>
 </html>

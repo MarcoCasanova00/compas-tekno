@@ -1,7 +1,13 @@
-/* SPDX-License-Identifier: GPL-3.0-only
- * Full firmware in an AudioWorklet: the emu_full.wasm (board.c + panel.c +
- * stage.c + engine.c) renders audio; between quanta the screen/LEDs go out.
- */
+// SPDX-License-Identifier: GPL-3.0-only
+// Copyright (C) 2026 M-Vave-OP1 contributors
+// The app in an AudioWorklet: emu.wasm is firmware/app/ on the host platform (web/emu/emu.c). Each render quantum
+// asks it for 128 frames, which runs the device's clock forward; between quanta the page's input goes in and, about
+// 30 times a second (4 when the page is hidden), the screen and the LEDs go out. After X0X's web/emu/worklet.js
+// (charlesvestal/fm1-x0x, GPL-3.0), as M-Vave-OP1's.
+
+export const HOLD_MS = 24;   // a key or button change stays this long (device time) before the next: the FM-1 debounces
+
+// minimal WASI stub: the standalone build only imports wasi_snapshot_preview1.fd_write (stdout)
 const WASI = { wasi_snapshot_preview1: {
   fd_write(fd, iovs, iovsLen, nwritten) { return 0; },
 } };
@@ -19,15 +25,17 @@ if (typeof registerProcessor === "function") {
       this.nextOk = 0;
       this.port.onmessage = (e) => this.onMessage(e.data);
     }
+
     async onMessage(m) {
       if (m.type === "load") {
         try {
           const { instance } = await WebAssembly.instantiate(m.wasm, WASI);
           const ex = instance.exports;
-          ex._initialize ? ex._initialize() : 0;
+          ex._initialize();
           ex.web_boot();
           this.ex = ex;
-          this.port.postMessage({ type: "ready", rate: ex.web_sample_rate() });
+          const ids = Array.from({ length: 14 }, (_, b) => ex.web_button_id(b));
+          this.port.postMessage({ type: "ready", rate: ex.web_sample_rate(), ids });
         } catch (err) {
           this.port.postMessage({ type: "error", message: String((err && err.message) || err) });
         }
@@ -37,29 +45,38 @@ if (typeof registerProcessor === "function") {
       if (!ex) return;
       if (m.type === "buttons" || m.type === "keys") this.queue.push(m);
       else if (m.type === "enc") ex.web_enc(m.role, m.n | 0);
+      else if (m.type === "midi") ex.web_midi(m.data[0] | 0, m.data[1] | 0, m.data[2] | 0);
+      else if (m.type === "visible") this.period = m.on ? 1 / 30 : 1 / 4;
     }
+
     publish() {
       const ex = this.ex, mem = ex.memory.buffer, msg = { type: "frame" }, transfer = [];
+      msg.kbMode = ex.web_kb_mode ? ex.web_kb_mode() : 0;
+      const leds = new Uint8Array(mem, ex.web_leds(), 41).slice();
+      const key = leds.join("");
+      if (key !== this.sentLeds) {
+        this.sentLeds = key;
+        msg.leds = leds;
+      }
       const draws = ex.web_screen_draws();
       if (draws !== this.sentDraws) {
         this.sentDraws = draws;
         msg.fb = new Uint16Array(mem, ex.web_screen(), 240 * 240).slice();
         transfer.push(msg.fb.buffer);
       }
-      const leds = new Uint8Array(mem, ex.web_leds(), 11).slice();
-      const key = leds.join("");
-      if (key !== this.sentLeds) { this.sentLeds = key; msg.leds = leds; }
-      if (msg.fb || msg.leds) this.port.postMessage(msg, transfer);
+      if (msg.leds || msg.fb) this.port.postMessage(msg, transfer);
     }
+
     input() {
       const ex = this.ex, now = ex.web_now_ms();
       while (this.queue.length && now - this.nextOk >= 0) {
         const m = this.queue.shift();
         if (m.type === "buttons") ex.web_buttons(m.mask >>> 0);
         else ex.web_keys(m.mask >>> 0);
-        this.nextOk = now + 24;
+        this.nextOk = now + HOLD_MS;
       }
     }
+
     process(inputs, outputs) {
       const ex = this.ex;
       if (!ex) return true;

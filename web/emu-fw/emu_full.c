@@ -282,6 +282,7 @@ void web_enc(uint32_t role, int32_t steps) {
 }
 uint32_t web_now_ms(void) { return host_ms; }
 uint32_t web_seq_playing(void) { return cp_status(CP_PLAYING); }
+uint32_t web_kb_mode(void) { return 0; }
 
 #ifdef COMPAS_NATIVE_MAIN
 #include <stdio.h>
