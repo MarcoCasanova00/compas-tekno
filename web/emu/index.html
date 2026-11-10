@@ -92,8 +92,20 @@ const V = "20261110b";                 // cache-buster: bumped per build (make_s
 let node = null, ids = [], buttons = 0, held = 0, keys = 0;
 
 function send(m) { if (node) node.port.postMessage(m); }
-function setButtons() { send({ type: "buttons", mask: buttons | held }); }
+// Compás physical matrix ids differ from the page's label order: PLAY label (10)
+// is matrix id 12 on the FM-1. Map labels -> matrix bits here.
+const LABEL_IDS = { 10: 12 };
+function translateLabels(mask) {
+  let m = 0;
+  for (let b = 0; b < 14; b++) if (mask & (1 << b)) m |= 1 << (LABEL_IDS[b] ?? b);
+  return m;
+}
+function setButtons() { send({ type: "buttons", mask: translateLabels(buttons | held) }); }
 function setKeys() { send({ type: "keys", mask: keys }); }
+// direct transport: Space = PLAY via engine command
+addEventListener("keydown", (e) => {
+  if (e.code === "Space") { e.preventDefault(); send({ type: "cmd", cmd: 1, a: 0, b: 0 }); }
+});
 
 // ------------------------------------------------------------------ controls
 for (const [box, roles] of [[$("kl"), [0, 1, 2]], [$("kr"), [3, 4, 5, 6]]])
