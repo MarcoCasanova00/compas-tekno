@@ -1,48 +1,47 @@
 <!doctype html>
 <!-- SPDX-License-Identifier: GPL-3.0-only
-     Compás TEKNO — browser emulator.
-     Audio playback uses the same packed bank format as the FM-1 firmware
-     (tools/board-bank.py output), decoded with the device's delta/RLE player. -->
+     Compás TEKNO — browser emulator running the real firmware engine (WASM):
+     src/engine.c + the packed bank, compiled for the browser. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Compás TEKNO — web emulator</title>
+<title>Compás TEKNO — firmware emulator</title>
 <style>
 :root { --bg:#0d0d0f; --fg:#eee; --dim:#9a9aa0; --part:#232327; --edge:#3a3a40;
         --accent:#ff9f1c; --lit:#ffe9bd; }
 * { box-sizing:border-box; }
 body { margin:0; background:var(--bg); color:var(--fg);
        font:14px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif; }
-main { max-width:720px; margin:0 auto; padding:28px 16px 40px; }
+main { max-width:760px; margin:0 auto; padding:28px 16px 40px; }
 h1 { font-size:20px; letter-spacing:2px; margin:0 0 2px; }
 h1 span { color:var(--accent); }
 p.sub { color:var(--dim); margin:0 0 18px; font-size:12px; }
+.badge { display:inline-block; background:#1c2b1c; color:#8fdc8f; border:1px solid #2f4a2f;
+         font-size:11px; padding:2px 8px; border-radius:99px; margin-left:8px; }
 .device { background:#17171a; border:1px solid var(--edge); border-radius:16px; padding:18px; }
 .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:14px; }
 label { color:var(--dim); font-size:12px; text-transform:uppercase; letter-spacing:1px; }
 select { background:var(--part); color:var(--fg); border:1px solid var(--edge);
-         border-radius:8px; padding:8px 10px; font:inherit; max-width:240px; }
+         border-radius:8px; padding:8px 10px; font:inherit; max-width:260px; }
 input[type=range] { width:140px; accent-color:var(--accent); }
 button { background:var(--part); color:var(--fg); border:1px solid var(--edge);
          border-radius:10px; padding:10px 22px; font:inherit; cursor:pointer; }
 button.lit { background:var(--accent); color:#151515; border-color:var(--accent); }
-.grid { display:grid; grid-template-columns:repeat(16,1fr); gap:4px; }
-.grid .cell { aspect-ratio:1; background:#111113; border:1px solid var(--edge); border-radius:4px; }
-.grid .cell.hit { background:var(--accent); border-color:var(--accent); }
-.row.roles { gap:6px; }
-.role { font-size:10px; color:var(--dim); width:100%; text-align:center;
-         background:#111113; border:1px solid var(--edge); border-radius:4px; padding:3px 0; }
-.role.lit { color:#111; background:var(--accent); border-color:var(--accent); }
+.matrix { display:grid; grid-template-columns:auto 1fr; gap:4px 10px; }
+.role { font-size:10px; color:var(--dim); align-self:center; text-align:right; }
+.steps { display:grid; gap:3px; }
+.steps .cell { aspect-ratio:1; background:#111113; border:1px solid var(--edge); border-radius:3px; }
+.steps .cell.on { background:var(--accent); border-color:var(--accent); }
+.steps .cell.cur { box-shadow:0 0 0 2px var(--lit); }
 footer { margin-top:16px; color:var(--dim); font-size:12px; text-align:center; }
 footer a { color:var(--dim); }
-@media (max-width:520px){ .grid { grid-template-columns:repeat(8,1fr); } }
 </style>
 </head>
 <body>
 <main>
-  <h1>Compás <span>TEKNO</span></h1>
-  <p class="sub">FM-1 rhythm section · UFO French/tribe sample bank · 155 BPM default</p>
+  <h1>Compás <span>TEKNO</span> <span class="badge">firmware WASM</span></h1>
+  <p class="sub">This page runs the actual Compás engine (engine.c + packed bank) compiled to WebAssembly.</p>
   <div class="device">
     <div class="row">
       <label>Preset</label>
@@ -56,103 +55,120 @@ footer a { color:var(--dim); }
       <label>Volume</label>
       <input type="range" id="vol" min="0" max="100" value="85">
     </div>
-    <div class="row" id="roles"></div>
-    <div class="grid" id="grid"></div>
+    <div class="matrix" id="matrix"></div>
   </div>
   <footer>
-    Browser emulator for the modified <a href="https://github.com/TexasRADIO/compas-firmware">Compás</a>
-    (GPL-3.0). Samples from UFO tekno banks. Audio decodes the actual firmware
-    packed bank — the FM-1 plays this same data.
+    Modified <a href="https://github.com/TexasRADIO/compas-firmware">Compás</a> (GPL-3.0)
+    · UFO French/tribe bank · <a href="https://github.com/MarcoCasanova00/compas-tekno">repo</a>
   </footer>
 </main>
 <script>
 const $ = id => document.getElementById(id);
-let studies = [], clips = [], bank = null, ctx = null, node = null;
-let cur = 0, playing = false;
+const CP_START=1, CP_STOP=2, CP_STUDY=3, CP_BPM=9, CP_FEEL=10, CP_LEVEL=8;
+const ST_POSITION=4, ST_STEPS=15;
+
+let mod, fw, presets = [], cur = 0, playing = false;
+let ctx, node, gain;
+let renderTimer = null, posTimer = null;
+let cells = [];
 
 async function init() {
-  const [b, st] = await Promise.all([
-    fetch('bank.json').then(r => r.json()),
-    fetch('studies.json').then(r => r.json()),
-  ]);
-  bank = b;
-  studies = st;
-  const bin = atob(b.packedBase64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  const clipsMeta = b.clips;
-  clips = clipsMeta.map(c => decodeClip(bytes, c.offset, c.frames));
-  // populate UI
+  const wasm = await fetch('emu.wasm').then(r => r.arrayBuffer());
+  ({ instance: { exports: fw } } = await WebAssembly.instantiate(wasm, {}));
+  presets = await fetch('studies_fw.json').then(r => r.json());
+  if (fw.fw_init(44100) !== 0) { alert('engine init failed'); return; }
+  fw.fw_command(CP_FEEL, 30, 0);
   const sel = $('preset');
-  st.forEach((s, i) => {
+  presets.forEach((p, i) => {
     const o = document.createElement('option');
-    o.value = i; o.textContent = s.title + (i === 0 ? '' : '');
+    o.value = i; o.textContent = p.title;
     sel.appendChild(o);
   });
   sel.disabled = false;
   $('play').disabled = false;
-  renderRoles();
-  renderGrid();
-  sel.onchange = () => { cur = +sel.value; renderRoles(); renderGrid(); restart(); };
-  $('bpm').oninput = e => { $('bpmval').textContent = e.target.value; if (node) node.port.postMessage({type:'bpm', bpm:+e.target.value}); };
-  $('vol').oninput = e => { if (node) node.port.postMessage({type:'vol', vol:+e.target.value/100}); };
-  $('play').onclick = async () => {
-    if (!ctx) {
-      ctx = new AudioContext();
-      await ctx.audioWorklet.addModule('worklet.js');
-      node = new AudioWorkletNode(ctx, 'tekno-worklet');
-      node.connect(ctx.destination);
-      node.port.postMessage({type:'init', clips});
-      node.port.postMessage({type:'vol', vol:+$('vol').value/100});
+  buildMatrix();
+  sel.onchange = () => { cur = +sel.value; buildMatrix(); selectStudy(); };
+  $('bpm').oninput = e => { $('bpmval').textContent = e.target.value; fw.fw_command(CP_BPM, +e.target.value, 0); };
+  $('vol').oninput = e => { if (gain) gain.gain.value = +e.target.value / 100; };
+  $('play').onclick = onPlay;
+  selectStudy();
+}
+
+function selectStudy() {
+  const wasPlaying = playing;
+  if (wasPlaying) stopAudio();
+  fw.fw_command(CP_STUDY, presets[cur].index, 0);
+  if (wasPlaying) startAudio();
+}
+
+function buildMatrix() {
+  const m = $('matrix'); m.innerHTML = '';
+  cells = [];
+  const p = presets[cur], steps = p.steps;
+  p.parts.forEach(part => {
+    const r = document.createElement('div');
+    r.className = 'role'; r.textContent = part.name;
+    const s = document.createElement('div');
+    s.className = 'steps';
+    s.style.gridTemplateColumns = `repeat(${steps}, 1fr)`;
+    const row = [];
+    for (let i = 0; i < steps; i++) {
+      const c = document.createElement('div');
+      c.className = 'cell';
+      if (part.base[i]) c.classList.add('on');
+      s.appendChild(c); row.push(c);
     }
-    if (ctx.state === 'suspended') await ctx.resume();
-    sendSet();
-    if (playing) { node.port.postMessage({type:'stop'}); playing = false; $('play').textContent = '▶ Play'; }
-    else { node.port.postMessage({type:'play'}); playing = true; $('play').textContent = '■ Stop'; $('play').classList.add('lit'); }
-  };
-}
-
-function sendSet() {
-  const s = studies[cur];
-  node.port.postMessage({type:'set', study:cur, parts:s.parts, steps:s.steps, kit:s.kit, bpm:+$('bpm').value});
-}
-
-function restart() { if (playing && node) { node.port.postMessage({type:'stop'}); node.port.postMessage({type:'set', study:cur, parts:studies[cur].parts, steps:studies[cur].steps, kit:studies[cur].kit, bpm:+$('bpm').value}); node.port.postMessage({type:'play'}); } }
-
-function renderRoles() {
-  const box = $('roles');
-  box.innerHTML = '';
-  studies[cur].parts.forEach(p => {
-    const d = document.createElement('div');
-    d.className = 'role'; d.textContent = p.name; d.id = 'role-' + p.name;
-    box.appendChild(d);
+    m.appendChild(r); m.appendChild(s);
+    cells.push(row);
   });
 }
 
-function renderGrid() {
-  const g = $('grid'); g.innerHTML = '';
-  const s = studies[cur];
-  for (let i = 0; i < s.steps; i++) {
-    const d = document.createElement('div');
-    d.className = 'cell'; d.dataset.step = i;
-    g.appendChild(d);
+function onPlay() {
+  if (!ctx) {
+    ctx = new AudioContext();
+    gain = ctx.createGain();
+    gain.gain.value = +$('vol').value / 100;
+    gain.connect(ctx.destination);
   }
+  if (ctx.state === 'suspended') ctx.resume();
+  if (playing) { stopAudio(); return; }
+  (async () => {
+    if (!node) {
+      await ctx.audioWorklet.addModule('player-worklet.js');
+      node = new AudioWorkletNode(ctx, 'fw-player');
+      node.connect(gain);
+    }
+    fw.fw_command(CP_START, 0, 0);
+    playing = true;
+    $('play').textContent = '■ Stop';
+    $('play').classList.add('lit');
+    let produced = 0;
+    renderTimer = setInterval(() => {
+      // keep the worklet fed: ~2 chunks ahead
+      for (let i = 0; i < 4; i++) {
+        fw.fw_render(256);
+        const buf = new Float32Array(256);
+        for (let j = 0; j < 256; j++) buf[j] = fw.fw_pcm(j) / 32768;
+        node.port.postMessage(buf, [buf.buffer]);
+        produced += 256;
+      }
+    }, 25);
+    posTimer = setInterval(() => {
+      const pos = fw.fw_status(ST_POSITION);
+      const steps = presets[cur].steps;
+      for (const row of cells) for (let i = 0; i < steps; i++)
+        row[i].classList.toggle('cur', i === (pos % steps));
+    }, 50);
+  })();
 }
 
-function decodeClip(bytes, offset, frames) {
-  const out = new Float32Array(frames);
-  let pos = offset, repeats = 0, sample = 0;
-  for (let i = 0; i < frames; i++) {
-    if (repeats) repeats--;
-    else {
-      let code = bytes[pos++];
-      if (code >= 128) { sample = (code - 128) * 256 + bytes[pos++] - 16384; }
-      else if (code) { sample += code - 64; }
-      else { repeats = bytes[pos++] - 1; }
-    }
-    out[i] = sample / 32768;
-  }
-  return out;
+function stopAudio() {
+  if (renderTimer) { clearInterval(renderTimer); renderTimer = null; }
+  if (posTimer) { clearInterval(posTimer); posTimer = null; }
+  if (fw) fw.fw_command(CP_STOP, 0, 0);
+  playing = false;
+  $('play').textContent = '▶ Play';
+  $('play').classList.remove('lit');
 }
 
 init();
