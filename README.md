@@ -20,15 +20,21 @@ A tekno conversion of **Compás** — the rhythm-section firmware for the M-VAVE
 
 ## Try it in the browser
 
+The emulator runs the **actual firmware engine** (engine.c + the packed bank)
+compiled to WebAssembly — the same code path the device executes.
+
 ```sh
 python3 -m http.server -d web/emu 8000
 # open http://localhost:8000/
 ```
 
-The emulator decodes the same `727.pack` byte stream the firmware uses, with the
-device's delta/RLE player, choke groups and per-role velocity.
+- `web/emu/emu.wasm` — the engine (src/engine.c) + bank shim compiled with
+  clang/LLVM to WASM (`web/emu-fw/` holds the sources and native harness).
+- `web/emu/worklet.js` — AudioWorklet playback of the rendered PCM.
+- `web/emu/studies_fw.json` — preset list with library indices and patterns.
 
-A rendered preview of the TRIBAL TEKNO preset (16 bars) is in `demo/tekno_preview.wav`.
+A render of the TRIBAL TEKNO preset from the real engine (16 bars @ 155 BPM)
+is in `demo/tekno_preview.wav`.
 
 ## Build the firmware
 
