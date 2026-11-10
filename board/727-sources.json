@@ -1,0 +1,126 @@
+{
+  "source": "UFO tekno sample banks (Electribe E2S format), extracted + normalized",
+  "scope": "Selected by user: French/tribe flavor (TRIBECORE NARKO, TRIBECORE, TRIBE190, HARDTEKNO).",
+  "recordings": [
+    {
+      "pad": "CH",
+      "sound": "Closed hat",
+      "sampleId": "d7418673044bfbf42aa1",
+      "seconds": 0.105125,
+      "peak": 0.25,
+      "processedSha256": "d7418673044bfbf42aa18aec7a904e7f8e311b7cf607778add3a553bb769d4a4"
+    },
+    {
+      "pad": "OH",
+      "sound": "Open hat",
+      "sampleId": "64e696dd451165e5d012",
+      "seconds": 0.241633,
+      "peak": 0.25,
+      "processedSha256": "64e696dd451165e5d0121bf00a7b880d352acf706b0a3454126227009cb20214"
+    },
+    {
+      "pad": "BD",
+      "sound": "Kick Guigoo Trib",
+      "sampleId": "82803e89d0f799f5f194",
+      "seconds": 0.333333,
+      "peak": 0.25,
+      "processedSha256": "82803e89d0f799f5f19462ce62aa24862dcb269f6ef12cd68d81ecf8c356c06b"
+    },
+    {
+      "pad": "BD2",
+      "sound": "Kick Guigoo Bass",
+      "sampleId": "6dfcd40fc1cd0c3de343",
+      "seconds": 0.315714,
+      "peak": 0.25,
+      "processedSha256": "6dfcd40fc1cd0c3de3432d2c87465b0942c23437a837c92c25b590c4d9177cb6"
+    },
+    {
+      "pad": "CP",
+      "sound": "Clap Kawai",
+      "sampleId": "0e64d7c244692c5b6197",
+      "seconds": 0.216825,
+      "peak": 0.25,
+      "processedSha256": "0e64d7c244692c5b61976960639034c6a58130ae9744aef4c198bf071bb98ac7"
+    },
+    {
+      "pad": "SD",
+      "sound": "Snare Nouvoo",
+      "sampleId": "c051d8569297a3799463",
+      "seconds": 0.288118,
+      "peak": 0.25,
+      "processedSha256": "c051d8569297a3799463d462c7b89a8ab140d88b530ebadf7b5d97e3872ee032"
+    },
+    {
+      "pad": "SD2",
+      "sound": "Drum Snar",
+      "sampleId": "98b49fa7d312a6862c24",
+      "seconds": 0.155896,
+      "peak": 0.25,
+      "processedSha256": "98b49fa7d312a6862c2442a3b307760e1d5c7cea4b0fc608494dc0c207cd9787"
+    },
+    {
+      "pad": "MP",
+      "sound": "Tribal Perc 1",
+      "sampleId": "9fc2cda037fe709da817",
+      "seconds": 0.105941,
+      "peak": 0.25,
+      "processedSha256": "9fc2cda037fe709da8171dbdaceec3c49fe28c255659c35c8313fbfa5690268a"
+    },
+    {
+      "pad": "MP2",
+      "sound": "Tribal Perc 2",
+      "sampleId": "d9fd3d77a8bf334eca1b",
+      "seconds": 0.077347,
+      "peak": 0.25,
+      "processedSha256": "d9fd3d77a8bf334eca1b1fb32353768ab479ed5f4d7e8c8a5896e6e7aee50893"
+    },
+    {
+      "pad": "LT",
+      "sound": "Tribal Tom",
+      "sampleId": "152152688dedd2fff1e6",
+      "seconds": 0.177052,
+      "peak": 0.25,
+      "processedSha256": "152152688dedd2fff1e6e61a3eeeb848f5382693b64dd7d29d31fadfa38627ed"
+    },
+    {
+      "pad": "MT",
+      "sound": "Tribal Conga",
+      "sampleId": "06e25bf1be13587e8f20",
+      "seconds": 0.247868,
+      "peak": 0.25,
+      "processedSha256": "06e25bf1be13587e8f200042216b40de38d13bd1561a9c0db874ea739d897fb8"
+    },
+    {
+      "pad": "CB",
+      "sound": "Hoover Stab",
+      "sampleId": "1b4ed04687089daabf20",
+      "seconds": 0.429478,
+      "peak": 0.25,
+      "processedSha256": "1b4ed04687089daabf207d39395641ffd2c774ed0b3503d742435ef4b4b8075e"
+    },
+    {
+      "pad": "RD",
+      "sound": "Pad Stab",
+      "sampleId": "92f2b1832b280a7b00ac",
+      "seconds": 1.606667,
+      "peak": 0.25,
+      "processedSha256": "92f2b1832b280a7b00acd22fb3417866568c3af775d1ce39e53da0a046228c46"
+    },
+    {
+      "pad": "SY",
+      "sound": "Break FX",
+      "sampleId": "27f5758839de9ab13c73",
+      "seconds": 1.262925,
+      "peak": 0.25,
+      "processedSha256": "27f5758839de9ab13c73edf70e1ce0a9245f3c4a9c0f05c7102af40977783369"
+    },
+    {
+      "pad": "BD3",
+      "sound": "Hard Kick Big",
+      "sampleId": "c3fc700ed0886f5ada37",
+      "seconds": 0.451587,
+      "peak": 0.25,
+      "processedSha256": "c3fc700ed0886f5ada371e522c46f9dd0256c6c0581b338c3b92f6ef56d4f822"
+    }
+  ]
+}

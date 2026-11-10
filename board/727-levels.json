@@ -1,0 +1,203 @@
+{
+  "source": "UFO tekno bank levels: all voices normalized to 0.25 peak",
+  "baseline": "Uniform bank: every voice normalized to the same peak; role levels set on the device.",
+  "archiveSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "referenceMaxPeak24": 2097152,
+  "voices": [
+    {
+      "sound": "Closed hat",
+      "sampleId": "d7418673044bfbf42aa1",
+      "referenceFile": "HARDTEKNO__RHT2_Hat_005.wav",
+      "frames": 4636,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RHT2_Hat_005.wav",
+        "frames": 4636,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Open hat",
+      "sampleId": "64e696dd451165e5d012",
+      "referenceFile": "HARDTEKNO__RK_DDG2_Hihat_16.wav",
+      "frames": 10656,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RK_DDG2_Hihat_16.wav",
+        "frames": 10656,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Kick Guigoo Trib",
+      "sampleId": "82803e89d0f799f5f194",
+      "referenceFile": "TRIBECORE NARKO__Kick-Guigoo-Trib.wav",
+      "frames": 14700,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "TRIBECORE NARKO__Kick-Guigoo-Trib.wav",
+        "frames": 14700,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Kick Guigoo Bass",
+      "sampleId": "6dfcd40fc1cd0c3de343",
+      "referenceFile": "TRIBECORE NARKO__Kick_Guigoo_Bass.wav",
+      "frames": 13923,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "TRIBECORE NARKO__Kick_Guigoo_Bass.wav",
+        "frames": 13923,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Clap Kawai",
+      "sampleId": "0e64d7c244692c5b6197",
+      "referenceFile": "TRIBECORE NARKO__Clap_Kawai.wav",
+      "frames": 9562,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "TRIBECORE NARKO__Clap_Kawai.wav",
+        "frames": 9562,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Snare Nouvoo",
+      "sampleId": "c051d8569297a3799463",
+      "referenceFile": "TRIBECORE NARKO__SN-Nouvoo-kisde.wav",
+      "frames": 12706,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "TRIBECORE NARKO__SN-Nouvoo-kisde.wav",
+        "frames": 12706,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Drum Snar",
+      "sampleId": "98b49fa7d312a6862c24",
+      "referenceFile": "TRIBECORE NARKO__Guigoo_drum_Snar.wav",
+      "frames": 6875,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "TRIBECORE NARKO__Guigoo_drum_Snar.wav",
+        "frames": 6875,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Tribal Perc 1",
+      "sampleId": "9fc2cda037fe709da817",
+      "referenceFile": "HARDTEKNO__RHT2_Perc_008.wav",
+      "frames": 4672,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RHT2_Perc_008.wav",
+        "frames": 4672,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Tribal Perc 2",
+      "sampleId": "d9fd3d77a8bf334eca1b",
+      "referenceFile": "HARDTEKNO__RK_DDG2_Perc_13.wav",
+      "frames": 3411,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RK_DDG2_Perc_13.wav",
+        "frames": 3411,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Tribal Tom",
+      "sampleId": "152152688dedd2fff1e6",
+      "referenceFile": "HARDTEKNO__RK_MT3_Perc_02.wav",
+      "frames": 7808,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RK_MT3_Perc_02.wav",
+        "frames": 7808,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Tribal Conga",
+      "sampleId": "06e25bf1be13587e8f20",
+      "referenceFile": "HARDTEKNO__RK_DDG2_Perc_01.wav",
+      "frames": 10931,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RK_DDG2_Perc_01.wav",
+        "frames": 10931,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Hoover Stab",
+      "sampleId": "1b4ed04687089daabf20",
+      "referenceFile": "HARDTEKNO__RK_BT8_Chord_09_.wav",
+      "frames": 18940,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RK_BT8_Chord_09_.wav",
+        "frames": 18940,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Pad Stab",
+      "sampleId": "92f2b1832b280a7b00ac",
+      "referenceFile": "HARDTEKNO__RK_MT3_Chord_04_.wav",
+      "frames": 70854,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "HARDTEKNO__RK_MT3_Chord_04_.wav",
+        "frames": 70854,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Break FX",
+      "sampleId": "27f5758839de9ab13c73",
+      "referenceFile": "TRIBE190__Break_short.wav",
+      "frames": 55695,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "TRIBE190__Break_short.wav",
+        "frames": 55695,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    },
+    {
+      "sound": "Hard Kick Big",
+      "sampleId": "c3fc700ed0886f5ada37",
+      "referenceFile": "TRIBECORE__HardCore_Kick_1.wav",
+      "frames": 19915,
+      "peak24": 2097152,
+      "accented": {
+        "referenceFile": "TRIBECORE__HardCore_Kick_1.wav",
+        "frames": 19915,
+        "peak24": 2097152
+      },
+      "gainQ15": 32768
+    }
+  ]
+}

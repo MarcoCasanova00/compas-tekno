@@ -1,0 +1,106 @@
+{
+  "format": 1,
+  "songs": [
+    {
+      "title": "TEKNO DURO",
+      "study": "coast",
+      "feel": 24,
+      "section": "base"
+    },
+    {
+      "title": "CORE TEKNO",
+      "study": "mx",
+      "kit": true,
+      "feel": 33,
+      "section": "base"
+    },
+    {
+      "title": "MENTAL TEKNO",
+      "study": "bolero",
+      "kit": true,
+      "feel": 22,
+      "section": "base"
+    },
+    {
+      "title": "GUIGOO ROLL",
+      "study": "son",
+      "kit": true,
+      "feel": 25,
+      "section": "base"
+    },
+    {
+      "title": "FRENCH KICK",
+      "study": "salsa",
+      "kit": true,
+      "feel": 26,
+      "section": "lift"
+    },
+    {
+      "title": "GALOP PERC",
+      "study": "merengue",
+      "feel": 20,
+      "section": "base"
+    },
+    {
+      "title": "TRIBAL CORE",
+      "study": "tejano",
+      "kit": true,
+      "feel": 25,
+      "section": "base"
+    },
+    {
+      "title": "NARKO DROP",
+      "study": "conjunto",
+      "feel": 23,
+      "section": "base"
+    },
+    {
+      "title": "UFO STABS",
+      "study": "la-paloma",
+      "bpm": 88,
+      "feel": 0
+    },
+    {
+      "title": "VOICE CUTZ",
+      "study": "la-golondrina",
+      "bpm": 84,
+      "feel": 0
+    },
+    {
+      "title": "KIK FLUO",
+      "study": "cdmx",
+      "feel": 0,
+      "kit": true
+    },
+    {
+      "title": "TRIBAL TEKNO",
+      "study": "tribal-tekno",
+      "kit": true,
+      "feel": 0
+    },
+    {
+      "title": "TRIBAL 155",
+      "study": "tribal",
+      "feel": 0,
+      "kit": false
+    },
+    {
+      "title": "RYTMIK DUB",
+      "study": "villera",
+      "feel": 0,
+      "kit": true
+    },
+    {
+      "title": "POLLON LOOP",
+      "study": "lima",
+      "feel": 0,
+      "kit": false
+    },
+    {
+      "title": "HARD TRIBE",
+      "study": "chile",
+      "feel": 0,
+      "kit": true
+    }
+  ]
+}
