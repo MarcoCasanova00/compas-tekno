@@ -125,8 +125,14 @@ function fwWatchdog() {
 }
 let fwWatch = null;
 // worklet replies to getstatus by reusing cmd channel in page:
-function fwGotStatus(playing) {
+let fwTempo = 155;
+function fwGotStatus(playing, tempo, study) {
   fwPlaying = !!playing;
+  if (typeof tempo === "number" && tempo >= 60 && tempo <= 180) {
+    fwTempo = tempo;
+    const el = document.getElementById("tempoVal");
+    if (el) el.textContent = tempo;
+  }
   if (fwWant && !fwPlaying && fwRetries < 4) {
     fwRetries++;
     fwStop();
@@ -135,17 +141,28 @@ function fwGotStatus(playing) {
     fwWant = false;
   }
 }
+function fwNudgeBpm(delta) {
+  const next = Math.max(60, Math.min(180, fwTempo + delta));
+  fwTempo = next;
+  send({ type: "cmd", cmd: 9, a: next, b: 0 });
+  send({ type: "getstatus" });
+}
 function addTransport() {
   const bar = document.createElement("div");
-  bar.style.cssText = "display:flex;gap:8px;justify-content:center;margin:10px 0;grid-column:1 / -1;";
-  for (const [label, fn] of [["▶ PLAY", fwPlay], ["■ STOP", fwStop]]) {
+  bar.style.cssText = "display:flex;gap:8px;justify-content:center;align-items:center;margin:10px 0;grid-column:1 / -1;";
+  for (const [label, fn] of [["▶ PLAY", fwPlay], ["■ STOP", fwStop], ["BPM −", () => fwNudgeBpm(-1)], ["BPM +", () => fwNudgeBpm(1)]]) {
     const b = document.createElement("button");
     b.textContent = label;
     b.className = "b";
     b.onclick = fn;
     bar.appendChild(b);
   }
+  const t = document.createElement("span");
+  t.style.cssText = "color:#9a9aa0;font-size:12px;min-width:90px;text-align:center;";
+  t.innerHTML = 'BPM <b id="tempoVal">155</b>';
+  bar.appendChild(t);
   document.querySelector(".keys")?.before(bar);
+  send({ type: "getstatus" });
 }
 addTransport();
 
