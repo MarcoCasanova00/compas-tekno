@@ -31,7 +31,7 @@ if (typeof registerProcessor === "function") {
         try {
           const { instance } = await WebAssembly.instantiate(m.wasm, WASI);
           const ex = instance.exports;
-          ex._initialize();
+          if (ex._initialize) ex._initialize();
           ex.web_boot();
           this.ex = ex;
           const ids = Array.from({ length: 14 }, (_, b) => ex.web_button_id(b));
