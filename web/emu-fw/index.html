@@ -205,7 +205,8 @@ async function boot() {
   fw.fw_command(CP_FEEL, 30, 0);
   $('play').disabled = false; $('prev').disabled = false; $('next').disabled = false;
   buildKeys(); drawLcd();
-  setPreset(0);
+  const tekno = presets.findIndex(p => p.title === 'TRIBAL TEKNO');
+  setPreset(tekno >= 0 ? tekno : 0);
   $('play').onclick = onPlay;
   $('prev').onclick = () => setPreset((cur + presets.length - 1) % presets.length);
   $('next').onclick = () => setPreset((cur + 1) % presets.length);
