@@ -1,0 +1,93 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-3.0-only
+     Compás TEKNO — full-firmware emulator: the real board/panel/stage/engine
+     compiled to WASM; the LCD framebuffer and audio come from the firmware. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compás TEKNO — full firmware emulator</title>
+<style>
+body { margin:0; background:#0d0d0f; color:#eee; font:13px/1.5 -apple-system,sans-serif; }
+main { max-width:760px; margin:0 auto; padding:24px 16px 40px; }
+h1 { font-size:18px; letter-spacing:2px; margin:0 0 2px; } h1 span { color:#ffb000; }
+p.sub { color:#9a9aa0; margin:0 0 14px; font-size:12px; }
+.device { background:#1d1d1f; border:1px solid #45454a; border-radius:18px; padding:16px;
+          display:grid; gap:12px; }
+.screen { background:#000; border-radius:8px; margin:0 auto; line-height:0; }
+canvas { width:100%; max-width:480px; image-rendering:pixelated; }
+.controls { display:flex; gap:8px; flex-wrap:wrap; }
+button { background:#2c2c30; color:#d6d6d8; border:1px solid #45454a; border-radius:8px;
+         padding:10px 16px; font:600 12px/1 inherit; cursor:pointer; }
+button.lit { background:#fff4d6; color:#1d1d1f; }
+button:disabled { opacity:.4; cursor:default; }
+.pads { display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; }
+.pads button { padding:8px 0; font-size:10px; }
+footer { margin-top:14px; color:#9a9aa0; font-size:11px; text-align:center; }
+footer a { color:#9a9aa0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Compás <span>TEKNO</span> — full firmware</h1>
+  <p class="sub">This runs the real Compás firmware build (board · panel · stage · engine) — the LCD below is the firmware's own framebuffer.</p>
+  <div class="device">
+    <div class="screen"><canvas id="fb" width="480" height="480"></canvas></div>
+    <div class="controls">
+      <button id="boot" class="lit">Boot firmware</button>
+      <button id="play" disabled>▶ PLAY (btn 12)</button>
+      <button id="encUp" disabled>ENC 0 +</button>
+      <button id="encDown" disabled>ENC 0 −</button>
+    </div>
+    <div class="pads" id="pads"></div>
+  </div>
+  <footer>
+    Modified <a href="https://github.com/TexasRADIO/compas-firmware">Compás</a> (GPL-3.0)
+    · <a href="https://github.com/MarcoCasanova00/compas-tekno">repo</a>
+  </footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let ctx, node, aut;
+let fbArr = null;
+
+async function boot() {
+  const wasm = await fetch('emu.wasm').then(r => r.arrayBuffer());
+  ctx = new AudioContext({ sampleRate: 44100 });
+  await ctx.audioWorklet.addModule('worklet.js');
+  node = new AudioWorkletNode(ctx, 'fm1-emu');
+  node.connect(ctx.destination);
+  const canvas = $('fb'), c2d = canvas.getContext('2d');
+  const img = c2d.createImageData(240, 240);
+  node.port.onmessage = (e) => {
+    const m = e.data;
+    if (m.type === 'ready') { $('play').disabled = false; $('encUp').disabled = false; $('encDown').disabled = false; }
+    if (m.type === 'error') alert('emulator error: ' + m.message);
+    if (m.fb) {
+      for (let i = 0; i < 240 * 240; i++) {
+        const c = m.fb[i];
+        img.data[i * 4] = (c >> 11) * 255 / 31;
+        img.data[i * 4 + 1] = ((c >> 5) & 63) * 255 / 63;
+        img.data[i * 4 + 2] = (c & 31) * 255 / 31;
+        img.data[i * 4 + 3] = 255;
+      }
+      c2d.putImageData(img, 0, 0);
+    }
+  };
+  node.port.postMessage({ type: 'load', wasm });
+  $('boot').disabled = true;
+}
+$('boot').onclick = boot;
+$('play').onclick = () => node && node.port.postMessage({ type: 'buttons', mask: 1 << 12 });
+$('encUp').onclick = () => node && node.port.postMessage({ type: 'enc', role: 0, n: 1 });
+$('encDown').onclick = () => node && node.port.postMessage({ type: 'enc', role: 0, n: -1 });
+const pads = $('pads');
+for (let i = 0; i < 14; i++) {
+  const b = document.createElement('button');
+  b.textContent = 'btn ' + i;
+  b.onclick = () => node && node.port.postMessage({ type: 'buttons', mask: 1 << i });
+  pads.appendChild(b);
+}
+</script>
+</body>
+</html>
