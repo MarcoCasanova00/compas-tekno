@@ -58,6 +58,8 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   synth leads & bass, free-party set flow.
 - **Synth demos** — `demo/synth_flute.acid/moog/trance.wav` (steady tones) to
   audition the four bass voices directly.
+- **Live-output demos** — `demo/live_moog_bass.wav`, `demo/live_flute_bass.wav`
+  (recorded from the real output path, bass soloed).
 - **Test guide** — `docs/TESTING-GUIDE.md`: verify grooves/BPM, tempo lock,
   the 4 synth voices, leads, drop, loops — on web or hardware.
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled

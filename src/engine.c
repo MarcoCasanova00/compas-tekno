@@ -389,7 +389,6 @@ static int32_t bass_steady(unsigned style,unsigned cut,unsigned bite,uint32_t ph
     case BASS_ACID:
         return acid_wave(phase<<2,38+(int32_t)cut/2,178-(int32_t)bite,&low,&band);
     case BASS_MOOG: {
-        int32_t s0=0,s1=0,s2=0,s3=0;
         int32_t core=saw(phase)+saw(phase*3u/2u)+saw(phase>>1)+tri(phase*2u)/2;
         int32_t cutoff=240+cut*6+96;
         int32_t res=120+bite;
@@ -410,12 +409,10 @@ static int32_t bass_steady(unsigned style,unsigned cut,unsigned bite,uint32_t ph
         return sig;
     }
     default: {
-        uint32_t lfo=phase;
-        int32_t wobble=(int32_t)(tri(lfo)>>9);
         int32_t breath=(int32_t)((phase*2654435761u)>>16)-32768;
         int32_t bright=ensemble_brightness(28672,ensemble_tilt(cut,bite));
         int32_t sig=(tri(phase)*13+tri(phase*3u/2u)*bright+breath/64)/20;
-        return sig*2;
+        return sig*3;
     }
     }
 }
