@@ -1032,7 +1032,7 @@ static void stage_paint(const StageModel *m)
             print(5,60,36,v.song==SET_SLOTS?"BANK":index,1,CYAN,INK,0);
             unsigned ticker=(motion.kind==MOTION_SONG && motion.frame>=12) ||
                 (motion.kind==MOTION_CLOSE && motion.frame>=8);
-            const char *subtitle=ticker?"TAKE IT AWAY":
+            const char *subtitle=ticker?"FREE PARTY":
                 v.next_groove<BOARD_GROOVE_PRESETS?board_groove_title(v.next_groove):
                 v.song==SET_SLOTS?panel_word("RHYTHM PRESET"):
                 m->next<SET_SLOTS?board_song_title(m->next):panel_word("END OF SET");
@@ -1637,6 +1637,6 @@ static void splash(void)
     brand_line((240-WORD_WIDTH)/2,19,wordmark,WORD_WIDTH,WORD_HEIGHT,GOLD);
     brand_line((240-SUBTITLE_WIDTH)/2,50,subtitle,SUBTITLE_WIDTH,SUBTITLE_HEIGHT,MINT);
     portrait(66,78,108);
-    text_line(43,196,"JOHNNY CANALES",14,CREAM,PLUM);
-    text_line(32,217,"TAKE IT AWAY    ",16,PINK,PLUM);
+    text_line(43,196,"TRIBAL TEKNO",14,CREAM,PLUM);
+    text_line(32,217,"FREE PARTY · 155",16,PINK,PLUM);
 }
