@@ -628,7 +628,7 @@ void panel_face(const Panel *panel, BoardView v, char lines[FACE_LINES][FACE_COL
         } else if(panel->page==PANEL_BASS) {
             if(v.piano) {
                 label(lines[3],0,"LEAD SHAPE · TD-3 STYLE");
-                label(lines[4],0,"1 CUTOFF"); number(lines[4],10,v.lead_cut);
+                label(lines[4],0,"1 CUTOFF"); number(lines[4],9,v.lead_cut);
                 label(lines[4],11,"2 ENV"); number(lines[4],17,v.lead_env);
             } else {
             label(lines[3],0,!panel_has_bass(v) ? "DRUM ENSEMBLE" :

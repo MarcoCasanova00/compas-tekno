@@ -187,15 +187,17 @@ static int32_t voices_mix(void)
     else if(score->voices>2) sum/=2;
     /* TD-3-style live shape: the cutoff knob sets the low-pass base; the
      * envelope knob is the env amount that opens the filter as a note
-     * attacks (shape_age resets at every new note, then settles). */
+     * attacks (shape_age resets at every new note, then settles). Alpha is
+     * Q12 (0..4095): ~0.028 @ 200 Hz, ~0.88 @ 15 kHz at 44.1 kHz. */
     {
-        int32_t base=64+(int32_t)player.shape_cut*3;    /* cutoff knob 0..100 */
+        int32_t cut=(int32_t)player.shape_cut;
+        int32_t env_amt=(int32_t)player.shape_env;
         if(player.shape_age<512) player.shape_age+=16;   /* attack ramp */
         else if(player.shape_age<8192) player.shape_age+=4;
-        int32_t env=player.shape_age<256 ? (int32_t)player.shape_age : 256;
-        int32_t alpha=(base + ((int32_t)player.shape_env*env)/256) >> 8;
-        if(alpha>255) alpha=255;
-        player.shape_lp += ((sum-player.shape_lp)*alpha) >> 8;
+        int32_t phase=player.shape_age<256 ? (int32_t)player.shape_age : 256;
+        int32_t alpha=64 + cut*35 + (env_amt*phase*5)/256;   /* Q12 */
+        if(alpha>4095) alpha=4095;
+        player.shape_lp += ((sum-player.shape_lp)*alpha) >> 12;
         sum=player.shape_lp;
     }
     return sum;
