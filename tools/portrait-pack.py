@@ -10,6 +10,8 @@ portrait (e.g. after a global palette change) or a fully custom one.
 
 Usage:
   python3 tools/portrait-pack.py art.png                 # -> board/portrait.inc
+  python3 tools/portrait-pack.py art.png --auto           # derive the 16-color
+                                                            # palette from the art
   python3 tools/portrait-pack.py art.png -o /tmp/p.inc --palette 255,237,190 12,33,23 ...
 """
 import argparse
@@ -42,7 +44,7 @@ def nearest_index(rgba, palette):
             err, best = d, i
     return best
 
-def pack(png: Path, palette, out: Path):
+def pack(png: Path, palette, out: Path, auto_palette: bool = False):
     img = Image.open(png).convert("RGBA")
     # The Swift path fills the canvas with palette[0] first, then draws the
     # image stretched over it, so transparency shows palette[0].
@@ -51,10 +53,20 @@ def pack(png: Path, palette, out: Path):
     canvas.alpha_composite(img)
     rgba = list(canvas.getdata())  # 108*108 RGBA tuples
 
+    if auto_palette:
+        # Median-cut to 16 colors, ordered by frequency so index 0 stays the
+        # dominant (background) color — mirroring the original palette layout.
+        rgb = Image.frombytes("RGB", (SIZE, SIZE), b"".join(bytes(p[:3]) for p in rgba))
+        q = rgb.quantize(colors=16, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
+        palette = list(q.getpalette()[:48])  # 16 RGB triples
+        palette = [tuple(palette[i*3:i*3+3]) for i in range(16)]
+        indexed = list(q.getdata())
+    else:
+        indexed = [nearest_index(p, palette) for p in rgba]
+
     packed = []
     for i in range(0, SIZE * SIZE, 2):
-        packed.append(nearest_index(rgba[i], palette) << 4
-                      | nearest_index(rgba[i + 1], palette))
+        packed.append(indexed[i] << 4 | indexed[i + 1])
 
     rows = []
     for start in range(0, len(packed), 18):
@@ -77,6 +89,7 @@ def main():
     ap.add_argument("png", type=Path)
     ap.add_argument("-o", "--output", type=Path, default=Path("board/portrait.inc"))
     ap.add_argument("--palette", help="16 RGB triples as 'r,g,b r,g,b ...' (optional)")
+    ap.add_argument("--auto", action="store_true", help="derive the 16-color palette from the art")
     a = ap.parse_args()
     palette = DEFAULT_PALETTE
     if a.palette:
@@ -84,7 +97,7 @@ def main():
         if len(parts) != 16:
             sys.exit("--palette needs exactly 16 'r,g,b' triples")
         palette = [tuple(int(v) for v in p.split(",")) for p in parts]
-    pack(a.png, palette, a.output)
+    pack(a.png, palette, a.output, auto_palette=a.auto)
 
 if __name__ == "__main__":
     main()

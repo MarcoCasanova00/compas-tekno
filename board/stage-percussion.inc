@@ -15,7 +15,7 @@ static void perc_conga(unsigned cx,unsigned scale,uint16_t ink,unsigned on,unsig
     paint(cx-w+2,139,2u*w-3,2,INK);
     paint(cx-w+4,150,2u*w-7,2,INK);
     if(hit) ellipse(cx,top+4,w+hit*2u,5u+hit,hit==1?CREAM:ink);
-    ellipse(cx,top+4,w,4,hit==1?CREAM:on?RGB565(227,188,139):DIM);
+    ellipse(cx,top+4,w,4,hit==1?CREAM:on?RGB565(180,214,110):DIM);
 }
 
 static void perc_maracas(unsigned cx,unsigned scale,uint16_t ink,unsigned on,unsigned hit)
@@ -43,7 +43,7 @@ static void perc_timbal(unsigned cx,unsigned scale,uint16_t ink,unsigned on,unsi
     for(unsigned side=0;side<2;++side) {
         unsigned x=cx+(side?11:-11);
         paint(x-w,top,2u*w+1,153u-top,shaded(ink,70));
-        ellipse(x,top,w,3,hit==1 && !side?CREAM:on?RGB565(227,188,139):DIM);
+        ellipse(x,top,w,3,hit==1 && !side?CREAM:on?RGB565(180,214,110):DIM);
         paint(x-1,153,2,7,DIM);
     }
     line_between(cx-11,top-(hit?1u:8u),14,top-(hit?13u:20u),on?CREAM:DIM);

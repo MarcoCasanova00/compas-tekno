@@ -56,11 +56,11 @@ const fs = require("fs");
   const fb = new Uint16Array(mem, ex.web_screen(), 240 * 240);
   const q = (v, bits) => Math.round((v * 255) / ((1 << bits) - 1));
   const pal = {
-    INK: [11, 7, 16], PLUM: [23, 16, 31], CREAM: [255, 248, 236], GOLD: [255, 230, 0],
-    PINK: [255, 46, 136], MINT: [61, 255, 122], LILAC: [180, 107, 255], RED: [255, 60, 64],
-    DIM: [107, 92, 122], LINE: [44, 34, 56], RAY: [20, 12, 28], GRILL: [58, 42, 70],
-    WOOD: [42, 26, 18], CYAN: [34, 224, 255], ORANGE: [255, 122, 26], BLUE: [127, 178, 255],
-    DIM2: [138, 122, 156], RING: [75, 60, 95], PAPER: [243, 230, 200], INKBLUE: [29, 42, 92],
+    INK: [0, 0, 0], PLUM: [7, 20, 6], CREAM: [200, 212, 138], GOLD: [253, 255, 0],
+    PINK: [137, 255, 0], MINT: [168, 224, 104], LILAC: [186, 220, 132], RED: [240, 255, 60],
+    DIM: [96, 116, 70], LINE: [30, 44, 22], RAY: [10, 26, 12], GRILL: [24, 40, 18],
+    WOOD: [20, 42, 14], CYAN: [150, 240, 100], ORANGE: [253, 255, 0], BLUE: [120, 200, 80],
+    DIM2: [122, 150, 88], RING: [46, 66, 34], PAPER: [176, 204, 130], INKBLUE: [8, 28, 10],
   };
   const raw = {};
   for (const [k, [r, g, bb]] of Object.entries(pal)) raw[k] = ((r >> 3) << 11) | ((g >> 2) << 5) | (bb >> 3);

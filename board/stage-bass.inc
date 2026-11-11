@@ -57,7 +57,7 @@ static void value_pop(unsigned center,unsigned y,const char *text,unsigned knob)
 
 static void bass_woofer(BoardView v,unsigned pump,unsigned flip)
 {
-    enum { AMBER=RGB565(200,116,42), TAN=RGB565(255,210,122) };
+    enum { AMBER=RGB565(137,255,0), TAN=RGB565(253,255,0) };
     unsigned acid=v.bass_style;
     unsigned squash=100;
     if(flip) {
