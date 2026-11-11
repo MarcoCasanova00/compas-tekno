@@ -81,12 +81,23 @@ TR-727 metadata stays archived in `board/727-original/`).
 
 ## 📦 Install on hardware
 
+> ### ⚠️ Before you flash — did you go back to V15 first?
+>
+> **"Did you go back to V15 before?"**
+>
+> If the FM-1 is running **any custom firmware** (Felucca, Baud Girl, Carnac,
+> Amaru OS, or anything else), **return to official V15 first**, then install
+> this package. Writing straight over another custom firmware is the #1 cause
+> of an FM-1 that stops answering. Coming from stock V15? You're clear.
+
 `firmware/compas-tekno.fwsc` is the flashable package for the M-VAVE FM-1
 (identity `FM-1_710`, JieLi chip key `0x980F`), built against the exact
 Felucca v1.6 BSP upstream pins (`tools/build_device.py` → `app.bin`, Felucca
 update loader + SDK SPL via `tools/fm1pkg_make.py`).
 
 Flash it the same way you flash Felucca/Amaru OS on the FM-1 (USB installer).
+Never unplug mid-write; if interrupted, replug and install again (the update
+resumes from the start). Keep your stock V15 image backed up.
 
 ## ⚖️ License & samples
 

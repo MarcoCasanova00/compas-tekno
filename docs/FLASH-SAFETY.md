@@ -29,7 +29,9 @@ the device already uses.
 1. **Back up the stock flash first** — keep `firmware/FM-1_015.fwsc` (from the
    official installer site) or a transporter dump.
 2. **If coming from another custom firmware** (Felucca, Baud Girl, Carnac,
-   Amaru, …): return to official V15 first, then install this. Writing over a
+   Amaru, …): **return to official V15 first**, then install this. The go/
+   no-go question before flashing is: **"Did you go back to V15 before?"**
+   If the answer is no, stop and restore stock V15 first. Writing over a
    foreign custom firmware is the #1 brick cause.
 3. Use the **same USB installer** you used for Amaru OS; use a data USB cable.
 4. Never unplug during a write. If interrupted, replug and install again — the
