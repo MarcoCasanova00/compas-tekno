@@ -11,6 +11,7 @@ unsigned piano_count(void);
 unsigned piano_id_valid(unsigned id, unsigned guide);
 /* Twelve nearest keys: -6 through +5 semitones; zero retains printed pitch. */
 void piano_transpose(int semitones);
+void piano_set_shape(unsigned cut, unsigned env);   /* live cutoff + envelope (0..100) */
 unsigned piano_step(void);
 int32_t piano_mix(unsigned bpm,unsigned guide);
 void piano_jump(unsigned bar);

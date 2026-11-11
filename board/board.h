@@ -19,7 +19,7 @@ int board_kumbia_restore(const uint8_t settings[KUMBIA_SETTINGS]);
 #endif
 /* Tekno scores (piano pieces) — available on every build; 66 stays clear of
  * the HANAN command block (61..65). */
-enum { BOARD_PIANO_CUE=66, BOARD_DRONE_TOGGLE=69 };
+enum { BOARD_PIANO_CUE=66, BOARD_DRONE_TOGGLE=69, BOARD_LEAD_SHAPE=70 };
 enum { RACK_HIT_STRENGTH, RACK_ACCENT_STRENGTH, RACK_LEVEL };
 enum { BOARD_OVERLAY_ALL=4 }; /* BOARD_OVERLAY_LEVEL lane: shift all four lanes, b=delta+128 */
 enum { BASS_ENSEMBLE, BASS_ACID, BASS_MOOG, BASS_LOVE_PARADE };
@@ -48,6 +48,7 @@ typedef struct {
     uint32_t steps;
     uint8_t part, next_part;
     uint8_t bass_style, bass_cut, bass_bite, overlays;
+    uint8_t lead_cut, lead_env; /* live TD-3-style lead shape (0..100) */
     uint8_t overlay_levels[4], rack_strength, rack_accent, rack_level;
     uint8_t next_bar;
     uint8_t phrases_left; /* auto-advance phrases left incl. this one; 0 = none; occupies old padding */

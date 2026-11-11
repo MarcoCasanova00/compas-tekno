@@ -47,7 +47,7 @@ static volatile uint8_t save_ready;
 static uint8_t active_song, queued_song, phrases, remaining_phrases, song_dirty;
 static uint8_t assigned[CP_ROLES];
 static uint8_t active_part, queued_part, queued_energy, next_bar;
-static uint8_t bass_style, bass_cut, bass_bite, overlays, overlay_hits, bass_hit;
+static uint8_t bass_style, bass_cut, bass_bite, lead_cut, lead_env, overlays, overlay_hits, bass_hit;
 static uint8_t overlay_levels[4], rack_controls[3];
 static uint32_t rack_pattern[RACK_SOUNDS], rack_pattern_accents[RACK_SOUNDS];
 static uint32_t record_pending[RACK_SOUNDS];
@@ -204,7 +204,9 @@ static void reset_song_layers(void)
     bass_style=BASS_MOOG;   /* default: fat synth bass; flute/acid via knob */
     bass_cut=44;
     bass_bite=45;
+    lead_cut=64; lead_env=50;   /* TD-3-style live lead shape defaults */
     cp_bass_set(bass_style,bass_cut,bass_bite);
+    piano_set_shape(lead_cut,lead_env);
     overlays=0;
     for(unsigned i=0;i<4;++i) overlay_levels[i]=100;
 }
@@ -922,6 +924,12 @@ static unsigned apply(BoardCommand cmd)
         bass_bite=cmd.b;
         cp_bass_set(bass_style,bass_cut,bass_bite);
         return CP_OK;
+    case BOARD_LEAD_SHAPE:
+        if(cmd.a>100 || cmd.b>100) return CP_RANGE;
+        lead_cut=cmd.a;
+        lead_env=cmd.b;
+        piano_set_shape(lead_cut,lead_env);
+        return CP_OK;
     case BOARD_OVERLAY:
         if(cmd.a>=4) return CP_RANGE;
         overlays^=1u<<cmd.a;
@@ -1167,6 +1175,8 @@ static void publish_view(unsigned refresh)
     view.bass_style=bass_style;
     view.bass_cut=bass_cut;
     view.bass_bite=bass_bite;
+    view.lead_cut=lead_cut;
+    view.lead_env=lead_env;
     view.overlays=overlays;
     view.next_bar=next_bar;
     view.speed=speed;

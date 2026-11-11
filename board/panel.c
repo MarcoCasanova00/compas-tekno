@@ -384,7 +384,12 @@ void panel_scan(Panel *panel, uint32_t buttons, uint32_t keys, const int32_t enc
     if(band_page(panel)) {
         if(panel->page==PANEL_BASS) {
             unsigned key_buttons=buttons&((1u<<OCT_DOWN)|(1u<<OCT_UP));
-            if(panel_has_bass(v) && (key_buttons==1u<<OCT_DOWN || key_buttons==1u<<OCT_UP)) {
+            if(v.piano) {
+                /* TD-3-style live lead shape: KNOB 1 = cutoff, KNOB 2 = envelope. */
+                if(enc[2] || enc[3]) send(panel,BOARD_LEAD_SHAPE,adjust(v.lead_cut,enc[2],0,100),
+                                         adjust(v.lead_env,enc[3],0,100));
+                if(enc[4]) send(panel,CP_LEVEL,5,adjust(v.levels[5],enc[4],0,100));
+            } else if(panel_has_bass(v) && (key_buttons==1u<<OCT_DOWN || key_buttons==1u<<OCT_UP)) {
                 unsigned from=board_next_root(v)<12?board_next_root(v):board_root(v);
                 send(panel,CP_ROOT,adjust(from,key_buttons==1u<<OCT_UP?1:-1,0,11),0);
             }
@@ -621,7 +626,12 @@ void panel_face(const Panel *panel, BoardView v, char lines[FACE_LINES][FACE_COL
             label(lines[4],0,"SAVE TO"); number(lines[4],8,panel->slot+1);
             label(lines[4],12,"SELECT");
         } else if(panel->page==PANEL_BASS) {
-            label(lines[3],0,v.piano ? "SCORE ACCOMPANIMENT" : !panel_has_bass(v) ? "DRUM ENSEMBLE" :
+            if(v.piano) {
+                label(lines[3],0,"LEAD SHAPE · TD-3 STYLE");
+                label(lines[4],0,"1 CUTOFF"); number(lines[4],10,v.lead_cut);
+                label(lines[4],11,"2 ENV"); number(lines[4],17,v.lead_env);
+            } else {
+            label(lines[3],0,!panel_has_bass(v) ? "DRUM ENSEMBLE" :
                 v.muted&32u ? "BASS MUTED / TOP 5" : v.bass_style==BASS_ACID ? "4 ACID BASS" :
                 v.bass_style==BASS_MOOG ? "4 MINIMOOG BASS" :
                 v.bass_style==BASS_LOVE_PARADE ? "4 TRANCE LEAD" : "4 FLUTE BASS");
@@ -629,6 +639,7 @@ void panel_face(const Panel *panel, BoardView v, char lines[FACE_LINES][FACE_COL
             else {
                 label(lines[4],0,"1 TONE"); number(lines[4],7,v.bass_cut);
                 label(lines[4],11,"2 BITE"); number(lines[4],17,v.bass_bite);
+            }
             }
         } else if(panel->page==PANEL_PERC) {
             if(v.piano) {

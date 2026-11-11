@@ -30,6 +30,9 @@ static struct {
     uint16_t hit, gate, age, guide_hit, guide_gate;
     uint8_t bar, note[4], click_age, guide_note, guide_age, guide_gain, percussion_edge, pitch_offset;
     uint8_t mark, gain;
+    uint8_t shape_cut, shape_env;   /* live TD-3-style cutoff + envelope knobs (0..100) */
+    int32_t shape_lp;               /* one-pole low-pass state for the lead mix */
+    uint32_t shape_age;             /* envelope follower: rises on note attacks, decays after */
 #ifdef PIANO_VOICES
     struct {
         uint32_t phase;
@@ -57,11 +60,18 @@ void piano_transpose(int semitones)
     if(semitones>=-6 && semitones<=5) player.pitch_offset=(uint8_t)(semitones+6);
 }
 
+void piano_set_shape(unsigned cut, unsigned env)
+{
+    player.shape_cut=(uint8_t)(cut>100?100:cut);
+    player.shape_env=(uint8_t)(env>100?100:env);
+}
+
 void piano_start(unsigned id,unsigned count_in)
 {
     score=&scores[id-1u];
     player.phase=0;
     piano_transpose(0);
+    player.shape_cut=64; player.shape_env=50; player.shape_lp=0; player.shape_age=0;
     player.tick=count_in ? -(int32_t)(score->pulse_ticks*score->beats) : 0;
     player.bar=0;
     seek_dynamics();
@@ -142,6 +152,7 @@ static void voice_begin(unsigned voice,const PianoNote *event)
     player.voice[voice].note=note_pitch(event);
     player.voice[voice].phase=0x40000000u;
     player.voice[voice].age=0;
+    player.shape_age=0;   /* new note retriggers the filter envelope */
 }
 
 static int32_t voices_mix(void)
@@ -172,8 +183,21 @@ static int32_t voices_mix(void)
         sum+=sig*(int32_t)envelope/2048;
         player.voice[i].phase=phase+score->increments[player.voice[i].note+player.pitch_offset];
     }
-    if(score->voices>4) return sum/4;
-    if(score->voices>2) return sum/2;
+    if(score->voices>4) sum/=4;
+    else if(score->voices>2) sum/=2;
+    /* TD-3-style live shape: the cutoff knob sets the low-pass base; the
+     * envelope knob is the env amount that opens the filter as a note
+     * attacks (shape_age resets at every new note, then settles). */
+    {
+        int32_t base=64+(int32_t)player.shape_cut*3;    /* cutoff knob 0..100 */
+        if(player.shape_age<512) player.shape_age+=16;   /* attack ramp */
+        else if(player.shape_age<8192) player.shape_age+=4;
+        int32_t env=player.shape_age<256 ? (int32_t)player.shape_age : 256;
+        int32_t alpha=(base + ((int32_t)player.shape_env*env)/256) >> 8;
+        if(alpha>255) alpha=255;
+        player.shape_lp += ((sum-player.shape_lp)*alpha) >> 8;
+        sum=player.shape_lp;
+    }
     return sum;
 }
 
