@@ -12,6 +12,10 @@ enum { OCT_DOWN=0, OCT_UP=1, MIX=2, SET=3, BASS=4, PERC=5, EDIT=6, RACK=7, HOME=
 #include "lang.inc"
 
 uint8_t panel_lang;
+static uint32_t drone_press_at[27];
+static uint8_t drone_latched[27];
+#define DRONE_HOLD_TICKS 19200u      /* ~0.8s at 24 kHz */
+unsigned drone_debug_sends;
 
 static int word_compare(const char *a, const char *b)
 {
@@ -426,6 +430,27 @@ void panel_scan(Panel *panel, uint32_t buttons, uint32_t keys, const int32_t enc
         if(buttons&(1u<<SECTION)) {
             if(v.piano && v.playing) send(panel,BOARD_ENDING,0,0);
             else send(panel,BOARD_PART,PART_END,0);
+        }
+        /* Drone latch: press a pad ~0.8s while playing toggles it. */
+        if(v.playing) {
+            uint32_t fresh=keys&~panel->held;
+            for(unsigned k=0;k<27u;++k) {
+                unsigned bit=1u<<k;
+                if(fresh&bit) {
+                    drone_press_at[k]=now;
+                    drone_latched[k]=0;
+                } else if(panel->held&bit) {
+                    if(drone_press_at[k] && now-drone_press_at[k]>=DRONE_HOLD_TICKS
+                       && !drone_latched[k]) {
+                        drone_latched[k]=1;
+                        drone_debug_sends++;
+                        send(panel,BOARD_DRONE_TOGGLE,53u+k,0);
+                    }
+                } else {
+                    drone_press_at[k]=0;
+                    drone_latched[k]=0;
+                }
+            }
         }
         uint32_t pressed=keys&~panel->held;
         panel->held=keys;

@@ -326,6 +326,8 @@ uint32_t web_tempo(void) { return cp_status(CP_TEMPO); }
 uint32_t web_study(void) { return cp_status(CP_STUDY_ID); }
 uint32_t web_mutes(void) { return cp_status(CP_MUTES); }
 uint32_t web_rack_state(uint32_t sound) { return board_rack_state(sound); }
+uint32_t web_drone_mask(void) { return board_drone_mask(); }
+uint32_t web_drone_sends(void) { extern unsigned drone_debug_sends; return drone_debug_sends; }
 void _initialize(void) {}   /* WASI reactor no-op for the worklet's guarded call */
 
 #ifdef COMPAS_NATIVE_MAIN

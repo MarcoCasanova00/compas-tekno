@@ -19,7 +19,7 @@ int board_kumbia_restore(const uint8_t settings[KUMBIA_SETTINGS]);
 #endif
 /* Tekno scores (piano pieces) — available on every build; 66 stays clear of
  * the HANAN command block (61..65). */
-enum { BOARD_PIANO_CUE=66 };
+enum { BOARD_PIANO_CUE=66, BOARD_DRONE_TOGGLE=69 };
 enum { RACK_HIT_STRENGTH, RACK_ACCENT_STRENGTH, RACK_LEVEL };
 enum { BOARD_OVERLAY_ALL=4 }; /* BOARD_OVERLAY_LEVEL lane: shift all four lanes, b=delta+128 */
 enum { BASS_ENSEMBLE, BASS_ACID, BASS_MOOG, BASS_LOVE_PARADE };
@@ -126,6 +126,9 @@ void board_init(void);
 unsigned board_submit(BoardCommand cmd);
 BoardView board_view(unsigned role);
 void board_render_audio(int32_t *out);   /* one 128-frame audio half: services commands, renders, publishes view */
+void board_drone_toggle(unsigned midi);
+int32_t board_drone_mix(void);
+uint32_t board_drone_mask(void);
 uint32_t board_rack_state(unsigned sound);
 void board_set_user_tempo(uint8_t t);
 void fm1_alnk0_irq(void);

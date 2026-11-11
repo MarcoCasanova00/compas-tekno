@@ -173,3 +173,8 @@ live record, swing, rolls, and now **3-state step velocity**: in GLO → SEQ
 edit, tap a step repeatedly to cycle off → normal → accent → off (accent =
 double velocity). Still missing vs Volca: parameter locks/motion sequencing
 (per-step pitch/gain automation).
+
+**Q: Can I add drone/latched sounds over the groove (like Carnac textures)?**
+A: Yes — **long-press any pad (~0.8 s) while playing** latches that note as a
+sustained synth drone layered under the groove; long-press again to unlatch.
+Works on HOME/BASS/LFO pages; up to 36 semitone positions; soft attack/release.

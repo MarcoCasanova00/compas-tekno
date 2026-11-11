@@ -54,6 +54,45 @@ static uint32_t record_pending[RACK_SOUNDS];
 static uint8_t record_armed;
 static uint8_t rack_sequence, rack_sequence_sound, active_rhythm, queued_rhythm;
 uint8_t board_rhythm_only, board_roll_mode;
+
+/* Droning latched voices: up to 36 semitone positions (MIDI 36..71).
+ * Each active note is a soft detuned pair of triangles with slow attack /
+ * release, layered under the groove. Toggled by long-press on pads. */
+static uint32_t drone_mask;
+static uint32_t drone_phase[36];
+static int32_t drone_env;              /* 0..4096 */
+static const uint32_t drone_inc[36] = {
+    0x077a2100u,0x07db0a00u,0x083e9900u,0x08a4d300u,0x090dc000u,0x09796600u,
+    0x09e7c800u,0x0a58eb00u,0x0accd400u,0x0b438a00u,0x0bbd1400u,0x0c397900u,
+    0x0cb8c000u,0x0d3af300u,0x0dc01900u,0x0e483a00u,0x0ed36100u,0x0f619a00u,
+    0x0ff2ef00u,0x10876a00u,0x111f1600u,0x11b9fd00u,0x12582b00u,0x12f9ab00u,
+    0x139e8900u,0x1446d200u,0x14f29000u,0x15a1d300u,0x1654a700u,0x170b1a00u,
+    0x17c53b00u,0x18831a00u,0x1944c600u,0x1a0a4e00u,0x1ad3c200u,0x1ba13100u,
+};
+static int32_t tri32(uint32_t p) {
+    int32_t x=(int32_t)(p>>16);
+    return x<32768 ? x*2-32768 : 98303-x*2;
+}
+uint32_t board_drone_mask(void) { return drone_mask; }
+void board_drone_toggle(unsigned midi) {
+    if(midi<36 || midi>71) return;
+    drone_mask ^= 1u<<(midi-36);
+    if(!drone_mask) drone_env/=2;
+}
+int32_t board_drone_mix(void) {
+    if(!drone_mask && !drone_env) return 0;
+    int32_t sum=0;
+    for(unsigned i=0;i<36u;++i) if(drone_mask&(1u<<i)) {
+        uint32_t p=drone_phase[i];
+        sum += (tri32(p)+tri32(p+0x20000000u))/2;
+        drone_phase[i]=p+drone_inc[i];
+    }
+    /* slow attack/release */
+    int32_t target=drone_mask?4096:0;
+    if(drone_env<target) drone_env+=(target-drone_env)/240;
+    else if(drone_env>target) drone_env-=(drone_env-target)/360;
+    return (sum*drone_env)/4096/10;
+}
 uint32_t board_rack_state(unsigned sound) {
     if(sound>=RACK_SOUNDS) return 0;
     return rack_pattern[sound] | (rack_pattern_accents[sound]<<16);
@@ -1031,6 +1070,9 @@ static unsigned apply(BoardCommand cmd)
     case BOARD_ACCENT:
         if (cmd.a>1) return CP_RANGE;
         accent=cmd.a;
+        return CP_OK;
+    case BOARD_DRONE_TOGGLE:
+        board_drone_toggle(cmd.a);
         return CP_OK;
     case BOARD_PIANO_CUE:
         /* Start a score (piano piece) from the compiled table. Scores play

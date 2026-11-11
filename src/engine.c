@@ -640,6 +640,7 @@ uint32_t cp_render(uint32_t count) {
         }
         if(mix>32767 || mix<-32768) board_mix_clip();
         mix=(mix>32767 ? 32767 : mix < -32768 ? -32768 : mix)/2 + board_rack_sample();
+        mix += board_drone_mix();   /* latched drones layer under the groove */
         /* soft crest limiter: keeps the pcm output within ~12-bit range
          * (float ceiling ~1.0) without flattening the groove dynamics */
         if(mix>3000) mix=3000+((mix-3000)/3);
