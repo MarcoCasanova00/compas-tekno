@@ -284,7 +284,11 @@ unsigned board_submit(BoardCommand cmd)
 int board_ota_idle(void)
 {
     uint32_t irq=board_lock();
+#ifdef COMPAS_EMU_STORE
     unsigned idle=!queued && !view.playing && !save_ready;
+#else
+    unsigned idle=!queued && !view.playing;  /* no host save pending without the emu store */
+#endif
     board_unlock(irq);
     return idle;
 }

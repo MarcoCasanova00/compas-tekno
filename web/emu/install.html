@@ -499,11 +499,8 @@ class Updater {
     const back = await this.waitFor((id) => !IS_OTA(id), 40000);
     if (!back) throw fail("noreturn", "the device did not come back: power-cycle it");
     back.link.close();
-    // The Compás app deliberately never rewrites the boot-block identity, so the
-    // device may still report the previous firmware's id (e.g. FM-1_015). The
-    // loader's "success" confirm is the write proof; report the id as a note.
-    if (back.id.text !== product) step("done", back.id.text + " (note: boot-block identity unchanged — write confirmed by loader)");
-    else step("done", back.id.text);
+    if (back.id.text !== product) throw fail("mismatch", `installed, but the device reports ${back.id.text}`, back.id.text);
+    step("done", back.id.text);
     return back.id.text;
   }
 
@@ -628,6 +625,7 @@ const ERRORS = {
   lost: "The USB connection dropped. Replug and press Install again.",
   noloader: "The update loader did not appear. Replug and press Install again — the device stays in update mode until finished.",
   noreturn: "The device did not come back after writing. Power-cycle it.",
+  mismatch: "Written, but the device reports a different version — do not trust the write; restore V15 and check: ",
   badreq: "The device asked for an invalid block. Nothing was written; retry or use the verifier.",
 };
 

@@ -23,7 +23,7 @@ OBJDUMP = TC / "common/bin/objdump"
 CFLAGS = ["-target", "pi32v2", "-mcpu=r3", "-mfprev1", "-Oz", "-g", "-std=c11",
           "-Wall", "-Wextra", "-Werror", "-Wno-unused-function", "-Wno-type-limits",
           "-ffreestanding", "-fno-builtin", "-ffunction-sections", "-fdata-sections",
-          "-include", "stdint.h", "-DCOMPAS_BOARD",
+          "-include", "stdint.h", "-DCOMPAS_BOARD", "-DCOMPAS_USB",
           f"-I{ROOT/'build/device/board'}", f"-I{ROOT/'board'}", f"-I{ROOT/'src'}",
           f"-I{ROOT/'build'}", f"-I{ROOT/'build/board'}",
           f"-I{BSP/'firmware/hal'}", f"-I{BSP/'firmware/src'}"]

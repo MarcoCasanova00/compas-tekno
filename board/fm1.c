@@ -26,6 +26,8 @@ static void scan_during_transfer(unsigned pixels)
 #define STAGE_TRANSFER_POLL(pixels) scan_during_transfer(pixels)
 #include "stage.c"
 #undef STAGE_TRANSFER_POLL
+#include "fm1_flash.h"
+extern uint32_t _rt_start[], _rt_end[], _rt_load[];
 #ifdef COMPAS_EMU_STORE
 #include "store.h"
 #ifdef COMPAS_USB
@@ -35,8 +37,6 @@ static void scan_during_transfer(unsigned pixels)
 #else
 #define FL_RANGE_OK(off,n) FL_IN(off,n,STORE_A,STORE_B+STORE_SECTOR)
 #endif
-#include "fm1_flash.h"
-extern uint32_t _rt_start[], _rt_end[], _rt_load[];
 static unsigned store_enabled;
 #endif
 
