@@ -619,5 +619,12 @@
   "catalog": "tekno-desert-sunrise",
   "backing": "tekno-desert-sunrise.json",
   "bpm": 155
+ },
+ {
+  "id": "tekno-xlead-arp",
+  "title": "Extreme Lead · XLEAD arp",
+  "catalog": "tekno-xlead-arp",
+  "backing": "tekno-xlead-arp.json",
+  "bpm": 155
  }
 ]

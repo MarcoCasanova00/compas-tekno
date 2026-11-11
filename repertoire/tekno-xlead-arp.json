@@ -1,0 +1,61 @@
+{
+ "title": "Extreme Lead · XLEAD arp",
+ "composer": "Inspired by the XLEAD hardtek/acidtekno arp sysex set",
+ "edition": "Original composition in the spirit of the archive (E-rooted, octave+d screams)",
+ "source": "XLEAD sysex bank (Yamaha-format arps) — inspiration only, no copied data",
+ "scope": "16 bars, 4/4 @ 155 BPM, lead-line score",
+ "ppq": 24,
+ "meter": [
+  4,
+  4
+ ],
+ "preview_bpm": 155,
+ "form": [
+  {
+   "name": "INTRO",
+   "bar": 1
+  },
+  {
+   "name": "VERSE",
+   "bar": 5
+  },
+  {
+   "name": "REFRAIN",
+   "bar": 9
+  },
+  {
+   "name": "CODA",
+   "bar": 13
+  }
+ ],
+ "parts": [
+  {
+   "title": "XLEAD lead",
+   "program": 74,
+   "velocity_marks": [
+    [
+     0,
+     120
+    ]
+   ],
+   "bars": [
+    "E5:12 E5:12 E5:12 E5:12 E5:12 E5:12 E5:12 E5:12",
+    "E5:12 G5:12 E5:12 B5:12 E5:12 G5:12 E5:12 B5:12",
+    "E5:12 G5:12 A5:12 B5:12 E5:12 G5:12 A5:12 B5:12",
+    "E5:24 B5:24 E5:24 B5:24",
+    "B5:12 E6:12 B5:12 G5:12 E5:12 G5:12 B5:12 E6:12",
+    "E6:12 B5:12 G5:12 E5:12 A5:12 B5:12 D6:12 E6:12",
+    "G5:12 B5:12 E6:12 B5:12 G5:12 E5:12 B5:12 G5:12",
+    "E5:24 E6:48 B5:24",
+    "E6:12 G6:12 B6:12 G6:12 E6:12 B5:12 G5:12 E5:12",
+    "G6:12 B6:12 C7:12 B6:12 G6:12 E6:12 B5:12 G5:12",
+    "E6:12 B6:12 E6:12 G6:12 E6:12 B5:12 G5:12 E5:12",
+    "G#6:24 E6:24 B5:24 G5:24",
+    "E6:12 B5:12 G5:12 E5:12 E6:12 B5:12 G5:12 E5:12",
+    "G5:12 B5:12 E6:12 G6:12 G5:12 B5:12 E6:12 G6:12",
+    "E6:48 B5:24 G5:24",
+    "E5:96"
+   ]
+  }
+ ]
+}

@@ -165,7 +165,11 @@ static int32_t voices_mix(void)
         uint32_t phase=player.voice[i].phase;
         int32_t tone=triangle(phase);
         int32_t overtone=triangle(phase*2u+0xc0000000u);
-        sum+=(tone*5+overtone)*(int32_t)envelope/2048;
+        int32_t scream=triangle(phase*3u+0x80000000u);
+        int32_t sig=tone*5+overtone+scream/2;
+        if(sig>32000) sig=32000+(sig-32000)/2;
+        else if(sig<-32000) sig=-32000-(-32000-sig)/2;
+        sum+=sig*(int32_t)envelope/2048;
         player.voice[i].phase=phase+score->increments[player.voice[i].note+player.pitch_offset];
     }
     if(score->voices>4) return sum/4;
@@ -213,7 +217,12 @@ static int32_t chords_mix(void)
             uint32_t phase=player.oscillator[i];
             int32_t tone=triangle(phase);
             int32_t overtone=triangle(phase*2u+0xc0000000u);
-            sum+=(tone*5+overtone)*((int32_t)envelope)/2048;
+            int32_t scream=triangle(phase*3u+0x80000000u); /* extreme-lead third harmonic */
+            int32_t sig=tone*5+overtone+scream/2;
+            /* gentle drive: cheap soft clip keeps the hardtek bite without aliasing */
+            if(sig>32000) sig=32000+(sig-32000)/2;
+            else if(sig<-32000) sig=-32000-(-32000-sig)/2;
+            sum+=sig*((int32_t)envelope)/2048;
             player.oscillator[i]=phase+score->increments[player.note[i]+player.pitch_offset];
         }
         if(player.age<ATTACK) ++player.age;
