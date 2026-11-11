@@ -23,6 +23,7 @@ if (typeof registerProcessor === "function") {
       this.period = 1 / 30;
       this.queue = [];
       this.nextOk = 0;
+      this.vol = 1.0;
       this.port.onmessage = (e) => this.onMessage(e.data);
     }
 
@@ -49,12 +50,13 @@ if (typeof registerProcessor === "function") {
       else if (m.type === "getstatus") this.port.postMessage({ type: "status", playing: ex.web_seq_playing(), tempo: ex.web_tempo(), study: ex.web_study() });
       else if (m.type === "midi") ex.web_midi(m.data[0] | 0, m.data[1] | 0, m.data[2] | 0);
       else if (m.type === "visible") this.period = m.on ? 1 / 30 : 1 / 4;
+      else if (m.type === "vol") this.vol = Math.max(0, Math.min(1.5, m.v / 100));
     }
 
     publish() {
       const ex = this.ex, mem = ex.memory.buffer, msg = { type: "frame" }, transfer = [];
       msg.kbMode = ex.web_kb_mode ? ex.web_kb_mode() : 0;
-      const leds = new Uint8Array(mem, ex.web_leds(), 41).slice();
+      const leds = new Uint8Array(mem, ex.web_leds(), 11).slice();   // 11 columns, row-bit encoded
       const key = leds.join("");
       if (key !== this.sentLeds) {
         this.sentLeds = key;
@@ -85,8 +87,11 @@ if (typeof registerProcessor === "function") {
       if (this.queue.length) this.input();
       const out = outputs[0], n = out[0].length;
       ex.web_render(n);
-      out[0].set(new Float32Array(ex.memory.buffer, ex.web_out_l(), n));
-      if (out[1]) out[1].set(new Float32Array(ex.memory.buffer, ex.web_out_r(), n));
+      const vol = this.vol;
+      const l = new Float32Array(ex.memory.buffer, ex.web_out_l(), n);
+      const r = new Float32Array(ex.memory.buffer, ex.web_out_r(), n);
+      for (let i = 0; i < n; i++) out[0][i] = l[i] * vol;
+      if (out[1]) for (let i = 0; i < n; i++) out[1][i] = r[i] * vol;
       if (currentTime - this.lastFrame >= this.period) {
         this.lastFrame = currentTime;
         this.publish();
