@@ -77,6 +77,21 @@ kbd { font: 600 11px ui-monospace, Menlo, monospace; border: 1px solid var(--dim
   </div>
   <p class="help">The pads trigger the groove's instruments; the note row also triggers parts and layers. Knobs: drag up / down or scroll ·
     <kbd>Shift</kbd>-click holds a button · MIDI IN from WebMIDI when the browser allows it</p>
+  <details class="guide" id="flashgate">
+    <summary>Flashing the FM-1 (.fwsc) — verify first</summary>
+    <p class="small" style="margin:6px 0">Before you flash: the package is verified in this browser (identity + CRCs),
+      then you get the required confirmation.</p>
+    <p><button id="flashcheck" type="button" class="b">Verify package</button> <span id="flashstatus" style="color:var(--dim)"></span></p>
+    <pre id="flashlog" style="display:none;margin:8px 0;font-size:11px;line-height:1.4;color:var(--fg);background:#0e1510;border:1px solid #22341f;border-radius:4px;padding:8px;max-height:180px;overflow:auto"></pre>
+    <div id="flashsteps" hidden>
+      <ol style="margin:6px 0 0;padding-left:18px">
+        <li>If the FM-1 runs any custom firmware, <b>return to official V15 first</b> (web installer → "Return to official V15").</li>
+        <li>Connect the FM-1 by USB (data cable) and open your installer (same one used for Amaru OS).</li>
+        <li>Select <code>firmware/compas-tekno.fwsc</code> — identity <code>FM-1_710</code>.</li>
+        <li>Never unplug during the write; if interrupted, replug and install again.</li>
+      </ol>
+    </div>
+  </details>
   <footer>Compás TEKNO · a light fork of Compás (GPL-3.0) · UFO tekno banks · free-party take ·
     built on Felucca (Leo Kuroshita, Hügelton Instruments) and M-Vave-OP1 · browser build after charlesvestal's X0X ·
     M-VAVE and FM-1 are trademarks of their respective owners.</footer>
@@ -88,7 +103,7 @@ const ROLES = ["SELECT", "MODE", "KNOB 1", "KNOB 2", "KNOB 3", "KNOB 4", "SONG"]
 const SHARP = new Set([1, 3, 5, 8, 10, 13, 15, 17, 20, 22, 25]);   // key k = k semitones above F3
 const KEYMAP = "zsxdcfvbhnjm,l.;/q2w3e4rt6y7u8i9op";              // computer keys -> note keys 0..
 const $ = (id) => document.getElementById(id);
-const V = "20261111j";                 // cache-buster: bumped per build (make_site.py)
+const V = "20261111k";                 // cache-buster: bumped per build (make_site.py)
 let node = null, ids = [], buttons = 0, held = 0, keys = 0;
 
 function send(m) { if (node) node.port.postMessage(m); }
@@ -237,6 +252,79 @@ addEventListener("keydown", (e) => {
 addEventListener("keyup", (e) => {
   const k = KEYMAP.indexOf(e.key.toLowerCase());
   if (k >= 0 && k < 27) { keys &= ~(1 << k); setKeys(); }
+});
+
+// ---- flashing gate (mirrors the Amaru installer pattern: verify, then confirm) ----
+const crc16 = (data) => {
+  let c = 0;
+  for (const b of data) { c ^= b << 8; for (let i = 0; i < 8; i++) c = ((c << 1) ^ (c & 0x8000 ? 0x1021 : 0)) & 0xffff; }
+  return c & 0xffff;
+};
+const encXor = (arr, off, size) => {
+  let k = 0xFFFF;
+  for (let i = 0; i < size; i++) { arr[off + i] ^= k & 0xff; k = ((k << 1) ^ (k & 0x8000 ? 0x1021 : 0)) & 0xffff; }
+};
+const FWSC_URL = "https://raw.githubusercontent.com/MarcoCasanova00/compas-tekno/main/firmware/compas-tekno.fwsc";
+const flashLog = (line) => {
+  const el = $("flashlog");
+  el.style.display = "block";
+  el.textContent += line + "\n";
+};
+async function verifyFwsc() {
+  $("flashlog").textContent = "";
+  $("flashstatus").textContent = "fetching package…";
+  let pkg;
+  try {
+    const r = await fetch(FWSC_URL);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    pkg = new Uint8Array(await r.arrayBuffer());
+  } catch (e) { $("flashstatus").textContent = "cannot fetch package: " + e.message; return false; }
+  // 1) identity markers (first 20 blocks of 0x2F + 1 marker byte)
+  let product = "";
+  for (let i = 0; i < 20; i++) {
+    const m = pkg[i * 0x30 + 0x2F];
+    if (m === 0x7D) break;
+    let found = 0;
+    for (let ch = 32; ch < 127; ch++) if (((ch + i + 1) & 0xff) === m) { found = ch; break; }
+    if (!found) break;
+    product += String.fromCharCode(found);
+  }
+  flashLog(`package identity: ${product}`);
+  if (product !== "FM-1_710") { $("flashstatus").textContent = "identity mismatch — aborting"; return false; }
+  // 2) container: 0x40 header, then 2×0x50 entries (encrypted, key 0xFFFF)
+  const logical = new Uint8Array(pkg.length - 20); // strip the 20 marker bytes
+  let w = 0;
+  for (let i = 0; i < 20; i++) { logical.set(pkg.subarray(i * 0x30, i * 0x30 + 0x2F), w); w += 0x2F; }
+  logical.set(pkg.subarray(20 * 0x30), w);
+  const hdr = logical.slice(0, 0x40);
+  encXor(hdr, 0, 0x40);
+  if (crc16(hdr.subarray(2)) !== (hdr[0] | (hdr[1] << 8))) { $("flashstatus").textContent = "container header CRC failed"; return false; }
+  const total = hdr[4] | (hdr[5] << 8) | (hdr[6] << 16) | (hdr[7] << 24);
+  const nfiles = hdr[8] | (hdr[9] << 8);
+  flashLog(`container: total=${total} files=${nfiles}`);
+  const lst = logical.slice(0x40, 0x40 + 0x50 * nfiles);
+  for (let i = 0; i < nfiles; i++) encXor(lst, i * 0x50, 0x50);
+  for (let i = 0; i < nfiles; i++) {
+    const e = lst.subarray(i * 0x50, (i + 1) * 0x50);
+    const dcrc = e[4] | (e[5] << 8) | (e[6] << 16) | (e[7] << 24);
+    const off = e[8] | (e[9] << 8) | (e[10] << 16) | (e[11] << 24);
+    const size = e[12] | (e[13] << 8) | (e[14] << 16) | (e[15] << 24);
+    let name = "";
+    for (let j = 0x40; j < 0x50 && e[j]; j++) name += String.fromCharCode(e[j]);
+    const data = logical.subarray(off, off + size);
+    const ok = crc16(data) === (dcrc & 0xffff);
+    flashLog(`  ${name.padEnd(12)} off=0x${off.toString(16)} size=${size} crc=${ok ? "OK" : "FAIL"}`);
+    if (!ok) { $("flashstatus").textContent = "package CRC failed — do not flash"; return false; }
+  }
+  $("flashstatus").textContent = "package verified (FM-1_710, CRCs OK)";
+  return true;
+}
+$("flashcheck").addEventListener("click", async () => {
+  const ok = await verifyFwsc();
+  if (!ok) return;
+  const answer = confirm("Did you go back to official V15 before?\n\nWriting over another custom firmware is the most common cause of a bricked FM-1.\nIf you are not on stock V15, cancel, restore official V15, then flash.");
+  if (answer) { $("flashsteps").hidden = false; flashLog("confirmation given — install steps shown"); }
+  else { $("flashstatus").textContent = "cancelled — return to official V15 first"; }
 });
 
 // ------------------------------------------------------------------ screen, LEDs
