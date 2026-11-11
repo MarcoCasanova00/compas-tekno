@@ -2359,6 +2359,225 @@
     "overlayFamily": 0,
     "assignMask": 31
    }
+  },
+  {
+   "id": "santo-evolved",
+   "conductor": "default",
+   "title": "Evolved · Phrygian flute tekno",
+   "short": "EVOLVED",
+   "meter": 4,
+   "bpm": 155,
+   "refs": [
+    "EVOLVED"
+   ],
+   "note": "SANTO CENTER EVOLVED template: four-on-floor, off-beat hats, E-F-G-B phrygian flute bass line (root E).",
+   "parts": [
+    [
+     "Kick",
+     "kick",
+     "0! 4 8! 12 16! 20 24! 28",
+     "0! 4 8! 12 16! 20 24! 28",
+     ""
+    ],
+    [
+     "Hat",
+     "shake",
+     "2 6 10 14 18 22 26 30",
+     "2 6 10 14 18 22 26 30",
+     ""
+    ],
+    [
+     "Clap",
+     "snare",
+     "4 12 20 28",
+     "4 12 20 28",
+     ""
+    ],
+    [
+     "Perc",
+     "hand",
+     "3 7 11 15 19 23 27 31",
+     "3 7 11 15 19 23 27 31",
+     ""
+    ],
+    [
+     "OpenHat",
+     "hand",
+     "14 30",
+     "14 30",
+     ""
+    ],
+    [
+     "Bass",
+     "bass",
+     "0:0 4:0 7:7 8:0 12:0 16:0 20:7 24:0 28:5",
+     "0:3 4:5 8:7 12:8 16:10 20:7 24:5 28:3",
+     ""
+    ]
+   ],
+   "break": [
+    "Kick",
+    "Clap",
+    "Bass"
+   ],
+   "board": {
+    "kit": [
+     3,
+     1,
+     5,
+     8,
+     2,
+     0
+    ],
+    "overlayFamily": 0,
+    "assignMask": 31
+   }
+  },
+  {
+   "id": "santo-hypnotic",
+   "conductor": "default",
+   "title": "Hypnotic · Dorian b2 trance ostinato",
+   "short": "HYPNOTIC",
+   "meter": 4,
+   "bpm": 155,
+   "refs": [
+    "HYPNOTIC"
+   ],
+   "note": "SANTO CENTER HYPNOTIC 3-note hypnotic motif (D-Eb-G-A) over a locked four-on-floor; trance ostinato bass.",
+   "parts": [
+    [
+     "Kick",
+     "kick",
+     "0! 4 8! 12 16! 20 24! 28",
+     "0! 4 8! 12 16! 20 24! 28",
+     ""
+    ],
+    [
+     "Hat",
+     "shake",
+     "2 6 10 14 18 22 26 30",
+     "2 6 10 14 18 22 26 30",
+     ""
+    ],
+    [
+     "Clap",
+     "snare",
+     "4 12 20 28",
+     "4 12 20 28",
+     ""
+    ],
+    [
+     "Perc",
+     "hand",
+     "3 7 11 15 19 23 27 31",
+     "3 7 11 15 19 23 27 31",
+     ""
+    ],
+    [
+     "OpenHat",
+     "hand",
+     "14 30",
+     "14 30",
+     ""
+    ],
+    [
+     "Bass",
+     "bass",
+     "0:0 4:1 8:3 12:5 16:0 20:1 24:3 28:5",
+     "0:5 4:3 8:1 12:0 16:5 20:3 24:1 28:0",
+     ""
+    ]
+   ],
+   "break": [
+    "Kick",
+    "Clap",
+    "Bass"
+   ],
+   "board": {
+    "kit": [
+     3,
+     1,
+     5,
+     8,
+     2,
+     0
+    ],
+    "overlayFamily": 0,
+    "assignMask": 31
+   }
+  },
+  {
+   "id": "santo-sunrise",
+   "conductor": "default",
+   "title": "Spiral Sunrise · Egyptian double-harmonic",
+   "short": "SPIRAL SUNRISE",
+   "meter": 4,
+   "bpm": 155,
+   "refs": [
+    "SPIRAL SUNRISE"
+   ],
+   "note": "SANTO CENTER spiral-sunrise style: long arching egyptian double-harmonic phrases (E-F-G#-A-B-C-D#), sparse tribal percussion.",
+   "parts": [
+    [
+     "Kick",
+     "kick",
+     "0! 4 8! 12 16! 20 24! 28",
+     "0! 4 8! 12 16! 20 24! 28",
+     ""
+    ],
+    [
+     "Hat",
+     "shake",
+     "2 6 10 14 18 22 26 30",
+     "2 6 10 14 18 22 26 30",
+     ""
+    ],
+    [
+     "Clap",
+     "snare",
+     "4 12 20 28",
+     "4 12 20 28",
+     ""
+    ],
+    [
+     "Perc",
+     "hand",
+     "3 7 11 15 19 23 27 31",
+     "3 7 11 15 19 23 27 31",
+     ""
+    ],
+    [
+     "OpenHat",
+     "hand",
+     "14 30",
+     "14 30",
+     ""
+    ],
+    [
+     "Bass",
+     "bass",
+     "0:0 8:4 16:7 24:8",
+     "0:7 8:4 16:1 24:0",
+     ""
+    ]
+   ],
+   "break": [
+    "Kick",
+    "Clap",
+    "Bass"
+   ],
+   "board": {
+    "kit": [
+     3,
+     1,
+     5,
+     8,
+     2,
+     0
+    ],
+    "overlayFamily": 0,
+    "assignMask": 31
+   }
   }
  ],
  "voiceProvenance": "Original fixed-point procedural synthesis in engine.c. Role names signal function and timbral intent; no acoustical emulation claim, sample, ROM, loop or third-party recording."

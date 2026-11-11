@@ -52,7 +52,8 @@ def ctext(s):
 
 # GLO family tags come from the registry: the conductor family, with the few
 # studies whose dance family differs from their conductor named explicitly.
-FAMILY_BY_ID = {"tejano": "Tejano", "son": "Son", "conjunto": "Conjunto", "bolero": "Bolero",
+FAMILY_BY_ID = {"santo-evolved": "Santo", "santo-hypnotic": "Santo", "santo-sunrise": "Santo",
+                "tejano": "Tejano", "son": "Son", "conjunto": "Conjunto", "bolero": "Bolero",
                 "bolero-trova": "Bolero", "tribal": "Tribal", "tribal-tekno": "Tekno", "merenhouse": "Merengue",
                 "jarocho-bamba": "Jarocho"}
 def family(s):

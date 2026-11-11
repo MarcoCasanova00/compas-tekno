@@ -18,7 +18,7 @@ Hügelton Instruments) · GPL-3.0.
   tribe190 Electribe (E2S) banks**: Guigoo kicks, Kawai clap, Nouvoo snare,
   closed/open hats, tribal percs, toms, hoover stabs, break FX and a spare hard
   kick — packed losslessly into the firmware's native bank format.
-- **30 grooves, all kitted** — every one of the 30 presets now plays the tekno
+- **33 grooves, all kitted** — every one of the 30 presets now plays the tekno
   bank (Kick · Hat · Clap · Perc · OpenHat sampled; bass via the engine's
   acid/hoover voice). Each groove keeps its own patterns, parts and BPM — from
   `TEKNO DURO` and `FRENCH KICK` through `TRIBAL 155`, `HARD TRIBE`, to the
@@ -27,6 +27,9 @@ Hügelton Instruments) · GPL-3.0.
 - **Wakor visual identity** — the whole UI (device + web) is rethemed to a
   neon black/green/yellow palette (#000000 · #89ff00 · #fdff00 · #075800 ·
   #c8d48a).
+- **Shamanic flute bass** — the engine's synthesized bass voice now plays a
+  soft triangle/sine flute with slow vibrato and breath noise (per your pick);
+  the acid path stays available via the BASS page style toggle.
 - **New splash** — the boot portrait is a freshly packed 16-color 108×108
   artwork (regenerate from any PNG with `tools/portrait-pack.py`).
 

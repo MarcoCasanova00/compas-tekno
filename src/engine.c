@@ -358,12 +358,19 @@ static int32_t bass_sample(Voice *v)
         int32_t damping=178-bass.bite;
         signal=acid_wave(v->a,cutoff,damping,&bass.low,&bass.band);
     } else {
-        v->a+=v->da;
+        /* Shamanic breathy flute: soft triangle partials, slow vibrato
+         * (~5.4 Hz), a gentle attack ramp and a thin breath-noise bed. */
+        static uint32_t flute_lfo;
+        flute_lfo+=0x00080000u;
+        int32_t wobble=(int32_t)(tri(flute_lfo)>>9);
+        v->a+=v->da+(wobble*(int32_t)(v->da>>8)>>7);
         v->b+=v->db;
+        v->noise^=v->noise<<13; v->noise^=v->noise>>17; v->noise^=v->noise<<5;
+        int32_t breath=(int32_t)(v->noise>>16)-32768;
         int32_t bright=ensemble_brightness(v->env,bass.ensemble_tilt);
-        signal=ensemble_wave(v->a,v->b,bright);
+        signal=(tri(v->a)*13+tri(v->b)*bright+breath*2)/20;
     }
-    if(bass.age<64) signal=signal*bass.age++/64;
+    if(bass.age<256) signal=signal*bass.age++/256;
     int32_t amplitude=v->env;
     v->env-=v->decay+(amplitude>>11);
     return signal*amplitude/32768;

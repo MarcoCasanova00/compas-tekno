@@ -36,7 +36,7 @@ packs) with every voice normalized to 0.25 FS, matching `board/727-levels.json`
 - Boundaries are clean (clips start near silence and end near silence, except
   Break FX which is an intentional loop).
 
-## Kits — all 30 grooves now use the bank (1-based clip indices, `score.json` `board.kit`)
+## Kits — all 33 grooves now use the bank (1-based clip indices, `score.json` `board.kit`)
 
 Every groove's kit is `[3, 1, 5, 8, 2, 0]` (same as study 29's): the patterns/theory per groove stay as authored, the voices are the bank's. Bass stays synthesized.
 
