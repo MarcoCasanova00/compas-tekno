@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compás TEKNO · Install to FM-1</title>
+<style>
+  :root { --bg:#070705; --panel:#0f0d0a; --line:#3a332a; --fg:#ffd24a; --dim:#ffdf8c;
+          --bad:#ff5b5b; --amber:#ffd24a; color-scheme:dark; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif; }
+  a { color:var(--fg); }
+  .wrap { display:flex; align-items:stretch; gap:14px; max-width:1060px; margin:0 auto; padding:22px 14px 40px; }
+  main { flex:1; min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px 22px 26px; }
+  header { text-align:center; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:16px; }
+  .strap { font-size:11px; letter-spacing:2px; color:var(--dim); margin:8px 0 2px; }
+  h1 { font-size:20px; margin:6px 0 0; letter-spacing:.5px; }
+  h1 span { color:var(--dim); font-weight:400; }
+  nav { display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; margin-top:12px; font-size:12px; letter-spacing:.6px; }
+  nav a { text-decoration:none; border-bottom:1px solid transparent; }
+  nav a:hover, nav a[aria-current] { border-color:var(--fg); }
+  h2 { font-size:12px; letter-spacing:1.6px; text-transform:uppercase; color:var(--dim); margin:22px 0 8px; font-weight:600; }
+  table.pkg { width:100%; border-collapse:collapse; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; }
+  table.pkg th { text-align:left; width:96px; color:var(--dim); font-weight:400; padding:4px 8px 4px 0; }
+  table.pkg td { padding:4px 0; word-break:break-all; }
+  #verdict { margin-top:10px; font-size:12px; padding:8px 10px; border:1px solid var(--line); border-radius:4px; color:var(--dim); }
+  #verdict.ok { border-color:var(--fg); color:var(--fg); }
+  #verdict.bad { border-color:var(--bad); color:var(--bad); }
+  .row { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  button { font:inherit; font-weight:600; border:0; border-radius:4px; padding:11px 16px; cursor:pointer; }
+  #go { background:var(--fg); color:#0b100a; font-size:15px; }
+  #go:disabled { opacity:.3; cursor:not-allowed; }
+  #detect { background:transparent; color:var(--fg); border:1px solid var(--line); }
+  #detect:disabled { opacity:.35; cursor:not-allowed; }
+  .meter { display:flex; align-items:center; gap:10px; margin-top:14px; }
+  progress { flex:1; height:10px; appearance:none; border:1px solid var(--line); background:#1a160f; }
+  progress::-webkit-progress-bar { background:#1a160f; }
+  progress::-webkit-progress-value { background:var(--fg); transition:width .2s linear; }
+  progress::-moz-progress-bar { background:var(--fg); }
+  #pct { font-family:ui-monospace,Menlo,monospace; font-size:12px; color:var(--dim); min-width:4ch; text-align:right; }
+  #status { margin-top:10px; font-size:13px; min-height:1.6em; }
+  #status.live { font-weight:700; color:var(--amber); }
+  #status.live::before { content:"● "; }
+  #status.bad { color:var(--bad); font-weight:700; }
+  #log { margin:10px 0 0; max-height:180px; overflow:auto; font-family:ui-monospace,Menlo,monospace; font-size:11px;
+         color:#c9a94f; background:#080705; border:1px solid #2a241a; border-radius:4px; padding:8px; white-space:pre-wrap; }
+  #log:empty { display:none; }
+  ol.steps { margin:0; padding-left:20px; }
+  ol.steps li { margin:3px 0; }
+  .warn { border:2px solid var(--bad); background:#2a0a0a; color:#ff8d8d; padding:10px 12px; border-radius:4px;
+          font-weight:700; font-size:13px; margin:16px 0 0; text-align:center; letter-spacing:.3px; }
+  .warn.live { background:#4a0d0d; color:#ffb3b3; animation:pulse 1.1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { border-color:var(--bad); } 50% { border-color:#ffb3b3; box-shadow:0 0 0 2px #4a0d0d; } }
+  @media (prefers-reduced-motion: reduce) { .warn.live { animation:none; } }
+  .note { font-size:12px; color:var(--dim); }
+  code { font-family:ui-monospace,Menlo,monospace; }
+  details { margin-top:10px; }
+  summary { cursor:pointer; font-size:12px; color:var(--dim); }
+  input[type=file] { color:var(--dim); font-size:12px; margin-top:8px; }
+  footer { text-align:center; font-size:11px; color:#7a6a3f; margin-top:22px; border-top:1px solid var(--line); padding-top:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main>
+    <header>
+      <p class="strap">TEKNO · TRIBE · 155 BPM · UFO SAMPLES</p>
+      <h1>Compás TEKNO <span>· firmware installer</span></h1>
+      <nav>
+        <a href="./">Emulator</a>
+        <a href="install.html" aria-current="page">Install</a>
+        <a href="https://github.com/MarcoCasanova00/compas-tekno">Source</a>
+      </nav>
+    </header>
+
+    <h2>1 · Package</h2>
+    <table class="pkg">
+      <tr><th>Source</th><td id="pkg-name">loading…</td></tr>
+      <tr><th>Identity</th><td id="pkg-ident">—</td></tr>
+      <tr><th>Size</th><td id="pkg-size">—</td></tr>
+      <tr><th>SHA-256</th><td id="pkg-sha">—</td></tr>
+    </table>
+    <div id="verdict">checking…</div>
+    <details>
+      <summary>Use a local .fwsc instead</summary>
+      <p class="note">Only the exact published Compás TEKNO build is accepted: identity, size and SHA-256 must all match.</p>
+      <input type="file" id="file" accept=".fwsc">
+    </details>
+
+    <h2>2 · Install</h2>
+    <ol class="steps">
+      <li>Chrome or Edge, FM-1 connected directly by a <b>data</b> USB cable.</li>
+      <li>Close other MIDI apps (editors, DAWs, other browser tabs using MIDI).</li>
+      <li>Back up your music first (stock V15 dump or the slot saves).</li>
+      <li>Press <b>Install</b>, allow MIDI, and wait for <b>Done</b>. About a minute.</li>
+    </ol>
+    <div class="row">
+      <button id="go" disabled>Install Compás TEKNO</button>
+      <button id="detect">Detect device</button>
+    </div>
+    <div class="meter">
+      <progress id="bar" max="100" value="0" aria-label="Install progress"></progress>
+      <span id="pct">0%</span>
+    </div>
+    <div id="status" role="status" aria-live="polite">Loading the published package…</div>
+    <pre id="log"></pre>
+
+    <p class="warn" id="warn">DO NOT UNPLUG WHILE WRITING · RECOVERY: HOLD OCT− WHILE SWITCHING ON</p>
+    <p class="note">The device asks for the firmware block by block; nothing is committed until it confirms. If an install is
+      interrupted, replug the cable and press Install again — it resumes from the start. Compás TEKNO installs over official V15;
+      if you are on any other custom firmware (Felucca, Amaru, Baud Girl, Carnac, …), <b>return to official V15 first</b>.</p>
+
+    <footer>
+      Compás TEKNO · FM-1_710 · GPL-3.0-only · M-VAVE and FM-1 are trademarks of their respective owners.<br>
+      Update protocol: the FM-1 pulls the package with 0x30 read requests (M-UPGRADE), it is never pushed raw data.
+    </footer>
+  </main>
+</div>
+
+<script type="module">
+// SPDX-License-Identifier: GPL-3.0-only
+// Copyright (C) 2026 Leo Kuroshita (@kurogedelic), Hügelton Instruments
+// Adapted for Compás TEKNO (FM-1_710) by the Compás TEKNO maintainers.
+//
+// FM-1 .fwsc packages in the browser: the package identity and the image the
+// device reads during an update.
+
+const BLOCKS = 20, BLK = 0x30, KEEP = 0x2F;
+
+const T = new Uint16Array(256);
+for (let i = 0; i < 256; i++) {
+  let c = i << 8;
+  for (let k = 0; k < 8; k++) c = c & 0x8000 ? (c << 1) ^ 0x1021 : c << 1;
+  T[i] = c & 0xFFFF;
+}
+
+function crc16(d, crc = 0) {
+  for (let i = 0; i < d.length; i++) crc = ((crc << 8) & 0xFFFF) ^ T[((crc >> 8) ^ d[i]) & 0xFF];
+  return crc;
+}
+
+function enc(buf, off, size, key = 0xFFFF) {
+  for (let i = 0; i < size; i++) {
+    buf[off + i] ^= key & 0xFF;
+    key = ((key * 2) ^ (key & 0x8000 ? 0x1021 : 0)) & 0xFFFF;
+  }
+}
+
+function sfc(buf, off, size, base, key) {
+  for (let i = 0; i < size; i += 32) enc(buf, off + i, Math.min(size - i, 32), key ^ ((off + i - base) >> 2));
+}
+
+function chipkeyDecode(d) {
+  let sum = 0;
+  for (let i = 0; i < 16; i++) sum += d[i];
+  sum &= 0xFF;
+  sum = sum >= 0xE0 ? 0xAA : sum <= 0x10 ? 0x55 : sum;
+  let k = 0;
+  for (let i = 0; i < 16; i++) if ((d[16 + i] ^ d[15 - i]) < sum) k |= 1 << i;
+  return k;
+}
+
+const align32 = (v) => (v + 31) & ~31;
+const u16 = (b, o) => b[o] | (b[o + 1] << 8);
+const u32 = (b, o) => (b[o] | (b[o + 1] << 8) | (b[o + 2] << 16) | (b[o + 3] << 24)) >>> 0;
+function w16(b, o, v) { b[o] = v & 0xFF; b[o + 1] = (v >> 8) & 0xFF; }
+function w32(b, o, v) { w16(b, o, v & 0xFFFF); w16(b, o + 2, (v >>> 16) & 0xFFFF); }
+
+class Entry {                                   // JLFS head, 32 bytes
+  constructor(raw, off) {
+    this.hdrOff = off;
+    this.hcrc = u16(raw, off);
+    this.dcrc = u16(raw, off + 2);
+    this.offset = u32(raw, off + 4);
+    this.size = u32(raw, off + 8);
+    this.flags = raw[off + 12];
+    this.resvd = raw[off + 13];
+    this.index = u16(raw, off + 14);
+    this.rawName = raw.slice(off + 16, off + 32);
+    const z = this.rawName.indexOf(0);
+    this.name = String.fromCharCode(...this.rawName.slice(0, z < 0 ? 16 : z));
+    if (crc16(raw.subarray(off + 2, off + 32)) !== this.hcrc) throw new Error(`JLFS header CRC mismatch @${off.toString(16)}`);
+  }
+  packInto(buf) {
+    const o = this.hdrOff;
+    w16(buf, o + 2, this.dcrc); w32(buf, o + 4, this.offset); w32(buf, o + 8, this.size);
+    buf[o + 12] = this.flags; buf[o + 13] = this.resvd; w16(buf, o + 14, this.index);
+    buf.set(this.rawName, o + 16);
+    this.hcrc = crc16(buf.subarray(o + 2, o + 32));
+    w16(buf, o, this.hcrc);
+  }
+}
+
+class Package {
+  constructor(bytes) {
+    this.raw = new Uint8Array(bytes);
+    this.parseUfw();
+    this.flash = this.raw.slice(this.flashFileOff, this.flashFileOff + this.flashSize);
+    this.parseFlash();
+  }
+
+  get product() { return productOf(this.raw); }
+
+  headerBytes() {
+    const h = new Uint8Array(BLOCKS * KEEP);
+    for (let i = 0; i < BLOCKS; i++) h.set(this.raw.subarray(i * BLK, i * BLK + KEEP), i * KEEP);
+    return h;
+  }
+
+  hdrFileOff(i) { return Math.floor(i / KEEP) * BLK + (i % KEEP); }
+
+  parseUfw() {
+    const h = this.headerBytes();
+    enc(h, 0, 0x40);
+    const hcrc = u16(h, 0), lcrc = u16(h, 2), nent = u16(h, 8);
+    if (crc16(h.subarray(2, 0x40)) !== hcrc) throw new Error("not an FM-1 .fwsc (UFW header CRC mismatch)");
+    this.skew = BLOCKS * BLK - h.length;
+    this.ufw = h;
+    this.nent = nent;
+    const hsize = 0x40 + nent * 0x50;
+    if (crc16(h.subarray(0x40, hsize)) !== lcrc) throw new Error("UFW entry list CRC mismatch");
+    this.entries = [];
+    for (let off = 0x40; off < hsize; off += 0x50) {
+      const e = h.slice(off, off + 0x50);
+      enc(e, 0, 0x50);
+      const z = e.subarray(0x40, 0x50).indexOf(0);
+      this.entries.push({ off, type: u16(e, 0), dcrc: u16(e, 4), dataOff: u32(e, 8), size: u32(e, 12),
+        name: String.fromCharCode(...e.subarray(0x40, z < 0 ? 0x50 : 0x40 + z)), plain: e });
+    }
+    const fl = this.entries.find((e) => e.type === 0);
+    if (!fl) throw new Error("no flash.bin in the package");
+    this.flashEntry = fl;
+    this.flashFileOff = fl.dataOff + this.skew;
+    this.flashSize = fl.size;
+    if (crc16(this.raw.subarray(this.flashFileOff, this.flashFileOff + fl.size)) !== fl.dcrc) throw new Error("flash.bin CRC mismatch");
+  }
+
+  parseFlash() {
+    const dec = this.flash.slice();
+    const h = dec.slice(0, 32);
+    enc(h, 0, 32);
+    if (crc16(h.subarray(2, 32)) !== u16(h, 0)) throw new Error("flash header CRC mismatch");
+    this.chipKey = null; this.appBase = null;
+    for (let off = 32; ; off += 32) {
+      enc(dec, off, 32);
+      const e = new Entry(dec, off);
+      if (e.name === "isd_config.ini") {
+        const blob = dec.subarray(e.offset, e.offset + 34);
+        if (crc16(blob.subarray(0, 32)) === u16(blob, 32)) this.chipKey = chipkeyDecode(blob.subarray(0, 32));
+      }
+      if (e.flags === 0x81 && e.name === "app_dir_head" && this.appBase === null) this.appBase = e.offset;
+      if (e.index) break;
+    }
+    if (this.chipKey === null || this.appBase === null) throw new Error("chip key or app_dir_head not found");
+    const b = this.appBase, k = this.chipKey, end = align32(b + 32);
+    sfc(dec, b, end - b, b, k);
+    const head = new Entry(dec, b);
+    const blkEnd = b + head.size;
+    if (blkEnd > end) sfc(dec, end, blkEnd - end, b, k);
+    this.sfcEnd = Math.max(end, blkEnd);
+    this.cfgLen = 0;
+    const probe = this.flash.slice(b, align32(blkEnd) + 32);
+    sfc(probe, 0, probe.length, 0, k);
+    try {
+      const cfg = new Entry(probe, blkEnd - b);
+      if (cfg.name === "cfg" && blkEnd + cfg.size <= this.flash.length) this.cfgLen = cfg.size;
+    } catch (_) { /* no cfg block */ }
+    if (this.cfgLen) {
+      const region = this.flash.slice(b, blkEnd + this.cfgLen);
+      sfc(region, 0, region.length, 0, k);
+      dec.set(region, b);
+      this.sfcEnd = blkEnd + this.cfgLen;
+    }
+    this.head = head;
+    this.app = null;
+    for (let off = b + 32; ; off += 32) {
+      const e = new Entry(dec, off);
+      if (e.flags === 0x82 && e.name === "app.bin") this.app = e;
+      if (e.index) break;
+    }
+    if (!this.app) throw new Error("app.bin not found in app area");
+    this.appOff = b + this.app.offset;
+    this.dec = dec;
+  }
+}
+
+// the package identity ("FM-1_710"): one marker byte after each of the first 20 blocks
+function productOf(fwsc) {
+  if (fwsc.length < BLOCKS * BLK) throw new Error("not an FM-1 package (too short)");
+  let s = "";
+  for (let i = 0; i < BLOCKS; i++) {
+    const m = fwsc[i * BLK + KEEP];
+    if (m !== 0x7D) s += String.fromCharCode((m - i - 1) & 0xFF);
+  }
+  return s;
+}
+
+// the image the device addresses during an update: the .fwsc without the 20 marker bytes
+function logicalImage(fwsc) {
+  const out = new Uint8Array(fwsc.length - BLOCKS);
+  for (let i = 0; i < BLOCKS; i++) out.set(fwsc.subarray(i * BLK, i * BLK + KEEP), i * KEEP);
+  out.set(fwsc.subarray(BLOCKS * BLK), BLOCKS * KEEP);
+  return out;
+}
+
+async function sha256hex(bytes) {
+  const d = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(d)].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
+
+// ---- WebMIDI update protocol (M-UPGRADE) ----
+const HS_QUERY = [0xF0, 0x00, 0x32, 0x45, 0x00, 0x00, 0x00, 0x40, 0x7F, 0xF7];
+const UPGRADE = [0xF0, 0x22, 0x24, 0x35, 0x7F, 0xF7];
+const MAXDATA = 512;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const IS_OTA = (id) => /^ota-/i.test(id.model);
+const looksLikeFm1 = (n) => /fm-1|felucca|ota|composite|sinco|usb-midi/i.test(n || "");
+
+function pairWith(input, outs, loose) {
+  const exact = outs.find((o) => o.name === input.name);
+  if (exact) return exact;
+  if (!loose) return null;
+  const base = (s) => String(s || "").replace(/[^a-z0-9]/gi, "").toLowerCase();
+  const b = base(input.name);
+  return outs.find((o) => { const ob = base(o.name); return ob === b || ob.includes(b) || b.includes(ob); }) || outs[0] || null;
+}
+
+function fail(code, msg, detail = "") { const e = new Error(msg); e.code = code; e.detail = detail; return e; }
+
+function pack7(data) {
+  const out = []; let acc = 0, nb = 0;
+  for (const b of data) {
+    acc |= b << nb; nb += 8;
+    while (nb >= 7) { out.push(acc & 0x7F); acc >>>= 7; nb -= 7; }
+  }
+  if (nb) out.push(acc & 0x7F);
+  return out;
+}
+
+function unpack7(s) {
+  const out = []; let acc = 0, nb = 0;
+  for (const b of s) {
+    acc |= (b & 0x7F) << nb; nb += 7;
+    while (nb >= 8) { out.push(acc & 0xFF); acc >>>= 8; nb -= 8; }
+  }
+  return out;
+}
+
+function response(addr, data, fl = 0) {
+  const len = data.length;
+  const body = [0x00, 0x59, 0x30, (len + 8) & 0xFF, ((len + 8) >> 8) & 0xFF, 0, fl,
+    addr & 0xFF, (addr >>> 8) & 0xFF, (addr >>> 16) & 0xFF, (addr >>> 24) & 0xFF,
+    len & 0xFF, (len >> 8) & 0xFF, 0, ...data];
+  let s = 0;
+  for (let i = 6; i < body.length; i++) s += body[i];
+  body.push(~s & 0xFF);
+  return [0xF0, ...pack7(body), 0xF7];
+}
+
+function parseRequest(pkt) {
+  if (pkt[0] !== 0xF0 || pkt[pkt.length - 1] !== 0xF7) return null;
+  const u = unpack7(pkt.slice(1, -1));
+  if (u.length !== 15 || u[0] !== 0 || u[1] !== 0x59 || u[2] !== 0x30) return null;
+  let s = 0;
+  for (let i = 6; i < 14; i++) s += u[i];
+  if ((~s & 0xFF) !== u[14]) return null;
+  return { fl: u[6], addr: (u[7] | (u[8] << 8) | (u[9] << 16) | (u[10] << 24)) >>> 0, len: u[11] | (u[12] << 8) | (u[13] << 16) };
+}
+
+function parseIdentity(pkt) {
+  const d = unpack7(pkt.slice(1, -1));
+  if (d.length !== 34 || d[0] !== 0 || d[1] !== 0x59 || d[2] !== 0x11) return null;
+  const txt = String.fromCharCode(...d.slice(6, 33)).replace(/\0+$/, "");
+  const m = /^([^_]+)_(\d+)$/.exec(txt);
+  return m ? { text: txt, model: m[1], version: parseInt(m[2], 10) } : null;
+}
+
+class Link {
+  constructor(input, output) {
+    this.input = input; this.output = output; this.q = []; this.waiter = null;
+    input.onmidimessage = (ev) => {
+      if (ev.data[0] !== 0xF0) return;
+      this.q.push(Array.from(ev.data));
+      if (this.waiter) { const w = this.waiter; this.waiter = null; w(); }
+    };
+  }
+  get lost() { return this.input.state === "disconnected" || this.output.state === "disconnected"; }
+  send(bytes) {
+    try { this.output.send(bytes); return true; } catch (_) { return false; }
+  }
+  drain() { this.q.length = 0; }
+  async read(ms) {
+    if (!this.q.length) {
+      let tm;
+      await Promise.race([new Promise((r) => { this.waiter = r; }), new Promise((r) => { tm = setTimeout(r, ms); })]);
+      clearTimeout(tm);
+      this.waiter = null;
+    }
+    return this.q.shift() || null;
+  }
+  close() { this.input.onmidimessage = null; }
+}
+
+async function handshake(link, tries = 3) {
+  link.drain();
+  for (let t = 0; t < tries; t++) {
+    if (!link.send(HS_QUERY)) return null;
+    const end = Date.now() + 1000;
+    while (Date.now() < end) {
+      const p = await link.read(end - Date.now());
+      if (!p) break;
+      const id = parseIdentity(p);
+      if (id) return id;
+    }
+  }
+  return null;
+}
+
+class Updater {
+  constructor(access, log) {
+    this.access = access;
+    this.log = log || (() => {});
+  }
+
+  async find(filter, probeAll = false) {
+    const outs = [...this.access.outputs.values()].filter((o) => o.state !== "disconnected");
+    const list = [...this.access.inputs.values()]
+      .filter((i) => i.state !== "disconnected" && (probeAll || looksLikeFm1(i.name)))
+      .sort((a, b) => (looksLikeFm1(a.name) ? 0 : 1) - (looksLikeFm1(b.name) ? 0 : 1));
+    for (const input of list) {
+      const output = pairWith(input, outs, probeAll);
+      if (!output) continue;
+      try { await input.open(); await output.open(); } catch (_) { continue; }
+      const link = new Link(input, output);
+      const id = await handshake(link, 2);
+      if (id && (!filter || filter(id))) return { link, id, name: input.name };
+      link.close();
+    }
+    return null;
+  }
+
+  async waitFor(filter, ms) {
+    const end = Date.now() + ms;
+    while (Date.now() < end) {
+      const dev = await this.find(filter);
+      if (dev) return dev;
+      await sleep(1000);
+    }
+    return null;
+  }
+
+  async serve(link, image, finishAddr, idleMs, onProgress) {
+    let served = 0, last = Date.now();
+    for (;;) {
+      const pkt = await link.read(1000);
+      if (!pkt) {
+        if (link.lost) return { served, finished: false, lost: true };
+        if (Date.now() - last > idleMs) return { served, finished: false };
+        continue;
+      }
+      const r = parseRequest(pkt);
+      if (!r) continue;
+      last = Date.now();
+      if (r.addr === 0xE0000000 || r.addr === 0xF0000000) {
+        link.send(response(r.addr, [...new TextEncoder().encode("success"), 0]));
+        if (r.addr === finishAddr) return { served, finished: true };
+        continue;
+      }
+      if (r.len > MAXDATA || r.addr + r.len > image.length) throw fail("badreq", `bad request ${r.addr.toString(16)}+${r.len}`);
+      await sleep(10);
+      if (!link.send(response(r.addr, Array.from(image.subarray(r.addr, r.addr + r.len)), r.fl))) {
+        return { served, finished: false, lost: true };
+      }
+      served++;
+      if (onProgress) onProgress(served, r.addr);
+    }
+  }
+
+  async install(image, product, onStep) {
+    const step = onStep || (() => {});
+    const dev = await this.find((id) => !IS_OTA(id));
+    if (!dev) throw fail("notfound", "FM-1 not found (USB cable, and no other app using it?)");
+    const [model] = product.split("_");
+    if (dev.id.model !== model) { dev.link.close(); throw fail("model", `the device is ${dev.id.text}, the package is for ${product}`); }
+    step("start", dev.id.text);
+    dev.link.send(UPGRADE);
+    await sleep(2000);
+    const s1 = await this.serve(dev.link, image, 0xE0000000, 8000, (n) => step("verify", n));
+    dev.link.close();
+    if (!s1.finished) throw fail(s1.lost ? "lost" : "stopped", `the device ${s1.lost ? "was disconnected" : "stopped"} after ${s1.served} requests: nothing was written`);
+    step("loader");
+    await sleep(3000);
+    const ota = await this.waitFor((id) => id.model === "ota-" + model, 30000);
+    if (!ota) throw fail("noloader", "the update loader did not appear. Replug the USB cable and press Install again: the device stays in update mode until it is finished.");
+    const s2 = await this.write(ota, image, step);
+    if (!s2.finished) throw fail(s2.lost ? "lost" : "stopped", `the loader ${s2.lost ? "was disconnected" : "stopped"} after ${s2.served} requests. Replug and press Install again to resume.`);
+    step("reboot");
+    await sleep(3000);
+    const back = await this.waitFor((id) => !IS_OTA(id), 40000);
+    if (!back) throw fail("noreturn", "the device did not come back: power-cycle it");
+    back.link.close();
+    // The Compás app deliberately never rewrites the boot-block identity, so the
+    // device may still report the previous firmware's id (e.g. FM-1_015). The
+    // loader's "success" confirm is the write proof; report the id as a note.
+    if (back.id.text !== product) step("done", back.id.text + " (note: boot-block identity unchanged — write confirmed by loader)");
+    else step("done", back.id.text);
+    return back.id.text;
+  }
+
+  async write(ota, image, step) {
+    ota.link.send(UPGRADE);
+    await sleep(2000);
+    const s2 = await this.serve(ota.link, image, 0xF0000000, 180000, (n) => step("write", n));
+    ota.link.close();
+    return s2;
+  }
+
+  async resume(image, onStep, product = null) {
+    const model = product && product.split("_")[0];
+    const ota = await this.find((id) => model ? id.model === "ota-" + model : IS_OTA(id));
+    if (!ota) return false;
+    const step = onStep || (() => {});
+    const result = await this.write(ota, image, step);
+    if (!result.finished) return false;
+    if (product) {
+      step("reboot");
+      await sleep(3000);
+      const back = await this.waitFor((id) => id.model === model, 40000);
+      if (!back) throw fail("noreturn", "The FM-1 did not return after resuming the write.");
+      back.link.close();
+      step("done", back.id.text);
+    }
+    return true;
+  }
+}
+
+const $ = (id) => document.getElementById(id);
+const meta = {"version": "1.0", "product": "FM-1_710", "size": 609890,
+              "sha256": "e2ba75d396dccd430bbf2e4a300207e7524a1d19a997e61bf0eab5214b706a46",
+              "pkg": "https://raw.githubusercontent.com/MarcoCasanova00/compas-tekno/main/firmware/compas-tekno.fwsc"};
+const state = { image: null, ready: false, busy: false };
+const say = (s) => { $("status").classList.remove("bad"); $("status").textContent = s; };
+const sayBad = (s) => { live(false); $("status").classList.add("bad"); $("status").textContent = s; };
+const log = (s) => { $("log").textContent += s + "\n"; $("log").scrollTop = $("log").scrollHeight; };
+const bar = (p) => {
+  const v = Math.max(0, Math.min(100, p));
+  $("bar").value = v;
+  $("pct").textContent = Math.floor(v) + "%";
+};
+const live = (on) => { $("status").classList.toggle("live", on); $("warn").classList.toggle("live", on); };
+const TITLE = document.title;
+const busy = (on) => {
+  state.busy = on;
+  $("go").disabled = on || !state.ready;
+  $("detect").disabled = on;
+  $("file").disabled = on;
+  if (!on) { live(false); document.title = TITLE; }
+};
+window.addEventListener("beforeunload", (e) => { if (state.busy) { e.preventDefault(); e.returnValue = "An install is running."; } });
+
+async function accept(src, bytes) {
+  let prod = "", sha = "";
+  try { prod = productOf(bytes); } catch (_) { prod = ""; }
+  try { sha = await sha256hex(bytes); } catch (_) { sha = ""; }
+  const ok = prod === meta.product && bytes.length === meta.size && sha === meta.sha256;
+  $("pkg-name").textContent = src;
+  $("pkg-ident").textContent = prod || "(not an FM-1 package)";
+  $("pkg-size").textContent = bytes.length.toLocaleString("en-US") + " B";
+  $("pkg-sha").textContent = sha ? sha.slice(0, 16) + "…" + sha.slice(-8) : "—";
+  $("pkg-sha").title = sha;
+  const v = $("verdict");
+  v.className = ok ? "ok" : "bad";
+  v.textContent = ok
+    ? "Verified — this is the published Compás TEKNO " + meta.version + " build (" + prod + ")."
+    : "NOT verified — identity, size or SHA-256 does not match the published Compás TEKNO " + meta.version + " build. Flashing stays disabled.";
+  if (!ok) { log("expected " + meta.product + " " + meta.size + " B " + meta.sha256.slice(0, 16) + "…"); }
+  state.image = ok ? logicalImage(bytes) : null;
+  state.ready = ok;
+  $("go").disabled = !ok || state.busy;
+}
+
+async function loadPublished() {
+  try {
+    const r = await fetch(meta.pkg, { cache: "no-cache" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    await accept("published build · " + meta.pkg, new Uint8Array(await r.arrayBuffer()));
+    if (state.ready) say("Ready. Connect the FM-1 and press Install.");
+  } catch (e) {
+    sayBad("Could not load the published package (" + e.message + "). Choose the .fwsc file under “Use a local .fwsc instead”.");
+  }
+}
+
+$("file").addEventListener("change", async (e) => {
+  const f = e.target.files[0];
+  if (f) await accept(f.name, new Uint8Array(await f.arrayBuffer()));
+});
+
+async function openMidi() {
+  if (!navigator.requestMIDIAccess) { sayBad("This browser has no WebMIDI. Use Chrome or Edge."); return null; }
+  try { return await navigator.requestMIDIAccess({ sysex: true }); }
+  catch (_) { sayBad("MIDI (SysEx) permission denied. Allow MIDI for this site in the address bar, then retry."); return null; }
+}
+
+$("detect").addEventListener("click", async () => {
+  if (state.busy) return;
+  const midi = await openMidi(); if (!midi) return;
+  say("Looking for the FM-1…");
+  try {
+    const up = new Updater(midi, log);
+    const dev = (await up.find((id) => !IS_OTA(id))) || (await up.find((id) => !IS_OTA(id), true));
+    if (dev) {
+      const name = dev.name || "(unnamed port)";
+      dev.link.close();
+      say("Found " + dev.id.text + " on “" + name + "”. Ready to install.");
+      return;
+    }
+    const ota = (await up.find((id) => IS_OTA(id))) || (await up.find((id) => IS_OTA(id), true));
+    if (ota) { ota.link.close(); say("Found " + ota.id.text + " — the FM-1 is in update mode. Press Install to finish."); return; }
+    sayBad("No FM-1 answered. Check the data cable, close other MIDI apps, and try again.");
+  } catch (e) { sayBad("Detect failed: " + (e && e.message ? e.message : e)); }
+});
+
+const ERRORS = {
+  denied: "MIDI (SysEx) permission was denied. Allow MIDI for this site, then retry.",
+  notfound: "FM-1 not found. Use a data USB cable, close other MIDI apps, then retry.",
+  model: "The connected device is not an FM-1: ",
+  stopped: "The device stopped answering: nothing was written. Replug and press Install again.",
+  lost: "The USB connection dropped. Replug and press Install again.",
+  noloader: "The update loader did not appear. Replug and press Install again — the device stays in update mode until finished.",
+  noreturn: "The device did not come back after writing. Power-cycle it.",
+  badreq: "The device asked for an invalid block. Nothing was written; retry or use the verifier.",
+};
+
+$("go").addEventListener("click", async () => {
+  if (!state.image || state.busy) return;
+  if (!confirm("Write Compás TEKNO " + meta.version + " (" + meta.product + ") to the FM-1?\n\n" +
+      "• Back up your music first (stock V15 dump or slot saves).\n" +
+      "• If you are on another custom firmware, return to official V15 first.\n" +
+      "• Do not unplug the USB cable while writing (about a minute).\n" +
+      "• Recovery: hold OCT− while switching the FM-1 on.")) return;
+  busy(true); bar(0); $("log").textContent = "";
+  const midi = await openMidi();
+  if (!midi) { busy(false); return; }
+  const blocks = Math.max(1, Math.ceil(state.image.length / 512));
+  const writeMax = blocks * 2;
+  const step = (k, a) => {
+    if (k === "start") {
+      live(true); document.title = "Installing — do not unplug · Compás TEKNO";
+      say("Found " + a + " — verifying the package…"); bar(2);
+    } else if (k === "verify") {
+      say("Verifying — DO NOT UNPLUG · block " + a); bar(2 + 28 * Math.min(1, a / 40));
+    } else if (k === "loader") {
+      say("Accepted — switching to update mode. Keep the cable connected…"); bar(32);
+    } else if (k === "write") {
+      const p = 34 + 64 * Math.min(1, a / writeMax);
+      say("Writing — DO NOT UNPLUG · block " + a + " (" + Math.floor(p) + "%)"); bar(p);
+    } else if (k === "reboot") {
+      say("Written — restarting the FM-1. Do not unplug…"); bar(99);
+    } else if (k === "done") {
+      bar(100);
+      say("Done. The FM-1 reports " + a + " — Compás TEKNO " + meta.version + " is installed. You can unplug now.");
+    }
+  };
+  try {
+    const up = new Updater(midi, log);
+    const ota = (await up.find((id) => IS_OTA(id))) || (await up.find((id) => IS_OTA(id), true));
+    if (ota) {
+      say("The FM-1 is already in update mode (" + ota.id.text + "). Finishing the write…");
+      ota.link.close();
+      if (!(await up.resume(state.image, step, meta.product))) { say(ERRORS.stopped); }
+    } else {
+      await up.install(state.image, meta.product, step);
+    }
+  } catch (e) {
+    const msg = (e && e.code && ERRORS[e.code]) ? ERRORS[e.code] + (e.detail || "") : "Install failed: " + (e && e.message ? e.message : e);
+    sayBad(msg);
+    log(String((e && e.stack) || e));
+  } finally { busy(false); }
+});
+
+loadPublished();
+</script>
+</body>
+</html>
