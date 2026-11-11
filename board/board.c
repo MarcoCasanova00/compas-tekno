@@ -54,6 +54,10 @@ static uint32_t record_pending[RACK_SOUNDS];
 static uint8_t record_armed;
 static uint8_t rack_sequence, rack_sequence_sound, active_rhythm, queued_rhythm;
 uint8_t board_rhythm_only, board_roll_mode;
+uint32_t board_rack_state(unsigned sound) {
+    if(sound>=RACK_SOUNDS) return 0;
+    return rack_pattern[sound] | (rack_pattern_accents[sound]<<16);
+}
 uint16_t board_roll_keys;
 static const uint8_t score_parts[]={PIANO_FORM_INTRO,PIANO_FORM_VERSE,0,PIANO_FORM_REFRAIN,0,PIANO_FORM_CODA};
 enum { NO_MASTER_REQUEST=255 };
@@ -963,11 +967,17 @@ static unsigned apply(BoardCommand cmd)
         if(paired_rhythm(queued_rhythm)) queued_clave=2;
         active_rhythm=queued_rhythm=BOARD_CUSTOM_RHYTHM;
         uint32_t bit=1u<<cmd.b;
-        if(accent) {
-            rack_pattern[cmd.a]|=bit;
-            rack_pattern_accents[cmd.a]^=bit;
+        /* Volca-style step cycle: off -> normal -> accent -> off.
+         * A step's accent doubles its velocity (rack_pattern_accents). */
+        if(rack_pattern[cmd.a]&bit) {
+            if(rack_pattern_accents[cmd.a]&bit) {
+                rack_pattern[cmd.a]&=~bit;
+                rack_pattern_accents[cmd.a]&=~bit;
+            } else {
+                rack_pattern_accents[cmd.a]|=bit;
+            }
         } else {
-            rack_pattern[cmd.a]^=bit;
+            rack_pattern[cmd.a]|=bit;
             rack_pattern_accents[cmd.a]&=~bit;
         }
         if(!rack_sequence) rack_sequence=1;

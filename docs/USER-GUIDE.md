@@ -166,3 +166,10 @@ A: Yes, with different depths:
 Step-edit a specific part: **SELECT** knob picks the part (0–5 kick/hat/
 clap/perc/openhat/bass), then **EDIT** toggles its steps (OCT± = bar).
 Save whole setups to slots (SCL → SAVE).
+
+**Q: Can I compose like on a Volca Sample?**
+A: Close — 15 sounds × 16-step per-part patterns (more tracks than a Volca),
+live record, swing, rolls, and now **3-state step velocity**: in GLO → SEQ
+edit, tap a step repeatedly to cycle off → normal → accent → off (accent =
+double velocity). Still missing vs Volca: parameter locks/motion sequencing
+(per-step pitch/gain automation).
