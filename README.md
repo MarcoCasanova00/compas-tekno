@@ -117,7 +117,11 @@ TR-727 metadata stays archived in `board/727-original/`).
 Felucca v1.6 BSP upstream pins (`tools/build_device.py` → `app.bin`, Felucca
 update loader + SDK SPL via `tools/fm1pkg_make.py`).
 
-Flash it the same way you flash Felucca/Amaru OS on the FM-1 (USB installer).
+Flash it with the **web installer** (Chrome/Edge + WebMIDI, data USB cable):
+[`install.html`](https://marcocasanova00.github.io/compas-tekno/install.html)
+— it verifies the package (identity `FM-1_710`, size, SHA-256, CRCs) before it
+enables Install, keeps the V15 return gate, and is an adaptation of the Amaru OS
+installer (GPL-3.0, same author family).
 Never unplug mid-write; if interrupted, replug and install again (the update
 resumes from the start). Keep your stock V15 image backed up.
 

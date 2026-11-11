@@ -81,13 +81,14 @@ kbd { font: 600 11px ui-monospace, Menlo, monospace; border: 1px solid var(--dim
     <summary>Flashing the FM-1 (.fwsc) — verify first</summary>
     <p class="small" style="margin:6px 0">Before you flash: the package is verified in this browser (identity + CRCs),
       then you get the required confirmation.</p>
-    <p><button id="flashcheck" type="button" class="b">Verify package</button> <span id="flashstatus" style="color:var(--dim)"></span></p>
+    <p><a href="install.html" style="color:var(--fg)"><button type="button" class="b" style="cursor:pointer">Open the installer →</button></a>
+       <button id="flashcheck" type="button" class="b">Verify package here</button> <span id="flashstatus" style="color:var(--dim)"></span></p>
     <pre id="flashlog" style="display:none;margin:8px 0;font-size:11px;line-height:1.4;color:var(--fg);background:#0e1510;border:1px solid #22341f;border-radius:4px;padding:8px;max-height:180px;overflow:auto"></pre>
     <div id="flashsteps" hidden>
       <ol style="margin:6px 0 0;padding-left:18px">
         <li>If the FM-1 runs any custom firmware, <b>return to official V15 first</b> (web installer → "Return to official V15").</li>
-        <li>Connect the FM-1 by USB (data cable) and open your installer (same one used for Amaru OS).</li>
-        <li>Select <code>firmware/compas-tekno.fwsc</code> — identity <code>FM-1_710</code>.</li>
+        <li>Connect the FM-1 by USB (data cable) and open the <a href="install.html" style="color:var(--fg)">web installer</a>.</li>
+        <li>The installer fetches <code>firmware/compas-tekno.fwsc</code> — identity <code>FM-1_710</code> — and verifies it before enabling Install.</li>
         <li>Never unplug during the write; if interrupted, replug and install again.</li>
       </ol>
     </div>
