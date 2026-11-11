@@ -22,7 +22,7 @@ int board_kumbia_restore(const uint8_t settings[KUMBIA_SETTINGS]);
 enum { BOARD_PIANO_CUE=66 };
 enum { RACK_HIT_STRENGTH, RACK_ACCENT_STRENGTH, RACK_LEVEL };
 enum { BOARD_OVERLAY_ALL=4 }; /* BOARD_OVERLAY_LEVEL lane: shift all four lanes, b=delta+128 */
-enum { BASS_ENSEMBLE, BASS_ACID };
+enum { BASS_ENSEMBLE, BASS_ACID, BASS_MOOG };
 enum { PART_INTRO, PART_VERSE_A, PART_VERSE_B, PART_CHORUS, PART_BREAK, PART_END, PART_NONE };
 static inline unsigned board_part_energy(unsigned part,unsigned fallback)
 {

@@ -14,7 +14,7 @@ static int32_t ensemble_tilt(unsigned cut,unsigned bite)
 { return ((int32_t)cut-44)/10+((int32_t)bite-45)/20; }
 static struct {
     uint32_t target, last_step;
-    int32_t low, band;
+    int32_t low, band, s0, s1, s2, s3;
     uint16_t age;
     uint8_t style, cut, bite;
     int8_t ensemble_tilt;
@@ -326,6 +326,29 @@ static inline int32_t ensemble_wave(uint32_t phase,uint32_t overtone,int32_t bri
     return (tri(phase)*12+tri(overtone)*brightness)/20;
 }
 
+/* Minimoog-inspired voice: three detuned oscillators through a 24 dB/oct
+ * saturating ladder. Own emulation of the classic architecture (no third-
+ * party code): per-stage one-pole low-pass with gentle nonlinearity, and
+ * resonance fed back from the last stage. */
+static inline int32_t moog_stage(int32_t x, int32_t cutoff, int32_t *s)
+{
+    int32_t y = *s + (((x - *s) * cutoff) >> 10);
+    if (y > 22000) y = 22000 + (y - 22000) / 2;
+    else if (y < -22000) y = -22000 - (-22000 - y) / 2;
+    *s = y;
+    return y;
+}
+static inline int32_t moog_filter(int32_t in, int32_t cutoff, int32_t res,
+                                  int32_t *s0, int32_t *s1,
+                                  int32_t *s2, int32_t *s3)
+{
+    int32_t u = in - ((*s3 * res) >> 9);
+    int32_t o0 = moog_stage(u, cutoff, s0);
+    int32_t o1 = moog_stage(o0, cutoff, s1);
+    int32_t o2 = moog_stage(o1, cutoff, s2);
+    return moog_stage(o2, cutoff, s3);
+}
+
 static int32_t ensemble_brightness(int32_t envelope,int32_t tilt)
 {
     int32_t bright=(envelope>>12)+tilt;
@@ -357,6 +380,17 @@ static int32_t bass_sample(Voice *v)
         int32_t cutoff=10+bass.cut/2+(v->env>>10);
         int32_t damping=178-bass.bite;
         signal=acid_wave(v->a,cutoff,damping,&bass.low,&bass.band);
+    } else if(bass.style==BASS_MOOG) {
+        /* Three oscillators: fundamental + slow detuned copy + sub octave,
+         * through the ladder. Cutoff follows the envelope; resonance from
+         * the bite knob. */
+        static uint32_t moog_detune;
+        moog_detune+=0x00020000u;
+        v->a+=v->da; v->b+=v->db;
+        int32_t core=tri(v->a)*3+tri(v->b+moog_detune)+tri(v->a>>1);
+        int32_t cutoff=10+bass.cut/2+(v->env>>9);
+        int32_t res=96+bass.bite*2;
+        signal=moog_filter(core,cutoff,res,&bass.s0,&bass.s1,&bass.s2,&bass.s3);
     } else {
         /* Shamanic breathy flute: soft triangle partials, slow vibrato
          * (~5.4 Hz), a gentle attack ramp and a thin breath-noise bed. */
