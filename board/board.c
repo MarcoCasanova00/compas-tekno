@@ -184,7 +184,7 @@ void board_init(void)
     clear_recording();
     speed=100;speed_phase=speed_primed=0;speed_left=speed_right=0;
     master_request=NO_MASTER_REQUEST;
-    user_tempo=0;
+    user_tempo=155;   /* tempo is knob-only from boot: grooves never change it */
     board_piano_selected=piano_running=piano_hold=piano_guide=piano_perc_muted=groove_count_enabled=0;
     for(unsigned r=0;r<CP_ROLES;++r) assigned[r]=0;
     requested_role=shown_role=0;

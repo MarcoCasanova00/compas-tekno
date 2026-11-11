@@ -62,6 +62,8 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   (recorded from the real output path, bass soloed).
 - **Test guide** — `docs/TESTING-GUIDE.md`: verify grooves/BPM, tempo lock,
   the 4 synth voices, leads, drop, loops — on web or hardware.
+- **User guide** — `docs/USER-GUIDE.md`: full real-hardware workflow (pages,
+  knobs, live mechanics, free-party set recipe).
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled
   to WASM runs in your browser, same code path as the device.
 - **Tekno scores** — four lead pieces selectable from the emulator's SCORES
