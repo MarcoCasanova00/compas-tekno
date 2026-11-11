@@ -27,11 +27,14 @@ Hügelton Instruments) · GPL-3.0.
 - **Wakor visual identity** — the whole UI (device + web) is rethemed to a
   neon black/green/yellow palette (#000000 · #89ff00 · #fdff00 · #075800 ·
   #c8d48a).
-- **Three bass voices via the BASS page style knob** — 0 = shamanic
-  breathy flute (slow vibrato + breath noise), 1 = acid (TD-3-ish,
-  resonant), 2 = **Minimoog** (own emulation of the classic 3-osc ladder:
-  detuned oscillators, saturating 24 dB/oct filter, envelope cutoff,
-  resonance). No third-party code — modeled on the classic architecture.
+- **Four voices via the BASS page style knob** — 0 = shamanic breathy
+  flute (slow vibrato + breath noise), 1 = acid (TD-3-ish, resonant),
+  2 = **Minimoog** (own 3-osc ladder emulation: detuned oscillators,
+  saturating 24 dB/oct filter, envelope cutoff, resonance), 3 =
+  **Trance lead** (Da Hool “Love Parade” style: dual detuned saws →
+  band-pass, quarter-note triangle LFO on cutoff, ~21% drive, near-organ
+  sustain). All are original implementations modeled on classic recipes —
+  no third-party code.
 - **New splash** — the boot portrait is a freshly packed 16-color 108×108
   artwork (regenerate from any PNG with `tools/portrait-pack.py`).
 

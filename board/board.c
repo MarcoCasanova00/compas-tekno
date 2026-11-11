@@ -837,7 +837,7 @@ static unsigned apply(BoardCommand cmd)
         manual_rack_hit(cmd.a,cmd.b);
         return CP_OK;
     case BOARD_BASS_STYLE:
-        if(cmd.a>BASS_MOOG) return CP_RANGE;
+        if(cmd.a>BASS_LOVE_PARADE) return CP_RANGE;
         bass_style=cmd.a;
         cp_bass_set(bass_style,bass_cut,bass_bite);
         return CP_OK;
@@ -1284,7 +1284,7 @@ unsigned board_rhythm_slots_load(const uint8_t *bytes,unsigned size)
                song->project[6]>=sizeof groove_steps || b[4]!=groove_steps[song->project[6]] ||
                b[5]!=song->project[7] || b[6]!=song->project[8] ||
                (b[140]>=BOARD_RHYTHM_PATTERNS && b[140]!=BOARD_CUSTOM_RHYTHM) ||
-               b[141]>BASS_MOOG || b[142]>100 || b[143]>100 || b[144]>15 ||
+               b[141]>BASS_LOVE_PARADE || b[142]>100 || b[143]>100 || b[144]>15 ||
                b[145]>100 || b[146]>100 || b[147]>100 || b[148]>100 || b[149]>1 ||
                b[150]>PART_NONE) return CP_BAD_PROJECT;
         }

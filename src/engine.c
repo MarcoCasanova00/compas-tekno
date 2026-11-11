@@ -349,6 +349,17 @@ static inline int32_t moog_filter(int32_t in, int32_t cutoff, int32_t res,
     return moog_stage(o2, cutoff, s3);
 }
 
+/* Trance lead (Da Hool "Love Parade" style): two detuned saws through a
+ * band-pass state-variable filter, with a triangle LFO on the cutoff at a
+ * quarter-note rate, mild drive and near-organ sustain. */
+static inline int32_t trance_bp(int32_t saw, int32_t cutoff, int32_t damp,
+                                int32_t *low, int32_t *band)
+{
+    *low += cutoff * (*band) / 256;
+    *band += cutoff * (saw - *low - damp * (*band) / 256) / 256;
+    return *band;
+}
+
 static int32_t ensemble_brightness(int32_t envelope,int32_t tilt)
 {
     int32_t bright=(envelope>>12)+tilt;
@@ -380,6 +391,21 @@ static int32_t bass_sample(Voice *v)
         int32_t cutoff=10+bass.cut/2+(v->env>>10);
         int32_t damping=178-bass.bite;
         signal=acid_wave(v->a,cutoff,damping,&bass.low,&bass.band);
+    } else if(bass.style==BASS_LOVE_PARADE) {
+        /* Two saws, one detuned; LFO moves the band-pass at quarter notes. */
+        static uint32_t love_lfo, love_detune;
+        uint32_t lfo_inc=(uint32_t)(((uint64_t)0x100000000ULL * s.p.bpm) / 10584000u);
+        love_lfo += lfo_inc;
+        love_detune += 0x00050000u;
+        v->a += v->da;
+        v->b += v->db;
+        int32_t sawA=(int32_t)(v->a >> 16) - 32768;
+        int32_t sawB=(int32_t)((v->b + love_detune) >> 16) - 32768;
+        int32_t core=(sawA + sawB) / 2 + sawA / 4;
+        int32_t cutoff=70 + tri(love_lfo) / 8 + (v->env >> 10);
+        int32_t damp=210 - bass.bite;
+        signal=trance_bp(core, cutoff, damp, &bass.low, &bass.band);
+        signal += (signal * 21) / 256;   /* ~21% drive */
     } else if(bass.style==BASS_MOOG) {
         /* Three oscillators: fundamental + slow detuned copy + sub octave,
          * through the ladder. Cutoff follows the envelope; resonance from

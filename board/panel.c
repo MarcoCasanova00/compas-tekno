@@ -369,7 +369,7 @@ void panel_scan(Panel *panel, uint32_t buttons, uint32_t keys, const int32_t enc
                                      adjust(v.bass_bite,enc[3],0,100));
             if(enc[4] && panel_has_bass(v))
                 send(panel,CP_LEVEL,5,adjust(v.levels[5],enc[4],0,100));
-            if(enc[5] && panel_has_bass(v)) send(panel,BOARD_BASS_STYLE,adjust(v.bass_style,enc[5],0,2),0);
+            if(enc[5] && panel_has_bass(v)) send(panel,BOARD_BASS_STYLE,adjust(v.bass_style,enc[5],0,3),0);
         } else if(panel->page==PANEL_PERC) {
             unsigned direction=buttons&((1u<<OCT_DOWN)|(1u<<OCT_UP));
             if(board_has_clave(v) && (direction==1u<<OCT_DOWN || direction==1u<<OCT_UP))
@@ -579,7 +579,8 @@ void panel_face(const Panel *panel, BoardView v, char lines[FACE_LINES][FACE_COL
         } else if(panel->page==PANEL_BASS) {
             label(lines[3],0,v.piano ? "SCORE ACCOMPANIMENT" : !panel_has_bass(v) ? "DRUM ENSEMBLE" :
                 v.muted&32u ? "BASS MUTED / TOP 5" : v.bass_style==BASS_ACID ? "4 ACID BASS" :
-                v.bass_style==BASS_MOOG ? "4 MINIMOOG BASS" : "4 FLUTE BASS");
+                v.bass_style==BASS_MOOG ? "4 MINIMOOG BASS" :
+                v.bass_style==BASS_LOVE_PARADE ? "4 TRANCE LEAD" : "4 FLUTE BASS");
             if(!panel_has_bass(v)) label(lines[4],0,"NO SEPARATE BASS");
             else {
                 label(lines[4],0,"1 TONE"); number(lines[4],7,v.bass_cut);
