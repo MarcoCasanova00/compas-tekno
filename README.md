@@ -18,11 +18,12 @@ Hügelton Instruments) · GPL-3.0.
   tribe190 Electribe (E2S) banks**: Guigoo kicks, Kawai clap, Nouvoo snare,
   closed/open hats, tribal percs, toms, hoover stabs, break FX and a spare hard
   kick — packed losslessly into the firmware's native bank format.
-- **33 grooves, full tekno** — every preset is now a real tekno machine:
-  four-on-floor or double-kick hammering kicks, offbeat/16th hats, clap on
-  2 & 4, tribal 16th percussion, 145–180 BPM, using the SANTO CENTER theory
-  vocabulary (mental · tribe · pumping · hardtek · galop · schranz). All on
-  the UFO bank; bass via the synth voices.
+- **33 grooves, full tekno** — every preset is a real tekno machine at
+  **155 or 165 BPM** (the free-party pocket): four-on-floor with double-kick
+  hardtek variants, SANTO CENTER-derived hats (offbeat / 16th / tribe-shuffle /
+  mental-sparse), interlocking tribal percussion, and per-style bass motifs
+  (octave-jump tribe, rolling 16th gallop, hypnotic mutations). All on the
+  UFO bank; bass via the synth voices.
 - **Wakor visual identity** — the whole UI (device + web) is rethemed to a
   neon black/green/yellow palette (#000000 · #89ff00 · #fdff00 · #075800 ·
   #c8d48a).
@@ -48,6 +49,10 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   with save/recall.
 - **The drop** — mute the kick during the breakdown, unmute for the drop:
   hardware = MIX page + pad 1 (toggles kick mute); web = the **DROP** button.
+- **Infinite loop** — songs loop indefinitely; nothing auto-stops. Grooves
+  change live at the bar boundary (RACK + SONG knob) for progressive sets.
+- **AUTO (web)** — cycles grooves seamlessly every 4/8/16 bars, free-party
+  style.
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled
   to WASM runs in your browser, same code path as the device.
 - **Tekno scores** — four lead pieces selectable from the emulator's SCORES

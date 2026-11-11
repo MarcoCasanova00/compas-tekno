@@ -48,6 +48,7 @@ if (typeof registerProcessor === "function") {
       else if (m.type === "enc") ex.web_enc(m.role, m.n | 0);
       else if (m.type === "cmd") ex.web_cmd(m.cmd | 0, m.a | 0, m.b | 0);
       else if (m.type === "score") ex.web_score(m.id | 0);
+      else if (m.type === "cue") ex.web_board(55, m.id | 0, 0);
       else if (m.type === "getstatus") this.port.postMessage({ type: "status", playing: ex.web_seq_playing(), tempo: ex.web_tempo(), study: ex.web_study() });
       else if (m.type === "midi") ex.web_midi(m.data[0] | 0, m.data[1] | 0, m.data[2] | 0);
       else if (m.type === "visible") this.period = m.on ? 1 / 30 : 1 / 4;
