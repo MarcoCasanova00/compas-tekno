@@ -101,3 +101,55 @@ leave the lead.)
 - `firmware/compas-tekno.fwsc`, identity FM-1_710.
 - Back up stock V15; if coming from another custom firmware, **return to
   official V15 first**; never unplug mid-write.
+
+---
+
+## 7. FAQ — quick reference for testing
+
+**Q: Is the bank really the Electribe/UFO import? Are there only WAVs?**
+A: Yes — the 15 drum voices are your UFO/Electribe imports (HardTekno,
+TribeCore Narko, Tribe190), packed losslessly. Roles: kick/hat/clap/perc/
+openhat/bass. The old TR-727/cumbia bank is archived, not used.
+
+**Q: Are the synths real synthesis? I only heard a sine.**
+A: Yes — the bass/lead voices are synthesized in-engine. The 4 bass styles:
+0 flute (soft, near-pure by design) · 1 acid (nasal) · 2 Moog (fat, saw-
+stacked, analog drift — the default) · 3 trance (bright band-pass). If it
+still sounds too round, raise TONE (ENV KNOB 1) or choose style 3. Demos:
+`demo/synth_*.wav`, `demo/live_*_bass.wav`.
+
+**Q: Can I make my own sequences, or is it all pre-written?**
+A: Both. The 33 grooves + 4 leads are pre-written. You can also:
+- **Record live** (GLO twice → hit pads → GLO again) into the rack,
+- **Step-program** (GLO → SEQ edit → pick sound, toggle 16 steps),
+- **Edit the current part** (EDIT page),
+- **Save it all** to a slot (SCL → SAVE) for later recall.
+
+**Q: How do I hear the bass / a lead?**
+A: Bass: ENV page → KNOB 4 changes style while you listen; FX+pad 12
+solos it. Lead: stop → GLO → SONG knob past groove 32 → a LEAD entry → PLAY.
+
+**Q: Why does tempo change when I change song?**
+A: It shouldn't anymore — tempo is locked from boot (155) and only the BPM
+knob changes it. If a build before this fix is running, reflash.
+
+**Q: How do I do a drop/breakdown?**
+A: Hold FX + pad 1 (kick mute) any time; bring it back on the downbeat for
+the drop. Breakdown: FX + pads 1 & 3 (kick+clap out), MODE → BREAK.
+
+**Q: Do songs loop forever? Can I change songs smoothly?**
+A: Yes — playback never auto-stops. Change grooves live on GLO (SONG knob);
+the new groove lands at the next bar without dropping playback.
+
+**Q: The emulator has buttons the hardware doesn't, right?**
+A: No — the emulator now mirrors the real FM-1 exactly (same 14 buttons,
+27 keys, knobs, master). No invented controls.
+
+**Q: Is flashing safe?**
+A: Identity FM-1_710, CRCs verified, loader write-guard, V15-return gate on
+the page. Back up stock; if coming from another custom firmware, return to
+official V15 first.
+
+**Q: What should I test first after flashing?**
+A: Follow `docs/TESTING-GUIDE.md` (§0 baseline → §1 grooves/BPM → §3 synth
+voices → §4 leads → §5 live/→ §6 loops).
