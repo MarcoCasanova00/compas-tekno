@@ -25,7 +25,7 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 app_path = Path(sys.argv[1]) if len(sys.argv) > 1 else root / "firmware/compas-tekno-app.bin"
-out = root / "build/board"
+out = root / "build/device/board"          # device build's bank artifacts (kept separate from the web bank in build/board)
 out.mkdir(parents=True, exist_ok=True)
 app = app_path.read_bytes()
 

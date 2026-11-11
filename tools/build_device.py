@@ -24,7 +24,8 @@ CFLAGS = ["-target", "pi32v2", "-mcpu=r3", "-mfprev1", "-Oz", "-g", "-std=c11",
           "-Wall", "-Wextra", "-Werror", "-Wno-unused-function", "-Wno-type-limits",
           "-ffreestanding", "-fno-builtin", "-ffunction-sections", "-fdata-sections",
           "-include", "stdint.h", "-DCOMPAS_BOARD",
-          f"-I{ROOT/'board'}", f"-I{ROOT/'src'}", f"-I{ROOT/'build'}", f"-I{ROOT/'build/board'}",
+          f"-I{ROOT/'build/device/board'}", f"-I{ROOT/'board'}", f"-I{ROOT/'src'}",
+          f"-I{ROOT/'build'}", f"-I{ROOT/'build/board'}",
           f"-I{BSP/'firmware/hal'}", f"-I{BSP/'firmware/src'}"]
 
 def cc(src, out, extra=None):
@@ -46,17 +47,17 @@ for u in ("engine", "board", "panel", "piano", "fm1"):
 # 3) BSP LCD driver (no audio.c: our board/irq.S feeds the engine)
 cc(BSP/"firmware/src/lcd.c", OUT/"lcd.o",
    extra=["-include", "fm1_lcd_hw.h", "-include", "fm1_sys.h"])
-# 4) packed tekno bank array
-bank_h = ROOT/"build/board/727_packed.h"
+# 4) packed tekno bank array (device trim lives in build/device/board)
+bank_h = ROOT/"build/device/board/727_packed.h"
 if not bank_h.exists():
     import base64
-    pack = (ROOT/"build/board/727.pack").read_bytes()
+    pack = (ROOT/"build/device/board/727.pack").read_bytes()
     rows = "\n".join(",".join(map(str, pack[i:i+32])) + "," for i in range(0, len(pack), 32))
-    bank_h.write_text("/* generated from build/board/727.pack */\n"
+    bank_h.write_text("/* generated from build/device/board/727.pack */\n"
                       "const unsigned char compas_packed727[]={\n" + rows + "\n};\n")
 bank_c = OUT/"device_bank.c"
 bank_c.write_text('#include "727_packed.h"\n')
-cc(bank_c, OUT/"device_bank.o", extra=[f"-I{ROOT/'build/board'}"])
+cc(bank_c, OUT/"device_bank.o", extra=[f"-I{ROOT/'build/device/board'}"])
 # 4) link
 elf = OUT/"app.elf"
 subprocess.run([str(LD), "-T", str(BSP/"firmware/app.ld"), "-o", str(elf),
