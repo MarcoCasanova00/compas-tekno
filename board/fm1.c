@@ -301,7 +301,9 @@ void fm1_cstart(void)
 #endif
     fm1_audio_init(board_dma[0],BOARD_WORDS,isr_alnk0,3);
     fm1_irq_enable_all();
-    board_submit((BoardCommand){BOARD_CUE,0,0});
+    /* Boot into the tekno groove: study 29 TRIBAL TEKNO · free party (155 BPM,
+     * four-on-floor, UFO kit) — the same cue the browser bench sends. */
+    board_submit((BoardCommand){BOARD_GROOVE_CUE,29,0});
     splash();
     const uint32_t splash_started=fm1_ticks();
     uint32_t last_frame=splash_started, last_master=splash_started;

@@ -20,7 +20,7 @@ The three SDK files (uboot.boot, cfg_tool.bin, eq_cfg_hw.bin) are Apache-2.0, no
 ship LICENSES/Apache-2.0.txt with every package (LICENSING.md; make_site.py and
 build.py --release do).
 
-  fm1pkg_make.py APP.bin OTA.bin OUT.fwsc [--product FM-1_9XY] [--key 0x980F]
+  fm1pkg_make.py APP.bin OTA.bin OUT.fwsc [--product FM-1_710] [--key 0x980F]
 """
 import argparse
 import os
@@ -30,6 +30,14 @@ from pathlib import Path
 APP_SLOT = 0xE3000
 FLASH_SIZE = 0x110000
 KEY = 0x980F
+# Known FM-1 flash layouts (facts of the hardware; verified against the stock
+# packages): the 710 ships 4 MiB-class NOR with a 0x8DFBC app slot, the 900 a
+# larger 0xE3000 slot. Every other descriptor address (VM at 0x93000, BTIF at
+# 0xE9000, USR at 0xEA000) is common to both.
+LAYOUTS = {
+    "FM-1_710": (0x8DFBC, 0x93000),
+    "FM-1_900": (0xE3000, 0x110000),
+}
 # flash header: JieLi SDK defaults (burner_size 544, VID "0.01", flash_size 0xFF000,
 # fs_ver 0x10, PID "AC791N_STORY"), plain, without its CRC
 FLASH_HDR = bytes.fromhex("20022f104cc900f00f001010a4ff4e5d0b41e0cd781dc856417fb367cf9f")
@@ -197,12 +205,13 @@ def main():
     ap.add_argument("app", type=Path)
     ap.add_argument("ota", type=Path)
     ap.add_argument("out", type=Path)
-    ap.add_argument("--product", default="FM-1_900")
+    ap.add_argument("--product", default="FM-1_710", choices=sorted(LAYOUTS))
     ap.add_argument("--key", type=lambda s: int(s, 0), default=KEY)
     ap.add_argument("--sdk", type=Path, help="JieLi AC79 SDK checkout (default: $AC79_SDK)")
     a = ap.parse_args()
-    global SDK
+    global SDK, APP_SLOT, FLASH_SIZE
     SDK = a.sdk
+    APP_SLOT, FLASH_SIZE = LAYOUTS[a.product]
     pkg = ufw(flash_image(a.app.read_bytes(), a.key), a.ota.read_bytes(), a.product)
     a.out.write_bytes(pkg)
     print(f"package {a.out}: {len(pkg)} B, identity {a.product}, chip key {a.key:#06x}")
