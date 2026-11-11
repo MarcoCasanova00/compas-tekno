@@ -110,14 +110,21 @@ void lcd_window(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
     win_x0 = x0; win_y0 = y0; win_x1 = x1; win_y1 = y1; win_i = 0;
 }
 void lcd_data(const uint16_t *px, uint32_t n) {
-    for (uint32_t i = 0; i < n && win_i < 240u * 240u; i++) {
+    /* n is in BYTES on the wire — the BSP's lcd_blit calls lcd_data(px, w*h*2).
+     * Every word of a pixel stream is display_word()-swapped RGB565 (the LCD
+     * takes big-endian words); the panel shows the unswapped value, so that
+     * is what host_fb stores. */
+    for (uint32_t i = 0; i * 2u < n && win_i < 240u * 240u; i++) {
         uint32_t col = win_x0 + (win_i % (win_x1 - win_x0 + 1u));
         uint32_t row = win_y0 + (win_i / (win_x1 - win_x0 + 1u));
-        if (col < 240u && row < 240u) host_fb[row * 240u + col] = px[i];
+        uint16_t w = px[i];
+        if (col < 240u && row < 240u) host_fb[row * 240u + col] = (uint16_t)((w >> 8) | (w << 8));
         win_i++;
     }
 }
 void lcd_fill(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint16_t c) {
+    /* The BSP's lcd_fill byte-swaps internally, so the color the panel shows
+     * is c itself. */
     for (uint32_t j = y; j < y + h && j < 240u; j++)
         for (uint32_t i = x; i < x + w && i < 240u; i++)
             host_fb[j * 240u + i] = c;
@@ -128,8 +135,9 @@ void lcd_blit(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint16_t *px
     for (uint32_t j = 0; j < h; j++)
         for (uint32_t i = 0; i < w; i++) {
             uint32_t cx = x + i, cy = y + j;
+            uint16_t p = px[j * w + i];
             if (cx < 240u && cy < 240u)
-                host_fb[cy * 240u + cx] = px[j * w + i];
+                host_fb[cy * 240u + cx] = (uint16_t)((p >> 8) | (p << 8));
         }
     host_blits++;
     host_pixels += w * h;
@@ -227,7 +235,13 @@ void web_boot(void) {
     board_init();
     panel_lang = 0;
     panel_master(&panel, fm1_adc_read(4));
-    board_submit((BoardCommand){BOARD_CUE, 0, 0});
+    /* The browser bench has no master pot. panel_master parks it at boot (the
+     * device stays quiet until the pot moves), so take the level explicitly —
+     * 100 = unity, what the page rendered before the real audio path. */
+    board_submit((BoardCommand){BOARD_MASTER, 100, 0});
+    /* Boot straight into the tekno groove: study 29 TRIBAL TEKNO · free party
+     * (four-on-floor, offbeat hats, 155 BPM, UFO kit) — same cue on device. */
+    board_submit((BoardCommand){BOARD_GROOVE_CUE, 29, 0});
     splash();
     opening = 1;
     splash_started = last_frame = last_master = 0;
@@ -248,12 +262,10 @@ void web_render(uint32_t n) {
     uint32_t b;
     if (n > WEB_MAX) n = WEB_MAX;
     for (b = 0; b < n; b += 128u) {
-        cp_render(128u);
-        const int16_t *pcm = cp_pcm();
-        for (uint32_t i = 0; i < 128u; i++) {
-            web_buf[2u * b + 2u * i] = (int32_t)pcm[i] << 8;
-            web_buf[2u * b + 2u * i + 1u] = (int32_t)pcm[i] << 8;
-        }
+        /* Real device audio path: this services the command mailbox (so panel
+         * actions apply and BUSY clears) and publishes the board view — what
+         * the FM-1's audio ISR runs on every half. */
+        board_render_audio(&web_buf[2u * b]);
         /* device main loop cadence: one frame per 16 ms of audio */
         web_frames += 128u;
         while (web_frames >= FS * 16u / 1000u) {
@@ -265,8 +277,11 @@ void web_render(uint32_t n) {
         }
     }
     for (uint32_t i = 0; i < n; i++) {
-        web_l[i] = (float)web_buf[2u * i] / 65536.0f;
-        web_r[i] = (float)web_buf[2u * i + 1u] / 65536.0f;
+        /* board writes Q15-style codec words (sum*128); /2^20 is device-referred
+         * with the mix's real headroom — int16 unity lands at 4.0, the default
+         * groove peaks near 0.85. */
+        web_l[i] = (float)web_buf[2u * i] / 1048576.0f;
+        web_r[i] = (float)web_buf[2u * i + 1u] / 1048576.0f;
     }
 }
 float *web_out_l(void) { return web_l; }
@@ -283,6 +298,10 @@ void web_enc(uint32_t role, int32_t steps) {
 uint32_t web_now_ms(void) { return host_ms; }
 uint32_t web_seq_playing(void) { return cp_status(CP_PLAYING); }
 uint32_t web_kb_mode(void) { return 0; }
+uint32_t web_cmd(uint32_t cmd, uint32_t a, uint32_t b) { return cp_command(cmd, a, b); }
+uint32_t web_tempo(void) { return cp_status(CP_TEMPO); }
+uint32_t web_study(void) { return cp_status(CP_STUDY_ID); }
+void _initialize(void) {}   /* WASI reactor no-op for the worklet's guarded call */
 
 #ifdef COMPAS_NATIVE_MAIN
 #include <stdio.h>

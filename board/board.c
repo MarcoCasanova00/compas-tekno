@@ -1351,6 +1351,16 @@ static void render_half(int32_t *out)
     }
 }
 
+void board_render_audio(int32_t *out)
+{
+    /* Emulator/device audio half: service the command mailbox, render the
+     * engine + rack, publish the view — exactly what the audio ISR does. */
+    uint32_t previous=board_lock();
+    if (!fault) render_half(out);
+    else silence(out);
+    board_unlock(previous);
+}
+
 void fm1_alnk0_irq(void)
 {
     const uint32_t start=board_ticks();
