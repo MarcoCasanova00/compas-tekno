@@ -25,7 +25,7 @@ If drums sound right, proceed.
 
 ## 1. The 33 grooves & BPM range
 
-**Test:** RACK → SONG knob, walk the whole list.
+**Test:** GLO → SONG knob, walk the whole list.
 
 | Expectation |
 |---|
@@ -42,8 +42,8 @@ If drums sound right, proceed.
 ## 2. Tempo lock (new)
 
 **Test:**
-1. While playing, turn HOME/SET **KNOB 1** to 170.
-2. Change grooves (RACK → SONG knob).
+1. While playing, turn HOME/SCL **KNOB 1** to 170.
+2. Change grooves (GLO → SONG knob).
 3. Change again.
 
 **Expect:** tempo stays **170** through every groove change. It only changes
@@ -54,10 +54,10 @@ when *you* turn KNOB 1 again. (Set 162 → it sticks to 162.)
 ## 3. Synth voices (the main event)
 
 Bass = role 5. Get there:
-- BASS page, solo bass: HOME → **MIX** → pad 12 (solo role 5).
+- ENV page, solo bass: HOME → **MIX** → pad 12 (solo role 5).
 - Or simply listen in the mix; for clean A/B, solo.
 
-On the BASS page, **KNOB 4** cycles the 4 voices live:
+On the ENV page, **KNOB 4** cycles the 4 voices live:
 
 | Style | Knob | What to listen for | Character |
 |---|---|---|---|
@@ -67,7 +67,7 @@ On the BASS page, **KNOB 4** cycles the 4 voices live:
 | 3 **TRANCE LEAD** | 3 | bright, band-pass; a *pumping* filter sweep in time | saws + quarter-note LFO |
 
 **A/B protocol:**
-1. Solo the bass (MIX pad 12).
+1. Solo the bass (FX pad 12).
 2. Sweep KNOB 4 slowly, one pass per bar.
 3. Confirm each voice changes character (not just volume).
 4. Raise KNOB 2 (bite) on acid/Moog — resonance should scream/ring.
@@ -85,7 +85,7 @@ trance-lead obviously brightest.
 
 **Test:**
 1. Stop playback.
-2. RACK → SONG knob past groove 32 → LEAD entries:
+2. GLO → SONG knob past groove 32 → LEAD entries:
    - `LEAD FLUTE` (id 33)
    - `LEAD HYPNOTIC` (34)
    - `LEAD DESERT` (35)
@@ -111,10 +111,10 @@ trance-lead obviously brightest.
 |---|---|---|
 | Cut the kick (drop) | MIX → pad 1 | kick disappears instantly; hats/percs remain |
 | Bring it back | pad 1 again | drop lands on the next beat |
-| Solo one part | MIX pads 7–12 | only that part |
-| Fill | FILL | roll/fill; ends back on the groove |
+| Solo one part | FX pads 7–12 | only that part |
+| Fill | ARP | roll/fill; ends back on the groove |
 | Breakdown | mute kick+clap (pads 1 & 3) | airy percussion bed |
-| Build | add parts one by one, FILL at the top | rising energy |
+| Build | add parts one by one, ARP at the top | rising energy |
 | Energy | MODE knob | screen + arrangement shift BASE→LIFT→BREAK |
 
 ---
@@ -122,7 +122,7 @@ trance-lead obviously brightest.
 ## 6. Infinite loop & progressive change
 
 - Let any groove run 5+ minutes → **never auto-stops**, loops forever.
-- While playing, change groove with RACK SONG knob → lands **at the next
+- While playing, change groove with GLO SONG knob → lands **at the next
   bar**, playback never drops.
 
 ---

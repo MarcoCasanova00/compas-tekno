@@ -6505,14 +6505,14 @@ panel_scan:
  20046f6:    bf ea b0 ff       	call -160 <send : 200465a >
  20046fa:    d0 ec 49 a0       	[r4+8] = r10
  20046fe:    52 ee c0 50       	b[r12+0] = r5
- 2004702:    c0 ea 88 05       	goto 2832 <panel_scan+0xB74 : 2005216 >
+ 2004702:    c0 ea 70 05       	goto 2784 <panel_scan+0xB44 : 20051e6 >
  2004706:    5e e8 17 42       	if ((r14 & 256) != 0) goto 46 <panel_scan+0x96 : 2004738 >
  200470a:    5e e8 17 12       	if ((r14 & 4) != 0) goto 46 <panel_scan+0x9A : 200473c >
  200470e:    5e e8 1e 22       	if ((r14 & 16) != 0) goto 60 <panel_scan+0xAC : 200474e >
  2004712:    5e e8 21 2a       	if ((r14 & 32) != 0) goto 66 <panel_scan+0xB6 : 2004758 >
  2004716:    61 ff 40 e0 2a 04 	if ((r14 & 0x40) != 0) goto 2132 <panel_scan+0x8CE : 2004f70 >
- 200471c:    61 ff 00 ed 4e 04 	if ((r14 & 0x2000) != 0) goto 2204 <panel_scan+0x91C : 2004fbe >
- 2004722:    5e e8 1e 38       	if ((r14 & 128) == 0) goto 60 <panel_scan+0xC0 : 2004762 >
+ 200471c:    61 ff 80 e0 6e 05 	if ((r14 & 0x80) != 0) goto 2780 <panel_scan+0xB5C : 20051fe >
+ 2004722:    5e e8 1e 18       	if ((r14 & 8) == 0) goto 60 <panel_scan+0xC0 : 2004762 >
  2004726:    06 f8 05 08       	if (r6 == 4) goto 10 <panel_scan+0x92 : 2004734 >
  200472a:    dc e9 28 00       	r0 = b[sp+40] (u)
  200472e:    b0 ec 0f 00       	if (r0 <= 15) {
@@ -6919,11 +6919,11 @@ panel_scan:
  2004b40:    40 16             	r0 = r4
  2004b42:    bf ea 8a fd       	call -1260 <send : 200465a >
  2004b46:    50 ee 90 00       	r0 = b[r9+0] (u)
- 2004b4a:    01 ff 00 00 7d 02 	if (r0 != 0) goto 1274 <panel_scan+0x9A8 : 200504a >
+ 2004b4a:    01 ff 00 00 65 02 	if (r0 != 0) goto 1226 <panel_scan+0x978 : 200501a >
  2004b50:    d0 ec dc 00       	r0 = [r13+12]
  2004b54:    d0 ec d8 10       	r1 = [r13+8]
  2004b58:    90 e1 10 20       	r2 = r1 | r0
- 2004b5c:    00 ff 00 20 49 02 	if (r2 == 0) goto 1170 <panel_scan+0x952 : 2004ff4 >
+ 2004b5c:    00 ff 00 20 31 02 	if (r2 == 0) goto 1122 <panel_scan+0x922 : 2004fc4 >
  2004b62:    dc e9 3b 20       	r2 = b[sp+59] (u)
  2004b66:    21 18             	r1 += r2
  2004b68:    15 16             	r5 = r1
@@ -6947,23 +6947,23 @@ panel_scan:
  2004b8e:    40 16             	r0 = r4
  2004b90:    bf ea 63 fd       	call -1338 <send : 200465a >
  2004b94:    50 ee 90 00       	r0 = b[r9+0] (u)
- 2004b98:    15 8e             	goto 1116 <panel_scan+0x954 : 2004ff6 >
+ 2004b98:    05 96             	goto 1068 <panel_scan+0x924 : 2004fc6 >
  2004b9a:    40 d6             	r0 = r4  #
  2004b9c:    c8 45             		 b[r4+5] = r0
  2004b9e:    49 25             	r1 = 37
  2004ba0:    43 20             	r3 = 0
  2004ba2:    bf ea 5a fd       	call -1356 <send : 200465a >
- 2004ba6:    00 ff 00 e0 35 03 	if (r14 == 0) goto 1642 <panel_scan+0xB74 : 2005216 >
+ 2004ba6:    00 ff 00 e0 1d 03 	if (r14 == 0) goto 1594 <panel_scan+0xB44 : 20051e6 >
  2004bac:    41 21             	r1 = 1
  2004bae:    82 14             	r3_r2 = 0
- 2004bb0:    95 8f             	goto 1630 <panel_scan+0xB6E : 2005210 >
+ 2004bb0:    85 97             	goto 1582 <panel_scan+0xB3E : 20051e0 >
  2004bb2:    0e f8 e1 00       	if (r14 == 0) goto 450 <panel_scan+0x6D6 : 2004d78 >
  2004bb6:    41 21             	r1 = 1
  2004bb8:    82 14             	r3_r2 = 0
  2004bba:    40 16             	r0 = r4
  2004bbc:    bf ea 4d fd       	call -1382 <send : 200465a >
  2004bc0:    d0 ec 49 a0       	[r4+8] = r10
- 2004bc4:    95 88             	goto 1616 <panel_scan+0xB74 : 2005216 >
+ 2004bc4:    85 90             	goto 1568 <panel_scan+0xB44 : 20051e6 >
  2004bc6:    50 ee 90 00       	r0 = b[r9+0] (u)
  2004bca:    80 55             	if (r0 != 0) goto 42 <panel_scan+0x554 : 2004bf6 >
  2004bcc:    60 e1 03 b0       	r0 = r11 & 0x3
@@ -7006,7 +7006,7 @@ panel_scan:
  2004c2c:    bf ea 15 fd       	call -1494 <send : 200465a >
  2004c30:    c5 21             	r5 += 1
  2004c32:    85 f8 e7 09       	if (r5 != 4) goto -50 <panel_scan+0x562 : 2004c04 >
- 2004c36:    05 89             	goto 1042 <panel_scan+0x9A8 : 200504a >
+ 2004c36:    f4 91             	goto 994 <panel_scan+0x978 : 200501a >
  2004c38:    d0 ec d8 00       	r0 = [r13+8]
  2004c3c:    00 50             	if (r0 == 0) goto 32 <panel_scan+0x5BC : 2004c5e >
  2004c3e:    dc e9 12 10       	r1 = b[sp+18] (u)
@@ -7064,7 +7064,7 @@ panel_scan:
  2004cd0:    50 ee 90 00       	r0 = b[r9+0] (u)
  2004cd4:    00 ff 00 00 0e 01 	if (r0 == 0) goto 540 <panel_scan+0x854 : 2004ef6 >
  2004cda:    d0 ec d4 11       	r1 = [r13+20]
- 2004cde:    00 ff 00 10 b3 01 	if (r1 == 0) goto 870 <panel_scan+0x9A8 : 200504a >
+ 2004cde:    00 ff 00 10 9b 01 	if (r1 == 0) goto 822 <panel_scan+0x978 : 200501a >
  2004ce4:    dc e9 57 30       	r3 = b[sp+87] (u)
  2004ce8:    70 e1 f0 30       	r0 = r3 & 0xFFFFFF0F
  2004cec:    b2 a4             	r2 = r3 >> 4
@@ -7219,7 +7219,7 @@ panel_scan:
  2004e58:    43 20             	r3 = 0
  2004e5a:    40 16             	r0 = r4
  2004e5c:    bf ea fd fb       	call -2054 <send : 200465a >
- 2004e60:    5b e8 0a 18       	if ((r11 & 8) == 0) goto 20 <panel_scan+0x7D6 : 2004e78 >
+ 2004e60:    5b e8 0a 68       	if ((r11 & 8192) == 0) goto 20 <panel_scan+0x7D6 : 2004e78 >
  2004e64:    dc e9 1b 00       	r0 = b[sp+27] (u)
  2004e68:    42 21             	r2 = 1
  2004e6a:    00 41             	if (r0 == 0) goto 2 <panel_scan+0x7CC : 2004e6e >
@@ -7251,7 +7251,7 @@ panel_scan:
  2004ea6:    bf ea d8 fb       	call -2128 <send : 200465a >
  2004eaa:    c6 21             	r6 += 1
  2004eac:    86 f8 f3 21       	if (r6 != 16) goto -26 <panel_scan+0x7F4 : 2004e96 >
- 2004eb0:    d4 92             	goto 868 <panel_scan+0xB74 : 2005216 >
+ 2004eb0:    c4 9a             	goto 820 <panel_scan+0xB44 : 20051e6 >
  2004eb2:    40 20             	r0 = 0
  2004eb4:    80 22             	[sp+8] = r0
  2004eb6:    66 94             	goto -1624 <panel_scan+0x1BE : 2004860 >
@@ -7317,8 +7317,8 @@ panel_scan:
  2004f46:    bf ea 88 fb       	call -2288 <send : 200465a >
  2004f4a:    50 ee 90 50       	r5 = b[r9+0] (u)
  2004f4e:    d0 ec d4 01       	r0 = [r13+20]
- 2004f52:    30 5b             	if (r0 == 0) goto 246 <panel_scan+0x9A8 : 200504a >
- 2004f54:    b5 5a             	if (r5 != 0) goto 244 <panel_scan+0x9A8 : 200504a >
+ 2004f52:    30 43             	if (r0 == 0) goto 198 <panel_scan+0x978 : 200501a >
+ 2004f54:    b5 42             	if (r5 != 0) goto 196 <panel_scan+0x978 : 200501a >
  2004f56:    01 16             	r1 = r0
  2004f58:    30 ed 64 00       	ifs (r0 >= 100) {
  2004f5c:    59 24             		r1 = 100
@@ -7330,8 +7330,8 @@ panel_scan:
                                	}
  2004f6a:    49 30             	r1 = 48
  2004f6c:    42 24             	r2 = 4
- 2004f6e:    34 8a             	goto 212 <panel_scan+0x9A2 : 2005044 >
- 2004f70:    86 f8 3d 06       	if (r6 != 3) goto 122 <panel_scan+0x94C : 2004fee >
+ 2004f6e:    24 92             	goto 164 <panel_scan+0x972 : 2005014 >
+ 2004f70:    86 f8 25 06       	if (r6 != 3) goto 74 <panel_scan+0x91C : 2004fbe >
  2004f74:    4a 41             	r2 = b[r4+1] (u)
  2004f76:    48 43             	r0 = b[r4+3] (u)
  2004f78:    0b 81             	r3 = r0 + 1
@@ -7355,239 +7355,239 @@ panel_scan:
  2004fa4:    bf ea 59 fb       	call -2382 <send : 200465a >
  2004fa8:    60 ff 00 be 4e 01 	if ((r11 & 0x800) == 0) goto 668 <panel_scan+0xBA8 : 200524a >
  2004fae:    50 ee 90 00       	r0 = b[r9+0] (u)
- 2004fb2:    00 ff 00 00 31 01 	if (r0 == 0) goto 610 <panel_scan+0xB78 : 200521a >
+ 2004fb2:    00 ff 00 00 19 01 	if (r0 == 0) goto 562 <panel_scan+0xB48 : 20051ea >
  2004fb8:    49 29             	r1 = 41
  2004fba:    42 20             	r2 = 0
  2004fbc:    a4 82             	goto 644 <panel_scan+0xBA0 : 2005242 >
- 2004fbe:    86 f8 0f 06       	if (r6 != 3) goto 30 <panel_scan+0x93E : 2004fe0 >
- 2004fc2:    dc e9 2b 00       	r0 = b[sp+43] (u)
- 2004fc6:    80 4c             	if (r0 != 0) goto 24 <panel_scan+0x93E : 2004fe0 >
- 2004fc8:    dc e9 30 00       	r0 = b[sp+48] (u)
- 2004fcc:    42 20             	r2 = 0
- 2004fce:    20 ea 08 40       	if ((r0 & 0x8) == 0) {
- 2004fd2:    48 43             		r0 = b[r4+3] (u)
- 2004fd4:    0a 81             		r2 = r0 + 1
+ 2004fbe:    40 22             	r0 = 2
+ 2004fc0:    ff ea ce fb       	goto -2148 <panel_scan+0xBE : 2004760 >
+ 2004fc4:    40 20             	r0 = 0
+ 2004fc6:    d0 ec d0 11       	r1 = [r13+16]
+ 2004fca:    01 53             	if (r1 == 0) goto 38 <panel_scan+0x950 : 2004ff2 >
+ 2004fcc:    80 52             	if (r0 != 0) goto 36 <panel_scan+0x950 : 2004ff2 >
+ 2004fce:    dc e9 21 00       	r0 = b[sp+33] (u)
+ 2004fd2:    10 18             	r0 += r1
+ 2004fd4:    01 16             	r1 = r0
+ 2004fd6:    30 ed 64 00       	ifs (r0 >= 100) {
+ 2004fda:    59 24             		r1 = 100
                                	}
- 2004fd6:    49 3c             	r1 = 60
- 2004fd8:    43 20             	r3 = 0
- 2004fda:    40 16             	r0 = r4
- 2004fdc:    bf ea 3d fb       	call -2438 <send : 200465a >
- 2004fe0:    40 23             	r0 = 3
- 2004fe2:    c8 40             	b[r4+0] = r0
- 2004fe4:    40 20             	r0 = 0
- 2004fe6:    52 ee c2 00       	b[r12+2] = r0
- 2004fea:    ff ea ba fb       	goto -2188 <panel_scan+0xC0 : 2004762 >
- 2004fee:    40 22             	r0 = 2
- 2004ff0:    ff ea b6 fb       	goto -2196 <panel_scan+0xBE : 2004760 >
- 2004ff4:    40 20             	r0 = 0
- 2004ff6:    d0 ec d0 11       	r1 = [r13+16]
- 2004ffa:    01 53             	if (r1 == 0) goto 38 <panel_scan+0x980 : 2005022 >
- 2004ffc:    80 52             	if (r0 != 0) goto 36 <panel_scan+0x980 : 2005022 >
- 2004ffe:    dc e9 21 00       	r0 = b[sp+33] (u)
- 2005002:    10 18             	r0 += r1
- 2005004:    01 16             	r1 = r0
- 2005006:    30 ed 64 00       	ifs (r0 >= 100) {
- 200500a:    59 24             		r1 = 100
+ 2004fdc:    43 20             	r3 = 0
+ 2004fde:    30 ed 00 00       	ifs (r0 >= 0) {
+ 2004fe2:    13 16             		r3 = r1
                                	}
- 200500c:    43 20             	r3 = 0
- 200500e:    30 ed 00 00       	ifs (r0 >= 0) {
- 2005012:    13 16             		r3 = r1
+ 2004fe4:    41 28             	r1 = 8
+ 2004fe6:    42 25             	r2 = 5
+ 2004fe8:    40 16             	r0 = r4
+ 2004fea:    bf ea 36 fb       	call -2452 <send : 200465a >
+ 2004fee:    50 ee 90 00       	r0 = b[r9+0] (u)
+ 2004ff2:    d0 ec d4 11       	r1 = [r13+20]
+ 2004ff6:    01 51             	if (r1 == 0) goto 34 <panel_scan+0x978 : 200501a >
+ 2004ff8:    80 50             	if (r0 != 0) goto 32 <panel_scan+0x978 : 200501a >
+ 2004ffa:    dc e9 3a 00       	r0 = b[sp+58] (u)
+ 2004ffe:    10 18             	r0 += r1
+ 2005000:    01 16             	r1 = r0
+ 2005002:    30 ed 03 00       	ifs (r0 >= 3) {
+ 2005006:    41 23             		r1 = 3
                                	}
- 2005014:    41 28             	r1 = 8
- 2005016:    42 25             	r2 = 5
- 2005018:    40 16             	r0 = r4
- 200501a:    bf ea 1e fb       	call -2500 <send : 200465a >
- 200501e:    50 ee 90 00       	r0 = b[r9+0] (u)
- 2005022:    d0 ec d4 11       	r1 = [r13+20]
- 2005026:    01 51             	if (r1 == 0) goto 34 <panel_scan+0x9A8 : 200504a >
- 2005028:    80 50             	if (r0 != 0) goto 32 <panel_scan+0x9A8 : 200504a >
- 200502a:    dc e9 3a 00       	r0 = b[sp+58] (u)
- 200502e:    10 18             	r0 += r1
- 2005030:    01 16             	r1 = r0
- 2005032:    30 ed 03 00       	ifs (r0 >= 3) {
- 2005036:    41 23             		r1 = 3
+ 2005008:    42 20             	r2 = 0
+ 200500a:    30 ed 00 00       	ifs (r0 >= 0) {
+ 200500e:    12 16             		r2 = r1
                                	}
- 2005038:    42 20             	r2 = 0
- 200503a:    30 ed 00 00       	ifs (r0 >= 0) {
- 200503e:    12 16             		r2 = r1
-                               	}
- 2005040:    49 2d             	r1 = 45
- 2005042:    43 20             	r3 = 0
- 2005044:    40 16             	r0 = r4
- 2005046:    bf ea 08 fb       	call -2544 <send : 200465a >
- 200504a:    d0 ec d4 20       	r2 = [r13+4]
- 200504e:    02 5b             	if (r2 == 0) goto 54 <panel_scan+0x9E4 : 2005086 >
- 2005050:    50 ee 90 00       	r0 = b[r9+0] (u)
- 2005054:    80 58             	if (r0 != 0) goto 48 <panel_scan+0x9E4 : 2005086 >
- 2005056:    dc e9 0f 00       	r0 = b[sp+15] (u)
- 200505a:    30 ec 02 80       	if (r0 > 2) {
- 200505e:    dc e9 0e 10       		r1 = b[sp+14] (u)
- 2005062:    dc e9 38 00       		r0 = b[sp+56] (u)
- 2005066:    bf ea 0d fb       		call -2534
+ 2005010:    49 2d             	r1 = 45
+ 2005012:    43 20             	r3 = 0
+ 2005014:    40 16             	r0 = r4
+ 2005016:    bf ea 20 fb       	call -2496 <send : 200465a >
+ 200501a:    d0 ec d4 20       	r2 = [r13+4]
+ 200501e:    02 5b             	if (r2 == 0) goto 54 <panel_scan+0x9B4 : 2005056 >
+ 2005020:    50 ee 90 00       	r0 = b[r9+0] (u)
+ 2005024:    80 58             	if (r0 != 0) goto 48 <panel_scan+0x9B4 : 2005056 >
+ 2005026:    dc e9 0f 00       	r0 = b[sp+15] (u)
+ 200502a:    30 ec 02 80       	if (r0 > 2) {
+ 200502e:    dc e9 0e 10       		r1 = b[sp+14] (u)
+ 2005032:    dc e9 38 00       		r0 = b[sp+56] (u)
+ 2005036:    bf ea 25 fb       		call -2486
                                	} <board_part_energy : 2004684 >
- 200506a:    20 18             	r0 += r2
- 200506c:    01 16             	r1 = r0
- 200506e:    30 ed 02 00       	ifs (r0 >= 2) {
- 2005072:    41 22             		r1 = 2
+ 200503a:    20 18             	r0 += r2
+ 200503c:    01 16             	r1 = r0
+ 200503e:    30 ed 02 00       	ifs (r0 >= 2) {
+ 2005042:    41 22             		r1 = 2
                                	}
- 2005074:    42 20             	r2 = 0
- 2005076:    30 ed 00 00       	ifs (r0 >= 0) {
- 200507a:    12 16             		r2 = r1
+ 2005044:    42 20             	r2 = 0
+ 2005046:    30 ed 00 00       	ifs (r0 >= 0) {
+ 200504a:    12 16             		r2 = r1
                                	}
- 200507c:    41 24             	r1 = 4
- 200507e:    43 20             	r3 = 0
- 2005080:    40 16             	r0 = r4
- 2005082:    bf ea ea fa       	call -2604 <send : 200465a >
- 2005086:    5b e8 09 50       	if ((r11 & 1024) == 0) goto 18 <panel_scan+0x9FA : 200509c >
- 200508a:    50 ee 90 00       	r0 = b[r9+0] (u)
- 200508e:    49 28             	r1 = 40
- 2005090:    80 41             	if (r0 != 0) goto 2 <panel_scan+0x9F2 : 2005094 >
- 2005092:    41 25             	r1 = 5
- 2005094:    82 14             	r3_r2 = 0
- 2005096:    40 16             	r0 = r4
- 2005098:    bf ea df fa       	call -2626 <send : 200465a >
- 200509c:    5b e8 11 58       	if ((r11 & 2048) == 0) goto 34 <panel_scan+0xA20 : 20050c2 >
- 20050a0:    50 ee 90 00       	r0 = b[r9+0] (u)
- 20050a4:    00 48             	if (r0 == 0) goto 16 <panel_scan+0xA14 : 20050b6 >
- 20050a6:    dc e9 0c 00       	r0 = b[sp+12] (u)
- 20050aa:    60 ff ff 00 03 00 	if ((r0 & 0xFF) == 0) goto 6 <panel_scan+0xA14 : 20050b6 >
- 20050b0:    49 29             	r1 = 41
- 20050b2:    42 20             	r2 = 0
- 20050b4:    04 82             	goto 4 <panel_scan+0xA18 : 20050ba >
- 20050b6:    49 2b             	r1 = 43
- 20050b8:    42 25             	r2 = 5
- 20050ba:    43 20             	r3 = 0
- 20050bc:    40 16             	r0 = r4
- 20050be:    bf ea cc fa       	call -2664 <send : 200465a >
- 20050c2:    40 62             	r0 = [r4+8] 
- 20050c4:    90 f1 a3 70       	r7 = r10 & ~r0  #
- 20050c8:    25 23             		 r5 = [sp+140]
- 20050ca:    d0 ec 49 a0       	[r4+8] = r10
- 20050ce:    42 20             	r2 = 0
- 20050d0:    46 21             	r6 = 1
- 20050d2:    c0 ff f4 6e 01 02 	r0 = 33648372 <panel_part_keys : 2016ef4 >
- 20050d8:    04 87             	goto 14 <panel_scan+0xA46 : 20050e8 >
- 20050da:    d8 ee 20 10       	r1 = b[r2+r0] (u)
- 20050de:    94 e1 72 11       	r1 = r7 & (1 << r1)
- 20050e2:    81 45             	if (r1 != 0) goto 10 <panel_scan+0xA4C : 20050ee >
- 20050e4:    c6 21             	r6 += 1
- 20050e6:    c2 21             	r2 += 1
- 20050e8:    82 fc f7 0b       	if (r2 <= 5) goto -18 <panel_scan+0xA38 : 20050da >
- 20050ec:    14 8d             	goto 90 <panel_scan+0xAA6 : 2005148 >
- 20050ee:    50 ee 90 00       	r0 = b[r9+0] (u)
- 20050f2:    00 46             	if (r0 == 0) goto 12 <panel_scan+0xA5E : 2005100 >
- 20050f4:    20 16             	r0 = r2
- 20050f6:    bf ea 43 f9       	call -3450 <score_part : 2004380 >
- 20050fa:    43 20             	r3 = 0
- 20050fc:    80 5e             	if (r0 != 0) goto 60 <panel_scan+0xA98 : 200513a >
- 20050fe:    14 84             	goto 72 <panel_scan+0xAA6 : 2005148 >
- 2005100:    dc e9 0c 00       	r0 = b[sp+12] (u)
- 2005104:    43 20             	r3 = 0
- 2005106:    00 59             	if (r0 == 0) goto 50 <panel_scan+0xA98 : 200513a >
- 2005108:    5b e8 17 52       	if ((r11 & 1024) != 0) goto 46 <panel_scan+0xA98 : 200513a >
- 200510c:    dc e9 10 00       	r0 = b[sp+16] (u)
- 2005110:    61 ff ff 00 12 00 	if ((r0 & 0xFF) != 0) goto 36 <panel_scan+0xA98 : 200513a >
- 2005116:    50 ee c0 00       	r0 = b[r12+0] (u)
- 200511a:    f8 3f             	r0 += -1
- 200511c:    82 e8 0d 00       	if (r0 != r2) goto 26 <panel_scan+0xA98 : 200513a >
- 2005120:    dc e9 39 00       	r0 = b[sp+57] (u)
- 2005124:    82 e8 09 00       	if (r0 != r2) goto 18 <panel_scan+0xA98 : 200513a >
- 2005128:    40 63             	r0 = [r4+12] 
- 200512a:    50 1e             	r0 = r5 - r0
- 200512c:    c1 ff 01 7c 92 00 	r1 = 9600001 </tmp/opencode/compas-tekno/src/engine.c+0x927C00 : 927c00 >
- 2005132:    43 21             	r3 = 1
- 2005134:    10 e9 00 01       	if (r0 >= r1) {
- 2005138:    43 20             		r3 = 0
+ 200504c:    41 24             	r1 = 4
+ 200504e:    43 20             	r3 = 0
+ 2005050:    40 16             	r0 = r4
+ 2005052:    bf ea 02 fb       	call -2556 <send : 200465a >
+ 2005056:    5b e8 09 50       	if ((r11 & 1024) == 0) goto 18 <panel_scan+0x9CA : 200506c >
+ 200505a:    50 ee 90 00       	r0 = b[r9+0] (u)
+ 200505e:    49 28             	r1 = 40
+ 2005060:    80 41             	if (r0 != 0) goto 2 <panel_scan+0x9C2 : 2005064 >
+ 2005062:    41 25             	r1 = 5
+ 2005064:    82 14             	r3_r2 = 0
+ 2005066:    40 16             	r0 = r4
+ 2005068:    bf ea f7 fa       	call -2578 <send : 200465a >
+ 200506c:    5b e8 11 58       	if ((r11 & 2048) == 0) goto 34 <panel_scan+0x9F0 : 2005092 >
+ 2005070:    50 ee 90 00       	r0 = b[r9+0] (u)
+ 2005074:    00 48             	if (r0 == 0) goto 16 <panel_scan+0x9E4 : 2005086 >
+ 2005076:    dc e9 0c 00       	r0 = b[sp+12] (u)
+ 200507a:    60 ff ff 00 03 00 	if ((r0 & 0xFF) == 0) goto 6 <panel_scan+0x9E4 : 2005086 >
+ 2005080:    49 29             	r1 = 41
+ 2005082:    42 20             	r2 = 0
+ 2005084:    04 82             	goto 4 <panel_scan+0x9E8 : 200508a >
+ 2005086:    49 2b             	r1 = 43
+ 2005088:    42 25             	r2 = 5
+ 200508a:    43 20             	r3 = 0
+ 200508c:    40 16             	r0 = r4
+ 200508e:    bf ea e4 fa       	call -2616 <send : 200465a >
+ 2005092:    40 62             	r0 = [r4+8] 
+ 2005094:    90 f1 a3 70       	r7 = r10 & ~r0  #
+ 2005098:    25 23             		 r5 = [sp+140]
+ 200509a:    d0 ec 49 a0       	[r4+8] = r10
+ 200509e:    42 20             	r2 = 0
+ 20050a0:    46 21             	r6 = 1
+ 20050a2:    c0 ff f4 6e 01 02 	r0 = 33648372 <panel_part_keys : 2016ef4 >
+ 20050a8:    04 87             	goto 14 <panel_scan+0xA16 : 20050b8 >
+ 20050aa:    d8 ee 20 10       	r1 = b[r2+r0] (u)
+ 20050ae:    94 e1 72 11       	r1 = r7 & (1 << r1)
+ 20050b2:    81 45             	if (r1 != 0) goto 10 <panel_scan+0xA1C : 20050be >
+ 20050b4:    c6 21             	r6 += 1
+ 20050b6:    c2 21             	r2 += 1
+ 20050b8:    82 fc f7 0b       	if (r2 <= 5) goto -18 <panel_scan+0xA08 : 20050aa >
+ 20050bc:    14 8d             	goto 90 <panel_scan+0xA76 : 2005118 >
+ 20050be:    50 ee 90 00       	r0 = b[r9+0] (u)
+ 20050c2:    00 46             	if (r0 == 0) goto 12 <panel_scan+0xA2E : 20050d0 >
+ 20050c4:    20 16             	r0 = r2
+ 20050c6:    bf ea 5b f9       	call -3402 <score_part : 2004380 >
+ 20050ca:    43 20             	r3 = 0
+ 20050cc:    80 5e             	if (r0 != 0) goto 60 <panel_scan+0xA68 : 200510a >
+ 20050ce:    14 84             	goto 72 <panel_scan+0xA76 : 2005118 >
+ 20050d0:    dc e9 0c 00       	r0 = b[sp+12] (u)
+ 20050d4:    43 20             	r3 = 0
+ 20050d6:    00 59             	if (r0 == 0) goto 50 <panel_scan+0xA68 : 200510a >
+ 20050d8:    5b e8 17 52       	if ((r11 & 1024) != 0) goto 46 <panel_scan+0xA68 : 200510a >
+ 20050dc:    dc e9 10 00       	r0 = b[sp+16] (u)
+ 20050e0:    61 ff ff 00 12 00 	if ((r0 & 0xFF) != 0) goto 36 <panel_scan+0xA68 : 200510a >
+ 20050e6:    50 ee c0 00       	r0 = b[r12+0] (u)
+ 20050ea:    f8 3f             	r0 += -1
+ 20050ec:    82 e8 0d 00       	if (r0 != r2) goto 26 <panel_scan+0xA68 : 200510a >
+ 20050f0:    dc e9 39 00       	r0 = b[sp+57] (u)
+ 20050f4:    82 e8 09 00       	if (r0 != r2) goto 18 <panel_scan+0xA68 : 200510a >
+ 20050f8:    40 63             	r0 = [r4+12] 
+ 20050fa:    50 1e             	r0 = r5 - r0
+ 20050fc:    c1 ff 01 7c 92 00 	r1 = 9600001 </tmp/opencode/compas-tekno/src/engine.c+0x927C00 : 927c00 >
+ 2005102:    43 21             	r3 = 1
+ 2005104:    10 e9 00 01       	if (r0 >= r1) {
+ 2005108:    43 20             		r3 = 0
                                	}
- 200513a:    49 2b             	r1 = 43
- 200513c:    40 16             	r0 = r4
- 200513e:    bf ea 8c fa       	call -2792 <send : 200465a >
- 2005142:    52 ee c0 60       	b[r12+0] = r6
- 2005146:    c5 63             	[r4+12] = r5
- 2005148:    be e8 00 c0       	if (r14 != 0) {
- 200514c:    41 21             		r1 = 1
- 200514e:    82 14             		r3_r2 = 0
- 2005150:    40 16             		r0 = r4
- 2005152:    bf ea 82 fa       		call -2812
+ 200510a:    49 2b             	r1 = 43
+ 200510c:    40 16             	r0 = r4
+ 200510e:    bf ea a4 fa       	call -2744 <send : 200465a >
+ 2005112:    52 ee c0 60       	b[r12+0] = r6
+ 2005116:    c5 63             	[r4+12] = r5
+ 2005118:    be e8 00 c0       	if (r14 != 0) {
+ 200511c:    41 21             		r1 = 1
+ 200511e:    82 14             		r3_r2 = 0
+ 2005120:    40 16             		r0 = r4
+ 2005122:    bf ea 9a fa       		call -2764
                                	} <send : 200465a >
- 2005156:    50 ee 90 00       	r0 = b[r9+0] (u)
- 200515a:    10 46             	if (r0 == 0) goto 76 <panel_scan+0xB06 : 20051a8 >
- 200515c:    57 e8 08 40       	if ((r7 & 256) == 0) goto 16 <panel_scan+0xACE : 2005170 >
- 2005160:    dc e9 32 00       	r0 = b[sp+50] (u)
- 2005164:    00 45             	if (r0 == 0) goto 10 <panel_scan+0xACE : 2005170 >
- 2005166:    49 2a             	r1 = 42
- 2005168:    82 14             	r3_r2 = 0
- 200516a:    40 16             	r0 = r4
- 200516c:    bf ea 75 fa       	call -2838 <send : 200465a >
- 2005170:    dc e9 0c 00       	r0 = b[sp+12] (u)
- 2005174:    00 4f             	if (r0 == 0) goto 30 <panel_scan+0xAF2 : 2005194 >
- 2005176:    dc e9 2f 00       	r0 = b[sp+47] (u)
- 200517a:    80 4c             	if (r0 != 0) goto 24 <panel_scan+0xAF2 : 2005194 >
- 200517c:    57 e8 0a 50       	if ((r7 & 1024) == 0) goto 20 <panel_scan+0xAF2 : 2005194 >
- 2005180:    dc e9 2c 00       	r0 = b[sp+44] (u)
- 2005184:    00 17             	r0 = r0.b0 (u)
- 2005186:    b0 e8 04 c0       	if (r0 != 4) {
- 200518a:    49 28             		r1 = 40
- 200518c:    82 14             		r3_r2 = 0
- 200518e:    40 16             		r0 = r4
- 2005190:    bf ea 63 fa       		call -2874
+ 2005126:    50 ee 90 00       	r0 = b[r9+0] (u)
+ 200512a:    10 46             	if (r0 == 0) goto 76 <panel_scan+0xAD6 : 2005178 >
+ 200512c:    57 e8 08 40       	if ((r7 & 256) == 0) goto 16 <panel_scan+0xA9E : 2005140 >
+ 2005130:    dc e9 32 00       	r0 = b[sp+50] (u)
+ 2005134:    00 45             	if (r0 == 0) goto 10 <panel_scan+0xA9E : 2005140 >
+ 2005136:    49 2a             	r1 = 42
+ 2005138:    82 14             	r3_r2 = 0
+ 200513a:    40 16             	r0 = r4
+ 200513c:    bf ea 8d fa       	call -2790 <send : 200465a >
+ 2005140:    dc e9 0c 00       	r0 = b[sp+12] (u)
+ 2005144:    00 4f             	if (r0 == 0) goto 30 <panel_scan+0xAC2 : 2005164 >
+ 2005146:    dc e9 2f 00       	r0 = b[sp+47] (u)
+ 200514a:    80 4c             	if (r0 != 0) goto 24 <panel_scan+0xAC2 : 2005164 >
+ 200514c:    57 e8 0a 50       	if ((r7 & 1024) == 0) goto 20 <panel_scan+0xAC2 : 2005164 >
+ 2005150:    dc e9 2c 00       	r0 = b[sp+44] (u)
+ 2005154:    00 17             	r0 = r0.b0 (u)
+ 2005156:    b0 e8 04 c0       	if (r0 != 4) {
+ 200515a:    49 28             		r1 = 40
+ 200515c:    82 14             		r3_r2 = 0
+ 200515e:    40 16             		r0 = r4
+ 2005160:    bf ea 7b fa       		call -2826
                                	} <send : 200465a >
- 2005194:    57 e8 26 68       	if ((r7 & 8192) == 0) goto 76 <panel_scan+0xB42 : 20051e4 >
- 2005198:    dc e9 55 00       	r0 = b[sp+85] (u)
- 200519c:    60 ff ff 00 21 00 	if ((r0 & 0xFF) == 0) goto 66 <panel_scan+0xB42 : 20051e4 >
- 20051a2:    49 38             	r1 = 56
- 20051a4:    42 20             	r2 = 0
- 20051a6:    04 9a             	goto 52 <panel_scan+0xB3A : 20051dc >
- 20051a8:    45 20             	r5 = 0
- 20051aa:    c6 ff fa 6e 01 02 	r6 = 33648378 <panel_layer_keys : 2016efa >
- 20051b0:    04 8c             	goto 24 <panel_scan+0xB28 : 20051ca >
- 20051b2:    d8 ee 50 06       	r0 = b[r5+r6] (u)
- 20051b6:    94 e1 72 00       	r0 = r7 & (1 << r0)
- 20051ba:    00 46             	if (r0 == 0) goto 12 <panel_scan+0xB26 : 20051c8 >
- 20051bc:    49 2f             	r1 = 47
- 20051be:    43 20             	r3 = 0
- 20051c0:    40 16             	r0 = r4
- 20051c2:    52 16             	r2 = r5
- 20051c4:    bf ea 49 fa       	call -2926 <send : 200465a >
- 20051c8:    c5 21             	r5 += 1
- 20051ca:    85 f8 f2 09       	if (r5 != 4) goto -28 <panel_scan+0xB10 : 20051b2 >
- 20051ce:    57 e8 09 88       	if ((r7 & 131072) == 0) goto 18 <panel_scan+0xB42 : 20051e4 >
- 20051d2:    50 ee 90 00       	r0 = b[r9+0] (u)
- 20051d6:    80 46             	if (r0 != 0) goto 12 <panel_scan+0xB42 : 20051e4 >
- 20051d8:    41 26             	r1 = 6
- 20051da:    42 25             	r2 = 5
- 20051dc:    43 20             	r3 = 0
- 20051de:    40 16             	r0 = r4
- 20051e0:    bf ea 3b fa       	call -2954 <send : 200465a >
- 20051e4:    5b e8 0a 18       	if ((r11 & 8) == 0) goto 20 <panel_scan+0xB5A : 20051fc >
- 20051e8:    dc e9 1b 00       	r0 = b[sp+27] (u)
- 20051ec:    42 21             	r2 = 1
- 20051ee:    00 41             	if (r0 == 0) goto 2 <panel_scan+0xB50 : 20051f2 >
- 20051f0:    42 20             	r2 = 0
- 20051f2:    49 23             	r1 = 35
- 20051f4:    43 20             	r3 = 0
- 20051f6:    40 16             	r0 = r4
- 20051f8:    bf ea 2f fa       	call -2978 <send : 200465a >
- 20051fc:    61 e1 7f 70       	r1 = r7 & 0x7F
- 2005200:    f0 ab             	r0 = r7 >> 11
- 2005202:    60 e1 ff 0c       	r0 = r0 & 0x7F80
- 2005206:    01 19             	r1 |= r0
- 2005208:    01 46             	if (r1 == 0) goto 12 <panel_scan+0xB74 : 2005216 >
- 200520a:    12 17             	r2 = r1.b0 (u)
- 200520c:    83 a8             	r3 = r0 >> 8
- 200520e:    49 2c             	r1 = 44
- 2005210:    40 16             	r0 = r4
- 2005212:    bf ea 22 fa       	call -3004 <send : 200465a >
- 2005216:    02 96             	sp += 88
- 2005218:    5f 04             	{pc, r15-r4} = [sp++]
- 200521a:    48 40             	r0 = b[r4+0] (u)
- 200521c:    80 f8 07 06       	if (r0 != 3) goto 14 <panel_scan+0xB8C : 200522e >
- 2005220:    dc e9 17 00       	r0 = b[sp+23] (u)
- 2005224:    42 21             	r2 = 1
- 2005226:    00 41             	if (r0 == 0) goto 2 <panel_scan+0xB88 : 200522a >
- 2005228:    42 20             	r2 = 0
- 200522a:    49 21             	r1 = 33
- 200522c:    04 8a             	goto 20 <panel_scan+0xBA0 : 2005242 >
+ 2005164:    57 e8 26 68       	if ((r7 & 8192) == 0) goto 76 <panel_scan+0xB12 : 20051b4 >
+ 2005168:    dc e9 55 00       	r0 = b[sp+85] (u)
+ 200516c:    60 ff ff 00 21 00 	if ((r0 & 0xFF) == 0) goto 66 <panel_scan+0xB12 : 20051b4 >
+ 2005172:    49 38             	r1 = 56
+ 2005174:    42 20             	r2 = 0
+ 2005176:    04 9a             	goto 52 <panel_scan+0xB0A : 20051ac >
+ 2005178:    45 20             	r5 = 0
+ 200517a:    c6 ff fa 6e 01 02 	r6 = 33648378 <panel_layer_keys : 2016efa >
+ 2005180:    04 8c             	goto 24 <panel_scan+0xAF8 : 200519a >
+ 2005182:    d8 ee 50 06       	r0 = b[r5+r6] (u)
+ 2005186:    94 e1 72 00       	r0 = r7 & (1 << r0)
+ 200518a:    00 46             	if (r0 == 0) goto 12 <panel_scan+0xAF6 : 2005198 >
+ 200518c:    49 2f             	r1 = 47
+ 200518e:    43 20             	r3 = 0
+ 2005190:    40 16             	r0 = r4
+ 2005192:    52 16             	r2 = r5
+ 2005194:    bf ea 61 fa       	call -2878 <send : 200465a >
+ 2005198:    c5 21             	r5 += 1
+ 200519a:    85 f8 f2 09       	if (r5 != 4) goto -28 <panel_scan+0xAE0 : 2005182 >
+ 200519e:    57 e8 09 88       	if ((r7 & 131072) == 0) goto 18 <panel_scan+0xB12 : 20051b4 >
+ 20051a2:    50 ee 90 00       	r0 = b[r9+0] (u)
+ 20051a6:    80 46             	if (r0 != 0) goto 12 <panel_scan+0xB12 : 20051b4 >
+ 20051a8:    41 26             	r1 = 6
+ 20051aa:    42 25             	r2 = 5
+ 20051ac:    43 20             	r3 = 0
+ 20051ae:    40 16             	r0 = r4
+ 20051b0:    bf ea 53 fa       	call -2906 <send : 200465a >
+ 20051b4:    5b e8 0a 68       	if ((r11 & 8192) == 0) goto 20 <panel_scan+0xB2A : 20051cc >
+ 20051b8:    dc e9 1b 00       	r0 = b[sp+27] (u)
+ 20051bc:    42 21             	r2 = 1
+ 20051be:    00 41             	if (r0 == 0) goto 2 <panel_scan+0xB20 : 20051c2 >
+ 20051c0:    42 20             	r2 = 0
+ 20051c2:    49 23             	r1 = 35
+ 20051c4:    43 20             	r3 = 0
+ 20051c6:    40 16             	r0 = r4
+ 20051c8:    bf ea 47 fa       	call -2930 <send : 200465a >
+ 20051cc:    61 e1 7f 70       	r1 = r7 & 0x7F
+ 20051d0:    f0 ab             	r0 = r7 >> 11
+ 20051d2:    60 e1 ff 0c       	r0 = r0 & 0x7F80
+ 20051d6:    01 19             	r1 |= r0
+ 20051d8:    01 46             	if (r1 == 0) goto 12 <panel_scan+0xB44 : 20051e6 >
+ 20051da:    12 17             	r2 = r1.b0 (u)
+ 20051dc:    83 a8             	r3 = r0 >> 8
+ 20051de:    49 2c             	r1 = 44
+ 20051e0:    40 16             	r0 = r4
+ 20051e2:    bf ea 3a fa       	call -2956 <send : 200465a >
+ 20051e6:    02 96             	sp += 88
+ 20051e8:    5f 04             	{pc, r15-r4} = [sp++]
+ 20051ea:    48 40             	r0 = b[r4+0] (u)
+ 20051ec:    80 f8 1f 06       	if (r0 != 3) goto 62 <panel_scan+0xB8C : 200522e >
+ 20051f0:    dc e9 17 00       	r0 = b[sp+23] (u)
+ 20051f4:    42 21             	r2 = 1
+ 20051f6:    00 41             	if (r0 == 0) goto 2 <panel_scan+0xB58 : 20051fa >
+ 20051f8:    42 20             	r2 = 0
+ 20051fa:    49 21             	r1 = 33
+ 20051fc:    14 82             	goto 68 <panel_scan+0xBA0 : 2005242 >
+ 20051fe:    86 f8 0f 06       	if (r6 != 3) goto 30 <panel_scan+0xB7E : 2005220 >
+ 2005202:    dc e9 2b 00       	r0 = b[sp+43] (u)
+ 2005206:    80 4c             	if (r0 != 0) goto 24 <panel_scan+0xB7E : 2005220 >
+ 2005208:    dc e9 30 00       	r0 = b[sp+48] (u)
+ 200520c:    42 20             	r2 = 0
+ 200520e:    20 ea 08 40       	if ((r0 & 0x8) == 0) {
+ 2005212:    48 43             		r0 = b[r4+3] (u)
+ 2005214:    0a 81             		r2 = r0 + 1
+                               	}
+ 2005216:    49 3c             	r1 = 60
+ 2005218:    43 20             	r3 = 0
+ 200521a:    40 16             	r0 = r4
+ 200521c:    bf ea 1d fa       	call -3014 <send : 200465a >
+ 2005220:    40 23             	r0 = 3
+ 2005222:    c8 40             	b[r4+0] = r0
+ 2005224:    40 20             	r0 = 0
+ 2005226:    52 ee c2 00       	b[r12+2] = r0
+ 200522a:    ff ea 9a fa       	goto -2764 <panel_scan+0xC0 : 2004762 >
  200522e:    dc e9 0e 00       	r0 = b[sp+14] (u)
  2005232:    c0 21             	r0 += 1
  2005234:    41 23             	r1 = 3
@@ -7694,7 +7694,7 @@ panel_scan:
  200532e:    42 22             	r2 = 2
  2005330:    40 16             	r0 = r4
  2005332:    bf ea 92 f9       	call -3292 <send : 200465a >
- 2005336:    5b e8 7f 18       	if ((r11 & 8) == 0) goto 254 <panel_scan+0xD96 : 2005438 >
+ 2005336:    5b e8 7f 68       	if ((r11 & 8192) == 0) goto 254 <panel_scan+0xD96 : 2005438 >
  200533a:    dc e9 1b 00       	r0 = b[sp+27] (u)
  200533e:    42 21             	r2 = 1
  2005340:    00 41             	if (r0 == 0) goto 2 <panel_scan+0xCA2 : 2005344 >
@@ -7851,7 +7851,7 @@ panel_scan:
  20054b2:    41 27             	r1 = 7
  20054b4:    e7 9d             	goto -70 <panel_scan+0xDCE : 2005470 >
  20054b6:    85 f8 c9 21       	if (r5 != 16) goto -110 <panel_scan+0xDAA : 200544c >
- 20054ba:    57 8d             	goto -678 <panel_scan+0xB74 : 2005216 >
+ 20054ba:    47 95             	goto -726 <panel_scan+0xB44 : 20051e6 >
 
 
 panel_input:

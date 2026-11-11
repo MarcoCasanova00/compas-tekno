@@ -20,12 +20,12 @@ the groove, synthesizer leads and bass, and progressive free-party sets.
 |---|---|
 | Cut/add a drum part | **MIX** page → pads **1–6** mute (tap again = back) |
 | Hear one part alone | **MIX** page → pads **7–12** solo |
-| Kick cut for the drop | MIX pad **1** (kick mute) — or the web **DROP** button |
-| Fill | **FILL** button |
-| End/break section | **SEC** button, or BREAK/END part keys |
+| Kick cut for the drop | FX pad **1** (kick mute) — or the web **DROP** button |
+| Fill | **ARP** button |
+| End/break section | **SEQ** button, or BREAK/END part keys |
 | Energy | **MODE** knob (BASE → LIFT → BREAK) |
-| Build | add parts one by one, FILL at the top, SEC to release |
-| Change song live | RACK page → **SONG** knob (lands at next bar) |
+| Build | add parts one by one, ARP at the top, SEQ to release |
+| Change song live | GLO page → **SONG** knob (lands at next bar) |
 | Keep your tempo | once set, the BPM knob is the only tempo authority |
 
 ## The drummer's craft (dynamic add/subtract)
@@ -38,17 +38,17 @@ Tribe/mental is *subtraction* first. Common moves:
 - **Layer the clap** on 2 & 4 (pad 3), then the open hat (pad 5) for lift.
 - **Breakdown**: mute kick + clap (pads 1 & 3) — leave hats/perc running,
   twist MODE to BREAK, add the lead.
-- **Rebuild**: FILL once or twice, then bring kick back on the first bar of
+- **Rebuild**: ARP once or twice, then bring kick back on the first bar of
   the next phrase.
-- **Stutter/roll**: FILL during perc-only sections gives rolls; double-tap
-  FILL for a longer build.
+- **Stutter/roll**: ARP during perc-only sections gives rolls; double-tap
+  ARP for a longer build.
 - **The drop**: kick mute during the last 4–8 bars of a build, unmute exactly
-  on the downbeat. Combine with SECTION (energy → BREAK) for the classic
+  on the downbeat. Combine with SEQTION (energy → BREAK) for the classic
   fake-out.
 
 ## Synth leads & bass
 
-- **Bass voice** (role 5): BASS page → style knob:
+- **Bass voice** (role 5): ENV page → style knob:
   - 0 Shamanic flute — soft, breathy (deep techno / dub)
   - 1 Acid — TD-3-ish, resonant (tribe classic)
   - 2 Minimoog — fat saw-ladder (mental / tribal bass)
@@ -61,16 +61,16 @@ Tribe/mental is *subtraction* first. Common moves:
   - EXTREME LEAD · XLEAD arp (the screamer)
 - During a set, layer a lead on the breakdown; drop it (XLEAD) at the peak.
   Stop first, then turn the SONG knob into a LEAD entry.
-- **Root/pitch**: BASS page OCT± moves the bass root; synth parts follow it.
+- **Root/pitch**: ENV page OCT± moves the bass root; synth parts follow it.
 
 ## Free-party set flow (progressive)
 
 1. **Warm** — 155 BPM, hats+perc only, sparse.
-2. **Drop 1** — kick in (pad 1), add clap, ride FILL.
+2. **Drop 1** — kick in (pad 1), add clap, ride ARP.
 3. **Progression** — SONG knob to a 165 BPM finishing (pumping/hardtek) at a
    bar boundary; tempo stays where you set it (knob-only).
 4. **Breakdown** — cut kick/clap; lead in; MODE → BREAK.
-5. **Peak** — bass style 3 (trance lead), XLEAD score, all drums, FILLs.
+5. **Peak** — bass style 3 (trance lead), XLEAD score, all drums, ARPs.
 6. **Land** — drop again, modulate back down, or auto-advance (web AUTO).
 
 The web emulator mirrors the hardware exactly (same buttons, keys, knobs,

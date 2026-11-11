@@ -1,8 +1,12 @@
 #include "panel.h"
 #include "piano.h"
 
-enum { OCT_DOWN=0, OCT_UP=1, MIX=2, ACCENT=3, BASS=4, PERC=5, EDIT=6, SET=7, HOME=8, SAVE=9,
-       FILL=10, SECTION=11, PLAY=PANEL_PLAY_BUTTON, RACK=13 };
+/* Physical FM-1 panel (real buttons): OCT- OCT+ FX SCL ENV LFO EDIT GLO
+ * HOME SAVE ARP SEQ PLAY REC. Each maps onto a Compás function:
+ *   FX→MIX  SCL→SET  ENV→BASS  LFO→PERC  GLO→RACK  ARP→FILL  SEQ→SECTION
+ *   REC→ACCENT */
+enum { OCT_DOWN=0, OCT_UP=1, MIX=2, SET=3, BASS=4, PERC=5, EDIT=6, RACK=7, HOME=8, SAVE=9,
+       FILL=10, SECTION=11, PLAY=PANEL_PLAY_BUTTON, ACCENT=13 };
 #include "panel-score.inc"
 #define LANG_TABLE
 #include "lang.inc"
