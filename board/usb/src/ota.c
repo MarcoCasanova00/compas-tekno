@@ -30,6 +30,7 @@
 #define OTA_LDR_HCRC 0xEBAAu                     /* official update loader (usb_hid_ota.bin) */
 #define OTA_LDR_DCRC 0x5881u
 #define OTA_LDR_LEN 0x4DE1u
+#define OTA_FL_LEN 0x93000u                       /* flash.bin = [0, the app area end): this board's size */
 #define OTA_FRAME_MAX 640u                       /* 512-B response = 605 wire bytes */
 #ifndef FELUCCA_HANDSHAKE_ID
 #define FELUCCA_HANDSHAKE_ID FELUCCA_ID           /* loaders retain their own identity */
@@ -291,6 +292,8 @@ static int ota_stage(void)                       /* steps 1..6; 0 = host said su
         return rc;
     if (!fl_off || !ota_off)
         return -3;
+    if (fl_len != OTA_FL_LEN)
+        return -15;                                  /* another board's package: nothing staged, nothing erased */
     /* 2. which loader: the official one (known CRCs; it rewrites the whole flash.bin
      *    including the head) or Felucca's own (app area only, checks the chip key) */
     if (ota_read(ota_off, b, 512))

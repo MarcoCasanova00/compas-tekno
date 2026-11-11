@@ -114,8 +114,8 @@ static int ldr_session(void)
     /* 1. UFW header + entry list (ota.c; it leaves the entries decoded in hdr) */
     if ((rc = ota_ufw(hdr, &fl_off, &fl_size, &ota_off, &ota_len)) != 0)
         return rc;
-    if (!fl_off || fl_size != LDR_APP_HI)
-        return -14;                                      /* another board's package: refused before any erase */
+    if (!fl_off || fl_size < LDR_APP_HI || fl_size > LDR_FL_MAX)
+        return -3;
     for (i = 0; i < ota_rd16(hdr + 8); i++)
         if (ota_rd16(hdr + 0x40 + i * 0x50u) == 0)
             want = ota_rd16(hdr + 0x40 + i * 0x50u + 4u);   /* flash.bin's data CRC16 */
