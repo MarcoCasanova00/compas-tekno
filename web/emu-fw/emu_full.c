@@ -327,6 +327,18 @@ uint32_t web_study(void) { return cp_status(CP_STUDY_ID); }
 uint32_t web_mutes(void) { return cp_status(CP_MUTES); }
 uint32_t web_rack_state(uint32_t sound) { return board_rack_state(sound); }
 uint32_t web_drone_mask(void) { return board_drone_mask(); }
+uint32_t web_song_meta(uint32_t slot, uint32_t which) {
+    unsigned study, bpm, reverse;
+    if(!board_song_meta(slot, &study, &bpm, &reverse)) return 0;
+    if(which==0) return study;
+    if(which==1) return bpm;
+    return reverse;
+}
+uint32_t web_song_title(uint32_t slot) {
+    const char *t = board_song_title(slot);
+    uint32_t v=0; for(unsigned i=0;i<4 && t[i];++i) v=(v<<8)|t[i];
+    return v;
+}
 uint32_t web_drone_sends(void) { extern unsigned drone_debug_sends; return drone_debug_sends; }
 void _initialize(void) {}   /* WASI reactor no-op for the worklet's guarded call */
 

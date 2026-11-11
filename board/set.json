@@ -3,102 +3,116 @@
   "songs": [
     {
       "title": "TEKNO DURO",
-      "study": "coast",
+      "study": "tekno-duro",
+      "bpm": 155,
       "feel": 24,
       "section": "base"
     },
     {
       "title": "CORE TEKNO",
-      "study": "mx",
+      "study": "core-tekno",
+      "bpm": 155,
       "kit": true,
       "feel": 33,
       "section": "base"
     },
     {
       "title": "MENTAL TEKNO",
-      "study": "bolero",
+      "study": "mental-tekno",
+      "bpm": 155,
       "kit": true,
       "feel": 22,
       "section": "base"
     },
     {
       "title": "GUIGOO ROLL",
-      "study": "son",
+      "study": "guigoo-roll",
+      "bpm": 155,
       "kit": true,
       "feel": 25,
       "section": "base"
     },
     {
       "title": "FRENCH KICK",
-      "study": "salsa",
+      "study": "french-kick",
+      "bpm": 155,
       "kit": true,
       "feel": 26,
       "section": "lift"
     },
     {
       "title": "GALOP PERC",
-      "study": "merengue",
+      "study": "galop-perc",
+      "bpm": 155,
       "feel": 20,
       "section": "base"
     },
     {
       "title": "TRIBAL CORE",
-      "study": "tejano",
+      "study": "tribal-core",
+      "bpm": 155,
       "kit": true,
       "feel": 25,
       "section": "base"
     },
     {
       "title": "NARKO DROP",
-      "study": "conjunto",
+      "study": "narko-drop",
+      "bpm": 155,
       "feel": 23,
       "section": "base"
     },
     {
       "title": "UFO STABS",
-      "study": "la-paloma",
-      "bpm": 88,
+      "study": "santo-evolved",
+      "bpm": 155,
       "feel": 0
     },
     {
       "title": "VOICE CUTZ",
-      "study": "la-golondrina",
-      "bpm": 84,
+      "study": "santo-hypnotic",
+      "bpm": 155,
       "feel": 0
     },
     {
       "title": "KIK FLUO",
-      "study": "cdmx",
+      "study": "kik-fluo",
+      "bpm": 155,
       "feel": 0,
       "kit": true
     },
     {
       "title": "TRIBAL TEKNO",
       "study": "tribal-tekno",
+      "bpm": 155,
       "kit": true,
       "feel": 0
     },
     {
       "title": "TRIBAL 155",
-      "study": "tribal",
+      "study": "tribal-155",
+      "bpm": 155,
       "feel": 0,
       "kit": false
     },
     {
       "title": "RYTMIK DUB",
-      "study": "villera",
+      "study": "rytmik-dub",
+      "bpm": 155,
       "feel": 0,
       "kit": true
     },
     {
       "title": "POLLON LOOP",
-      "study": "lima",
+      "study": "pollon-loop",
+      "bpm": 155,
       "feel": 0,
       "kit": false
     },
     {
       "title": "HARD TRIBE",
-      "study": "chile",
+      "study": "hard-tribe",
+      "bpm": 155,
       "feel": 0,
       "kit": true
     }
