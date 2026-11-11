@@ -56,6 +56,8 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   score engine: stop, turn the SONG knob past 32, PLAY.
 - **Live guide** — `docs/TRIBE-MENTAL-LIVE.md`: drum add/subtract, kicks/breaks,
   synth leads & bass, free-party set flow.
+- **Test guide** — `docs/TESTING-GUIDE.md`: verify grooves/BPM, tempo lock,
+  the 4 synth voices, leads, drop, loops — on web or hardware.
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled
   to WASM runs in your browser, same code path as the device.
 - **Tekno scores** — four lead pieces selectable from the emulator's SCORES
