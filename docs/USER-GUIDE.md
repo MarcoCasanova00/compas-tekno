@@ -153,3 +153,16 @@ official V15 first.
 **Q: What should I test first after flashing?**
 A: Follow `docs/TESTING-GUIDE.md` (§0 baseline → §1 grooves/BPM → §3 synth
 voices → §4 leads → §5 live/→ §6 loops).
+
+**Q: Can I modify the lead, bass and drums independently?**
+A: Yes, with different depths:
+
+| What | Modify live? | How |
+|---|---|---|
+| Leads | select only (7 available) | GLO → SONG past 32; content fixed unless rebuilt from score tables |
+| Bass | fully | ENV page: style/tone/bite/level/root; plus SELECT→EDIT step-edit |
+| Drums | fully | rack programming per sound, live record (GLO twice), step-edit any part, mixer mute/solo |
+
+Step-edit a specific part: **SELECT** knob picks the part (0–5 kick/hat/
+clap/perc/openhat/bass), then **EDIT** toggles its steps (OCT± = bar).
+Save whole setups to slots (SCL → SAVE).
