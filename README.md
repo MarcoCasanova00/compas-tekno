@@ -53,6 +53,8 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   change live at the bar boundary (RACK + SONG knob) for progressive sets.
 - **AUTO (web)** — cycles grooves seamlessly every 4/8/16 bars, free-party
   style.
+- **Live guide** — `docs/TRIBE-MENTAL-LIVE.md`: drum add/subtract, kicks/breaks,
+  synth leads & bass, free-party set flow.
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled
   to WASM runs in your browser, same code path as the device.
 - **Tekno scores** — four lead pieces selectable from the emulator's SCORES

@@ -126,6 +126,7 @@ void board_init(void);
 unsigned board_submit(BoardCommand cmd);
 BoardView board_view(unsigned role);
 void board_render_audio(int32_t *out);   /* one 128-frame audio half: services commands, renders, publishes view */
+void board_set_user_tempo(uint8_t t);
 void fm1_alnk0_irq(void);
 
 /* Low-level port contract. The target binds these to the pinned BSP. */

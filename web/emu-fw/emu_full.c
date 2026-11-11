@@ -298,7 +298,11 @@ void web_enc(uint32_t role, int32_t steps) {
 uint32_t web_now_ms(void) { return host_ms; }
 uint32_t web_seq_playing(void) { return cp_status(CP_PLAYING); }
 uint32_t web_kb_mode(void) { return 0; }
-uint32_t web_cmd(uint32_t cmd, uint32_t a, uint32_t b) { return cp_command(cmd, a, b); }
+uint32_t web_cmd(uint32_t cmd, uint32_t a, uint32_t b) {
+    uint32_t r=cp_command(cmd,a,b);
+    if(!r && cmd==9 && a) board_set_user_tempo((uint8_t)a);   /* 9=CP_BPM */
+    return r;
+}
 uint32_t web_board(uint32_t cmd, uint32_t a, uint32_t b) { return board_submit((BoardCommand){cmd, a, b}); }
 uint32_t web_bass_style(void) { return cp_bass_style(); }
 uint32_t web_score(uint32_t id) { return board_submit((BoardCommand){BOARD_PIANO_CUE, id, 0}); }

@@ -59,6 +59,8 @@ static const uint8_t score_parts[]={PIANO_FORM_INTRO,PIANO_FORM_VERSE,0,PIANO_FO
 enum { NO_MASTER_REQUEST=255 };
 static uint8_t master_request;
 static uint32_t master_gain;
+static uint8_t user_tempo;   /* knob-set tempo, kept across groove/song changes */
+void board_set_user_tempo(uint8_t t) { if(t) user_tempo=t; }
 /* Varispeed is a live master treatment, not part of a song snapshot. Keep two
  * source samples and a hundredth-frame phase; the existing engine block holds
  * at most 130 newly rendered frames. No second PCM block is allocated. */
@@ -182,6 +184,7 @@ void board_init(void)
     clear_recording();
     speed=100;speed_phase=speed_primed=0;speed_left=speed_right=0;
     master_request=NO_MASTER_REQUEST;
+    user_tempo=0;
     board_piano_selected=piano_running=piano_hold=piano_guide=piano_perc_muted=groove_count_enabled=0;
     for(unsigned r=0;r<CP_ROLES;++r) assigned[r]=0;
     requested_role=shown_role=0;
@@ -422,6 +425,7 @@ static unsigned recall_groove(unsigned index)
     cp_command(CP_STOP,0,0);
     unsigned reply=cp_command(CP_STUDY,index,0);
     if(reply) return reply;
+    if(user_tempo) cp_command(CP_BPM,user_tempo,0);
     cp_command(CP_FEEL,0,0);
     board_piano_selected=piano_running=piano_hold=piano_guide=piano_perc_muted=groove_count_enabled=0;
     active_song=queued_song=SET_SLOTS;queued_root=12;queued_clave=2;
@@ -454,6 +458,7 @@ static unsigned recall_song(unsigned slot)
     for(unsigned i=0;i<CP_PROJECT_BYTES;++i) cp_blob()[i]=song->project[i];
     unsigned reply=cp_restore(CP_PROJECT_BYTES);
     if(reply) return reply;
+    if(user_tempo) cp_command(CP_BPM,user_tempo,0);
     kit=song->kit;queued_root=12;queued_clave=2;
     queued_groove=BOARD_GROOVE_PRESETS;
     active_rhythm=queued_rhythm=BOARD_CUSTOM_RHYTHM;
@@ -1016,7 +1021,11 @@ static unsigned apply(BoardCommand cmd)
         return cp_command(CP_HIT,cmd.a,accent ? 124 : 92);
     default:
         if(board_piano_selected && cmd.command!=CP_BPM) return CP_RANGE;
-        return cp_command(cmd.command,cmd.a,cmd.b);
+        {
+            unsigned reply=cp_command(cmd.command,cmd.a,cmd.b);
+            if(!reply && cmd.command==CP_BPM && cmd.a) user_tempo=cmd.a;
+            return reply;
+        }
     }
 }
 
