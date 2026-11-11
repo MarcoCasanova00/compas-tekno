@@ -46,6 +46,8 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   part keys (INTRO/VERSE/CHORUS/BREAK/END), **mute/solo per instrument on the
   MIX page**, overlay layers, groove browser (RACK + SONG knob), 16 song slots
   with save/recall.
+- **The drop** — mute the kick during the breakdown, unmute for the drop:
+  hardware = MIX page + pad 1 (toggles kick mute); web = the **DROP** button.
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled
   to WASM runs in your browser, same code path as the device.
 - **Tekno scores** — four lead pieces selectable from the emulator's SCORES

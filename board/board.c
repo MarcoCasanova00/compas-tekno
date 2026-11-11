@@ -156,7 +156,7 @@ static void silence(int32_t *dest)
 }
 static void reset_song_layers(void)
 {
-    bass_style=BASS_ENSEMBLE;
+    bass_style=BASS_MOOG;   /* default: fat synth bass; flute/acid via knob */
     bass_cut=44;
     bass_bite=45;
     cp_bass_set(bass_style,bass_cut,bass_bite);

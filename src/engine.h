@@ -21,4 +21,5 @@ uint32_t cp_render(uint32_t count);
 int16_t *cp_pcm(void);
 uint8_t *cp_blob(void);
 uint32_t cp_state_bytes(void);
+unsigned cp_bass_style(void);
 #endif

@@ -19,6 +19,7 @@ static struct {
     uint8_t style, cut, bite;
     int8_t ensemble_tilt;
 } bass;
+unsigned cp_bass_style(void) { return bass.style; }
 void cp_bass_set(unsigned style, unsigned cut, unsigned bite)
 {
     bass.style=(uint8_t)style;
@@ -144,6 +145,11 @@ static const uint16_t notes10[] = {654,693,734,778,824,873,925,980,1038,1100,116
 static int32_t tri(uint32_t p) {
     int32_t x=(int32_t)(p >> 16);
     return x < 32768 ? x*2-32768 : 98303-x*2;
+}
+/* Naive saw; always filtered downstream (ladder/state-variable), so the
+ * aliasing energy stays inaudible while the harmonic spine stays rich. */
+static inline int32_t saw(uint32_t p) {
+    return (int32_t)(p >> 16) - 32768;
 }
 static uint32_t inc(uint32_t hz10) {
     /* 2^32 / (10 * rate), rounded; multiplication stays in uint32_t. */
@@ -402,21 +408,23 @@ static int32_t bass_sample(Voice *v)
         int32_t sawA=(int32_t)(v->a >> 16) - 32768;
         int32_t sawB=(int32_t)((v->b + love_detune) >> 16) - 32768;
         int32_t core=(sawA + sawB) / 2 + sawA / 4;
-        int32_t cutoff=70 + tri(love_lfo) / 8 + (v->env >> 10);
-        int32_t damp=210 - bass.bite;
+        int32_t cutoff=160 + tri(love_lfo) / 3 + (v->env >> 8);
+        int32_t damp=150 - bass.bite;
         signal=trance_bp(core, cutoff, damp, &bass.low, &bass.band);
         signal += (signal * 21) / 256;   /* ~21% drive */
+        signal += core/8;                /* keep some raw saw body */
     } else if(bass.style==BASS_MOOG) {
-        /* Three oscillators: fundamental + slow detuned copy + sub octave,
-         * through the ladder. Cutoff follows the envelope; resonance from
-         * the bite knob. */
+        /* Minimoog: three saw oscillators (two slightly detuned + sub
+         * octave) through the ladder. Cutoff follows the envelope; the
+         * bite knob adds resonance. Rich, obviously not sine. */
         static uint32_t moog_detune;
-        moog_detune+=0x00020000u;
+        moog_detune+=0x00030000u;
         v->a+=v->da; v->b+=v->db;
-        int32_t core=tri(v->a)*3+tri(v->b+moog_detune)+tri(v->a>>1);
-        int32_t cutoff=10+bass.cut/2+(v->env>>9);
+        int32_t core=saw(v->a)+saw(v->b+moog_detune)+saw(v->a>>1);
+        int32_t cutoff=40+bass.cut*4+(v->env>>7);
         int32_t res=96+bass.bite*2;
-        signal=moog_filter(core,cutoff,res,&bass.s0,&bass.s1,&bass.s2,&bass.s3);
+        int32_t filtered=moog_filter(core,cutoff,res,&bass.s0,&bass.s1,&bass.s2,&bass.s3);
+        signal=filtered+core/8;   /* wet+dry: saw body stays through */
     } else {
         /* Shamanic breathy flute: soft triangle partials, slow vibrato
          * (~5.4 Hz), a gentle attack ramp and a thin breath-noise bed. */
@@ -429,11 +437,18 @@ static int32_t bass_sample(Voice *v)
         int32_t breath=(int32_t)(v->noise>>16)-32768;
         int32_t bright=ensemble_brightness(v->env,bass.ensemble_tilt);
         signal=(tri(v->a)*13+tri(v->b)*bright+breath*2)/20;
+        signal=signal*2;   /* breathy but present */
     }
     if(bass.age<256) signal=signal*bass.age++/256;
     int32_t amplitude=v->env;
     v->env-=v->decay+(amplitude>>11);
-    return signal*amplitude/32768;
+    int32_t out=(signal*amplitude)/32768;
+    /* DC block: one-pole high-pass keeps the ladder's low build-out from
+     * sitting on a constant offset (clean, present bass). */
+    static int32_t bass_hp;
+    int32_t hp=out-bass_hp;
+    bass_hp+=hp/64;
+    return hp*2/3;
 }
 #endif
 static int32_t sample(Voice *v) {
