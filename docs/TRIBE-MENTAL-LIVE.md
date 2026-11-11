@@ -53,14 +53,14 @@ Tribe/mental is *subtraction* first. Common moves:
   - 1 Acid — TD-3-ish, resonant (tribe classic)
   - 2 Minimoog — fat saw-ladder (mental / tribal bass)
   - 3 Trance lead — bright band-pass with quarter-note LFO (peak-time)
-- **Lead lines**: SCORES menu (web) selects a melodic lead that plays over the
-  groove:
+- **Lead lines**: the SONG knob extends past groove 32 with four LEAD entries
+  (flute / hypnotic / desert / XLEAD) that play over the groove:
   - TRIBAL TEKNO · Phrygian flute
   - MENTAL HYPNOTIC · Dorian b2
   - DESERT TRIBE · Egyptian spiral
   - EXTREME LEAD · XLEAD arp (the screamer)
 - During a set, layer a lead on the breakdown; drop it (XLEAD) at the peak.
-  Stop first to change scores (or the page does it for you).
+  Stop first, then turn the SONG knob into a LEAD entry.
 - **Root/pitch**: BASS page OCT± moves the bass root; synth parts follow it.
 
 ## Free-party set flow (progressive)
@@ -73,8 +73,8 @@ Tribe/mental is *subtraction* first. Common moves:
 5. **Peak** — bass style 3 (trance lead), XLEAD score, all drums, FILLs.
 6. **Land** — drop again, modulate back down, or auto-advance (web AUTO).
 
-The web emulator mirrors all of this: DROP, AUTO (4/8/16 bars), SCORES,
-MIX mute/solo pads — a full rehearsal rig before hardware.
+The web emulator mirrors the hardware exactly (same buttons, keys, knobs,
+MIX mute/solo pads) — a full rehearsal rig before hardware.
 
 ## Rules of thumb
 

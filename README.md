@@ -48,11 +48,12 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   MIX page**, overlay layers, groove browser (RACK + SONG knob), 16 song slots
   with save/recall.
 - **The drop** — mute the kick during the breakdown, unmute for the drop:
-  hardware = MIX page + pad 1 (toggles kick mute); web = the **DROP** button.
+  **MIX** page + pad 1 (toggles kick mute).
 - **Infinite loop** — songs loop indefinitely; nothing auto-stops. Grooves
   change live at the bar boundary (RACK + SONG knob) for progressive sets.
-- **AUTO (web)** — cycles grooves seamlessly every 4/8/16 bars, free-party
-  style.
+- **Leads on the hardware SONG knob** — after groove 32 the rack list extends
+  with four LEAD entries (flute / hypnotic / desert / XLEAD) that route to the
+  score engine: stop, turn the SONG knob past 32, PLAY.
 - **Live guide** — `docs/TRIBE-MENTAL-LIVE.md`: drum add/subtract, kicks/breaks,
   synth leads & bass, free-party set flow.
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled

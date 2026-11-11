@@ -413,7 +413,28 @@ const char *board_song_title(unsigned slot)
 }
 const char *board_groove_title(unsigned index)
 {
-    return index<BOARD_GROOVE_PRESETS?groove_titles[index]:"RHYTHM";
+    static const char *const lead_titles[4]={
+        "LEAD FLUTE", "LEAD HYPNOTIC", "LEAD DESERT", "LEAD XLEAD"
+    };
+    if(index<BOARD_GROOVE_PRESETS) return groove_titles[index];
+    if(index-BOARD_GROOVE_PRESETS<4) return lead_titles[index-BOARD_GROOVE_PRESETS];
+    return "RHYTHM";
+}
+unsigned board_lead_cue(unsigned index)
+{
+    /* SONG-knob entries 33..36 map to the piano-score leads (ids 29..32). */
+    const unsigned id=29u+(index-BOARD_GROOVE_PRESETS);
+    if(!piano_id_valid(id,0)) return CP_RANGE;
+    if(cp_status(CP_PLAYING)) return CP_STOP_FIRST;
+    queued_song=SET_SLOTS;queued_groove=BOARD_GROOVE_PRESETS;
+    active_part=queued_part=PART_NONE;queued_energy=3;next_bar=0;
+    phrases=remaining_phrases=0;
+    overlay_hits=groove_count_enabled=0;board_roll_keys=0;
+    clear_recording();
+    rack_sequence=board_rhythm_only=0;
+    for(unsigned r=0;r<CP_ROLES;++r) assigned[r]=0;
+    board_piano_selected=id;piano_running=piano_hold=piano_guide=piano_perc_muted=0;
+    return CP_OK;
 }
 static unsigned recall_groove(unsigned index)
 {
@@ -739,7 +760,7 @@ static unsigned apply(BoardCommand cmd)
         queued_root=cmd.a==cp_status(CP_ROOT_NOTE)?12:cmd.a;
         return CP_OK;
     case BOARD_GROOVE_CUE:
-        if(cmd.a>=BOARD_GROOVE_PRESETS) return CP_RANGE;
+        if(cmd.a>=BOARD_GROOVE_PRESETS) return board_lead_cue(cmd.a);
         queued_song=SET_SLOTS;queued_part=PART_NONE;queued_energy=3;next_bar=0;
         queued_rhythm=BOARD_CUSTOM_RHYTHM;
         if(!cp_status(CP_PLAYING)) return recall_groove(cmd.a);
