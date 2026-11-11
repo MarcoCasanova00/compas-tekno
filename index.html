@@ -103,7 +103,7 @@ const ROLES = ["SELECT", "MODE", "KNOB 1", "KNOB 2", "KNOB 3", "KNOB 4", "SONG"]
 const SHARP = new Set([1, 3, 5, 8, 10, 13, 15, 17, 20, 22, 25]);   // key k = k semitones above F3
 const KEYMAP = "zsxdcfvbhnjm,l.;/q2w3e4rt6y7u8i9op";              // computer keys -> note keys 0..
 const $ = (id) => document.getElementById(id);
-const V = "20261111n";                 // cache-buster: bumped per build (make_site.py)
+const V = "20261111o";                 // cache-buster: bumped per build (make_site.py)
 let node = null, ids = [], buttons = 0, held = 0, keys = 0;
 
 function send(m) { if (node) node.port.postMessage(m); }
@@ -144,17 +144,7 @@ setInterval(() => { if (node) send({ type: "getstatus" }); }, 1000);
 function addTransport() {
   const bar = document.createElement("div");
   bar.style.cssText = "display:flex;gap:8px;justify-content:center;align-items:center;margin:10px 0;grid-column:1 / -1;";
-  let kickMuted = false;
-  const dropBtn = document.createElement("button");
-  dropBtn.textContent = "DROP (kick mute)";
-  dropBtn.className = "b";
-  dropBtn.onclick = () => {
-    kickMuted = !kickMuted;
-    send({ type: "cmd", cmd: 6, a: 0, b: 0 });  // CP_MUTE role 0 = kick
-    dropBtn.textContent = kickMuted ? "KICK MUTED — press for drop" : "DROP (kick mute)";
-  };
-  bar.appendChild(dropBtn);
-  for (const [label, fn] of [["▶ PLAY", fwPlay], ["■ STOP", fwStop], ["BPM −", () => fwNudgeBpm(-1)], ["BPM +", () => fwNudgeBpm(1)]]) {
+  for (const [label, fn] of [["▶ PLAY", fwPlay]]) {
     const b = document.createElement("button");
     b.textContent = label;
     b.className = "b";
@@ -171,69 +161,7 @@ function addTransport() {
   m.innerHTML = 'MASTER <input type="range" min="0" max="150" value="100" style="width:90px">';
   m.lastChild.addEventListener("input", (e) => send({ type: "vol", v: +e.target.value }));
   bar.appendChild(m);
-  // SCORES: tekno scores follow SANTO CENTER theory (ids 29–31)
-  const scores = [
-    { id: 29, label: "TRIBAL TEKNO · Phrygian flute" },
-    { id: 30, label: "MENTAL HYPNOTIC · Dorian b2" },
-    { id: 31, label: "DESERT TRIBE · Egyptian spiral" },
-    { id: 32, label: "EXTREME LEAD · XLEAD arp" },
-  ];
-  const sc = document.createElement("label");
-  sc.style.cssText = "display:flex;align-items:center;gap:6px;color:#9a9aa0;font-size:12px;";
-  sc.innerHTML = 'SCORES <select style="background:#0e1510;color:#c8d48a;border:1px solid #22341f;border-radius:4px;font-size:12px;padding:2px 4px"><option value="0">— grooves —</option></select>';
-  const sel = sc.lastChild;
-  for (const s of scores) {
-    const o = document.createElement("option");
-    o.value = s.id; o.textContent = s.label;
-    sel.appendChild(o);
-  }
-  sel.addEventListener("change", () => {
-    const id = +sel.value;
-    if (id) {
-      if (fwPlaying) { fwStop(); setTimeout(() => send({ type: "score", id }), 200); }
-      else send({ type: "score", id });
-      send({ type: "getstatus" });
-    }
-    else {
-      // back to grooves: stop first (engine refuses study change while playing)
-      if (fwPlaying) fwStop();
-      send({ type: "cmd", cmd: 3, a: lastStudy || 29, b: 0 });
-      send({ type: "getstatus" });
-    }
-  });
-  bar.appendChild(sc);
-  // AUTO-ADVANCE: free-party seamless song progression (bar-synced cycle)
-  let autoOn = false, autoBars = 8, autoTimer = null, autoLast = 0;
-  const autoBtn = document.createElement("button");
-  autoBtn.className = "b";
-  autoBtn.textContent = "AUTO 8 bars";
-  const autoSel = document.createElement("select");
-  autoSel.style.cssText = "background:#0e1510;color:#c8d48a;border:1px solid #22341f;border-radius:4px;font-size:12px;";
-  for (const n of [4, 8, 16]) {
-    const o = document.createElement("option");
-    o.value = n; o.textContent = n + " bars"; autoSel.appendChild(o);
-  }
-  autoSel.value = "8";
-  autoSel.addEventListener("change", () => { autoBars = +autoSel.value; });
-  autoBtn.onclick = () => {
-    autoOn = !autoOn;
-    autoBtn.textContent = autoOn ? "AUTO ON" : `AUTO ${autoBars} bars`;
-    if (autoOn) {
-      autoLast = performance.now();
-      if (!autoTimer) autoTimer = setInterval(() => {
-        if (!autoOn || !fwPlaying) return;
-        const barDur = (4 * 60) / fwTempo * 1000;
-        if (performance.now() - autoLast >= barDur * autoBars) {
-          autoLast += barDur * autoBars;
-          const next = (lastStudy + 1) % 33;
-          send({ type: "cue", id: next });
-          send({ type: "getstatus" });
-        }
-      }, 100);
-    } else if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
-  };
-  bar.appendChild(autoSel);
-  bar.appendChild(autoBtn);
+
   document.querySelector(".keys")?.before(bar);
   send({ type: "getstatus" });
 }
@@ -448,7 +376,7 @@ $("go").addEventListener("click", async () => {
   <ul>
     <li>The <b>14 panel buttons</b> are: <b>OCT− · OCT+ · MIX · ACC · BASS · PERC · EDIT · SET · HOME · SAVE · FILL · SEC · PLAY · RACK</b></li>
     <li><b>PLAY</b> starts/stops the groove (keyboard <b>Space</b> does the same). <b>FILL</b> fires a fill, <b>SEC</b> jumps past the section, <b>ACC</b> toggles accent emphasis.</li>
-    <li><b>The drop:</b> mute the kick during the breakdown, then unmute for the drop — on hardware use <b>MIX</b> + pad 1 (toggles kick mute), on the web page the <b>DROP</b> button does the same.</li>
+    <li><b>The drop:</b> <b>MIX</b> + pad 1 toggles the kick mute — cut the kick for the breakdown, bring it back for the drop.</li>
     <li><b>HOME</b> = main groove screen. Knobs: KNOB 1 = BPM (60–180) · KNOB 2 = feel/swing · KNOB 3 = bass level · KNOB 4 = overlay level · MODE = energy (BASE/LIFT/BREAK) · SONG = browse songs.</li>
     <li><b>BASS</b>: OCT± = root note up/down · KNOB 1 = cut · KNOB 2 = bite · KNOB 3 = level · KNOB 4 = style (classic/acid). <b>PERC</b>: OCT± = clave direction · KNOB 1–4 = overlay levels.</li>
     <li><b>MIX</b>: keys 1–6 mute, 7–12 solo · SPEED knob (varispeed) · LEVEL knob.</li>
@@ -457,7 +385,7 @@ $("go").addEventListener("click", async () => {
     <li><b>SET</b>: song slots (16). OCT± / SONG knob browse · <b>SEC</b> cues the slot · <b>SAVE</b> saves it (stop playback first — the firmware refuses to save while playing) · KNOB 3 = repeats/phrases · KNOB 2 = BPM · KNOB 4 = count-in · keys 1–16 cue a slot.</li>
     <li><b>Keyboard (27 pads)</b>: the pads trigger the groove's instruments; the note row also triggers parts (INTRO/VERSE/VARIATION/CHORUS/BREAK/END) and nearby keys layer overlays — the LEDs show which are live.</li>
     <li><b>MASTER</b> slider = volume (0–150%, default 100). The current groove is <b>TRIBAL TEKNO</b> (155 BPM, four-on-floor).</li>
-    <li><b>Free-party workflow:</b> loops never stop on their own; switch grooves live on the <b>RACK</b> page (SONG knob) at the next bar; <b>AUTO</b> cycles every 4/8/16 bars for seamless progression; <b>DROP</b> cuts the kick for the breakdown/build.</li>
+    <li><b>Free-party workflow:</b> loops never stop on their own; switch grooves live on the <b>RACK</b> page (SONG knob) at the next bar; after groove 32 the same knob reaches the four <b>LEAD</b> entries (flute/hypnotic/desert/XLEAD).</li>
   </ul>
  </details>
 <style>
