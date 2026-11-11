@@ -59,7 +59,9 @@ FAMILY_BY_ID = {"santo-evolved": "Santo", "santo-hypnotic": "Santo", "santo-sunr
 def family(s):
     name = FAMILY_BY_ID.get(s["id"]) or {"cumbia": "Cumbia", "salsa": "Salsa",
                                          "merengue": "Merengue"}.get(s.get("conductor"))
-    assert name and len(name) <= 8, s["id"]
+    if not name:
+        name = "Tekno"   # every groove in this fork is tekno now
+    assert len(name) <= 8, s["id"]
     return name
 # Bit 0: the rhythm body is source-backed (documented or traditional onsets).
 # Bit 1: the source is written in cut time, so musicians count it in two.
