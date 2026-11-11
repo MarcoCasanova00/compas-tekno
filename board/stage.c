@@ -1051,7 +1051,9 @@ static void stage_paint(const StageModel *m)
                 if(page==PANEL_HOME && !v.piano) energy_gauge(v,m->beat);
                 print(5,94,132,motion.kind==MOTION_BACK?"BACK IN!":motion.kind==MOTION_LIFT && motion.frame<6?"LIFT!":m->flash?(part==PART_CHORUS || v.section==1?"LIFT!":"CHANGE!"):
                       m->pending?cue:v.playing?"":current,1,m->flash?GOLD:m->pending?PINK:LILAC,INK,0);
-                print(141,94,48,v.fill && (!(m->beat&1u) || !m->pending)?"FILL":v.accent?"ACC":"",1,v.fill?CYAN:PINK,INK,0);
+                print(141,94,48,v.fill && (!(m->beat&1u) || !m->pending)?"FILL":
+                      v.accent?"ACC":v.muted?"MUTE":"",1,
+                      v.fill?CYAN:v.muted?PINK:INK,INK,0);
             }
             if(visible(187,53,53,53)) {
                 unsigned size=43;
@@ -1065,6 +1067,7 @@ static void stage_paint(const StageModel *m)
                            board_effective_bpm(v),motion.break_mode?DIM:m->flash?PINK:GOLD,"BPM");
                 if(size==43 && !m->pending) sticker_step(m->beat);
             }
+            if(v.muted) print(150,7,42,"MUTE",1,PINK,INK,0);
             clock_face(m);
             if(visible(0,132,240,52)) {
                 if(page==PANEL_HOME) {

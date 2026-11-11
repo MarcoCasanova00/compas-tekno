@@ -321,6 +321,7 @@ uint32_t web_score_title(uint32_t id) {
 }
 uint32_t web_tempo(void) { return cp_status(CP_TEMPO); }
 uint32_t web_study(void) { return cp_status(CP_STUDY_ID); }
+uint32_t web_mutes(void) { return cp_status(CP_MUTES); }
 void _initialize(void) {}   /* WASI reactor no-op for the worklet's guarded call */
 
 #ifdef COMPAS_NATIVE_MAIN

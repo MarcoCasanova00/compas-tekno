@@ -18,8 +18,8 @@ the groove, synthesizer leads and bass, and progressive free-party sets.
 
 | You want | Do |
 |---|---|
-| Cut/add a drum part | **MIX** page → pads **1–6** mute (tap again = back) |
-| Hear one part alone | **MIX** page → pads **7–12** solo |
+| Cut/add a drum part | Hold **FX** + pads **1–6** mute from ANY page (tap again = back) |
+| Hear one part alone | Hold **FX** + pads **7–12** solo from ANY page |
 | Kick cut for the drop | FX pad **1** (kick mute) — or the web **DROP** button |
 | Fill | **ARP** button |
 | End/break section | **SEQ** button, or BREAK/END part keys |

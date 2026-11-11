@@ -1148,13 +1148,14 @@ static void publish_view(unsigned refresh)
             (cp_board_counting() ? GROOVE_COUNT_ACTIVE : 0u);
     }
     unsigned refresh_role=refresh || requested_role!=shown_role;
+    /* Live state must track every frame (mute/solo toggles don't change the role). */
+    view.muted=cp_status(CP_MUTES);
+    view.solo=cp_status(CP_SOLO_ROLE);
     if (refresh_role) {
         shown_role=requested_role;
         view.study=cp_status(CP_STUDY_ID);
         view.bpm=cp_status(CP_TEMPO);
         view.feel=cp_status(CP_FEEL_VALUE);
-        view.muted=cp_status(CP_MUTES);
-        view.solo=cp_status(CP_SOLO_ROLE);
         view.kit=kit;
         view.master=master;
         view.accent=accent;

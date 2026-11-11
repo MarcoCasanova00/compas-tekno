@@ -231,6 +231,21 @@ void panel_scan(Panel *panel, uint32_t buttons, uint32_t keys, const int32_t enc
     BoardView v=board_view(panel->page==PANEL_BASS?BOARD_BASS_LINE_ROLE:panel->role);
     unsigned previous_page=panel->page, previous_edit=panel->rack_edit;
     unsigned play=buttons&(1u<<PLAY);
+    /* GLOBAL FX LAYER: hold FX (MIX) and press a pad to mute/solo from any
+     * page. Pads 1-6 mute roles 0-5, pads 7-12 solo them. */
+    if((buttons&(1u<<MIX)) && !play) {
+        unsigned pressed=keys&~panel->held;
+        if(pressed) {
+            panel->held=keys;
+            if(pressed & 0x3Fu)
+                for(unsigned i=0;i<6u;++i)
+                    if(pressed&(1u<<i)) send(panel,CP_MUTE,i,0);
+            if(pressed & 0xFC0u)
+                for(unsigned i=0;i<6u;++i)
+                    if(pressed&(1u<<(i+6u))) send(panel,CP_SOLO,i,0);
+            return;
+        }
+    }
     if (play && (v.playing || (!band_page(panel) && panel->page!=PANEL_SET))) {
         if(v.playing) ++panel->stop_epoch;
 #ifdef COMPAS_HANAN
