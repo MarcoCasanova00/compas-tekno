@@ -1,0 +1,61 @@
+{
+ "title": "SNAKE CHARMER · hijaz",
+ "composer": "fm1hypnotik theory · Compás TEKNO",
+ "edition": "Scale-based chord vamp + lead tab",
+ "source": "fm1hypnotik scale (SNAKE CHARMER · hijaz)",
+ "scope": "16 bars, 4/4 @ 155 BPM, chords + lead",
+ "ppq": 24,
+ "meter": [
+  4,
+  4
+ ],
+ "preview_bpm": 155,
+ "form": [
+  {
+   "name": "INTRO",
+   "bar": 1
+  },
+  {
+   "name": "VERSE",
+   "bar": 5
+  },
+  {
+   "name": "REFRAIN",
+   "bar": 9
+  },
+  {
+   "name": "CODA",
+   "bar": 13
+  }
+ ],
+ "parts": [
+  {
+   "title": "Snake charmer",
+   "program": 74,
+   "velocity_marks": [
+    [
+     0,
+     105
+    ]
+   ],
+   "bars": [
+    "D3+F#3+A3:96",
+    "Eb3+G3+Bb3:72 A3+G3+F#3:24",
+    "G3+Bb3+D4:96",
+    "D3+F#3+A3:72 C4+A3+F#3:24",
+    "D4+F#4+A4:48 A3+F#4+D4:48",
+    "Eb4+G4+Bb4:48 A4+G4+F#4:48",
+    "G4+Bb4+D5:48 D4+Bb4+G4:48",
+    "D4+F#4+A4:72 C5+A4+F#4:24",
+    "F#4+A4+D5:36 D4+F#4+A4:36 A4+D5+F#5:24",
+    "Bb4+D5+G5:48 A4+D5+F#5:48",
+    "C5+F#5+D5:48 D5+A4+F#4:48",
+    "D5+F#5+A5:72 C5+A4+F#4:24",
+    "D5+F#5+A5:48 A4+D5+F#5:48",
+    "G5+Eb5+Bb4:48 F#5+D5+A4:48",
+    "A5+F#5+D5:72 D5+A4+F#4:24",
+    "D5+F#5+A5:96"
+   ]
+  }
+ ]
+}

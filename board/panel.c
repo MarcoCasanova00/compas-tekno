@@ -337,7 +337,7 @@ void panel_scan(Panel *panel, uint32_t buttons, uint32_t keys, const int32_t enc
     if(enc[6]) {
         if(panel->page==PANEL_RACK && (!panel->rack_edit || v.piano)) {
             unsigned from=v.next_groove<BOARD_GROOVE_PRESETS?v.next_groove:v.study;
-            unsigned index=v.piano?0:adjust(from,enc[6],0,BOARD_GROOVE_PRESETS+3);  /* +4 LEAD entries */
+            unsigned index=v.piano?0:adjust(from,enc[6],0,BOARD_GROOVE_PRESETS+9);  /* +10 LEAD entries */
             panel->rack_edit=0;panel->bar=0;
             send(panel,BOARD_GROOVE_CUE,index,0);
         } else if(panel->page==PANEL_RACK) {

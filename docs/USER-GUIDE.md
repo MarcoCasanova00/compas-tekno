@@ -159,7 +159,7 @@ A: Yes, with different depths:
 
 | What | Modify live? | How |
 |---|---|---|
-| Leads | select only (7 available) | GLO → SONG past 32; content fixed unless rebuilt from score tables |
+| Leads | select only (10 available: flute/hypnotic/desert/XLEAD/Egyptian/Gypsy/Snake + 3 triplet variants) | GLO → SONG past 32; content fixed unless rebuilt from score tables |
 | Bass | fully | ENV page: style/tone/bite/level/root; plus SELECT→EDIT step-edit |
 | Drums | fully | rack programming per sound, live record (GLO twice), step-edit any part, mixer mute/solo |
 

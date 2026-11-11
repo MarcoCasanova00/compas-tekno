@@ -413,11 +413,13 @@ const char *board_song_title(unsigned slot)
 }
 const char *board_groove_title(unsigned index)
 {
-    static const char *const lead_titles[4]={
-        "LEAD FLUTE", "LEAD HYPNOTIC", "LEAD DESERT", "LEAD XLEAD"
+    static const char *const lead_titles[10]={
+        "LEAD FLUTE", "LEAD HYPNOTIC", "LEAD DESERT", "LEAD XLEAD",
+        "LEAD EGYPTIAN", "LEAD GYPSY", "LEAD SNAKE",
+        "LEAD FLUTE TRIPLET", "LEAD GYPSY TRIPLET", "LEAD SNAKE TRIPLET"
     };
     if(index<BOARD_GROOVE_PRESETS) return groove_titles[index];
-    if(index-BOARD_GROOVE_PRESETS<4) return lead_titles[index-BOARD_GROOVE_PRESETS];
+    if(index-BOARD_GROOVE_PRESETS<10) return lead_titles[index-BOARD_GROOVE_PRESETS];
     return "RHYTHM";
 }
 unsigned board_lead_cue(unsigned index)

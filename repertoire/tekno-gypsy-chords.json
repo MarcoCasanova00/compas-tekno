@@ -1,0 +1,61 @@
+{
+ "title": "GYPSY · hungarian-minor caravan",
+ "composer": "fm1hypnotik theory · Compás TEKNO",
+ "edition": "Scale-based chord vamp + lead tab",
+ "source": "fm1hypnotik scale (GYPSY · hungarian-minor caravan)",
+ "scope": "16 bars, 4/4 @ 155 BPM, chords + lead",
+ "ppq": 24,
+ "meter": [
+  4,
+  4
+ ],
+ "preview_bpm": 155,
+ "form": [
+  {
+   "name": "INTRO",
+   "bar": 1
+  },
+  {
+   "name": "VERSE",
+   "bar": 5
+  },
+  {
+   "name": "REFRAIN",
+   "bar": 9
+  },
+  {
+   "name": "CODA",
+   "bar": 13
+  }
+ ],
+ "parts": [
+  {
+   "title": "Gypsy chords",
+   "program": 74,
+   "velocity_marks": [
+    [
+     0,
+     105
+    ]
+   ],
+   "bars": [
+    "A3+C4+E4:96",
+    "B3+D#4+F4:72 F4+E4+D#4:24",
+    "E4+G#4+B4:96",
+    "A3+C4+E4:72 G#4+E4+C4:24",
+    "A4+C5+E5:48 E4+C5+A4:48",
+    "B4+D#5+F5:48 F5+E5+D#5:48",
+    "E5+G#5+B5:48 B4+G#5+E5:48",
+    "A4+C5+E5:72 G#5+E5+C5:24",
+    "C5+E5+A5:36 A4+C5+E5:36 E5+A5+C6:24",
+    "D#5+F5+B5:48 G#5+E5+B4:48",
+    "G#5+B5+E6:48 E5+G#5+B5:48",
+    "A5+C6+E6:72 G#5+E5+C5:24",
+    "E6+G#6+B6:48 A5+E6+C6:48",
+    "F6+D#6+B5:48 E6+C6+A5:48",
+    "G#6+B6+E6:72 B5+G#5+E5:24",
+    "A5+C6+E6:96"
+   ]
+  }
+ ]
+}

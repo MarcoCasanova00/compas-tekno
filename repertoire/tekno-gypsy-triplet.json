@@ -1,0 +1,61 @@
+{
+ "title": "GYPSY · TRIPLET",
+ "composer": "fm1hypnotik theory · Compás TEKNO",
+ "edition": "Triplet-feel variant (32-tick divisions)",
+ "source": "fm1hypnotik triplet (GYPSY · TRIPLET)",
+ "scope": "16 bars, 4/4 @155, triplet phrasing",
+ "ppq": 24,
+ "meter": [
+  4,
+  4
+ ],
+ "preview_bpm": 155,
+ "form": [
+  {
+   "name": "INTRO",
+   "bar": 1
+  },
+  {
+   "name": "VERSE",
+   "bar": 5
+  },
+  {
+   "name": "REFRAIN",
+   "bar": 9
+  },
+  {
+   "name": "CODA",
+   "bar": 13
+  }
+ ],
+ "parts": [
+  {
+   "title": "Gypsy triplet",
+   "program": 74,
+   "velocity_marks": [
+    [
+     0,
+     105
+    ]
+   ],
+   "bars": [
+    "A4:32 C5:32 E5:32",
+    "B4:32 D#5:32 F5:32",
+    "E5:32 G#5:32 B5:32",
+    "A4:96",
+    "A4:16 C5:16 E5:32 A5:32",
+    "B4:16 D#5:16 F5:32 B5:32",
+    "E5:32 G#5:32 B5:16 G#5:16",
+    "A4:96",
+    "C5:16 E5:16 A5:32 E5:32",
+    "D#5:16 F5:16 B5:32 F5:32",
+    "G#5:32 E5:32 B4:16 G#4:16",
+    "A4:96",
+    "E5:32 C5:32 A4:32",
+    "F5:32 D#5:32 B4:32",
+    "G#5:32 E5:32 B4:32",
+    "A4:96"
+   ]
+  }
+ ]
+}

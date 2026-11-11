@@ -626,5 +626,47 @@
   "catalog": "tekno-xlead-arp",
   "backing": "tekno-xlead-arp.json",
   "bpm": 155
+ },
+ {
+  "id": "tekno-egyptian-chords",
+  "title": "Egyptian · double-harmonic vamp",
+  "catalog": "tekno-egyptian-chords",
+  "backing": "tekno-egyptian-chords.json",
+  "bpm": 155
+ },
+ {
+  "id": "tekno-gypsy-chords",
+  "title": "Gypsy · hungarian-minor caravan",
+  "catalog": "tekno-gypsy-chords",
+  "backing": "tekno-gypsy-chords.json",
+  "bpm": 155
+ },
+ {
+  "id": "tekno-snake-chords",
+  "title": "Snake Charmer · hijaz",
+  "catalog": "tekno-snake-chords",
+  "backing": "tekno-snake-chords.json",
+  "bpm": 155
+ },
+ {
+  "id": "tekno-flute-triplet",
+  "title": "Flute · Triplet",
+  "catalog": "tekno-flute-triplet",
+  "backing": "tekno-flute-triplet.json",
+  "bpm": 155
+ },
+ {
+  "id": "tekno-gypsy-triplet",
+  "title": "Gypsy · Triplet",
+  "catalog": "tekno-gypsy-triplet",
+  "backing": "tekno-gypsy-triplet.json",
+  "bpm": 155
+ },
+ {
+  "id": "tekno-snake-triplet",
+  "title": "Snake · Triplet",
+  "catalog": "tekno-snake-triplet",
+  "backing": "tekno-snake-triplet.json",
+  "bpm": 155
  }
 ]

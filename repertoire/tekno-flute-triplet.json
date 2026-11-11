@@ -1,0 +1,61 @@
+{
+ "title": "FLUTE · TRIPLET",
+ "composer": "fm1hypnotik theory · Compás TEKNO",
+ "edition": "Triplet-feel variant (32-tick divisions)",
+ "source": "fm1hypnotik triplet (FLUTE · TRIPLET)",
+ "scope": "16 bars, 4/4 @155, triplet phrasing",
+ "ppq": 24,
+ "meter": [
+  4,
+  4
+ ],
+ "preview_bpm": 155,
+ "form": [
+  {
+   "name": "INTRO",
+   "bar": 1
+  },
+  {
+   "name": "VERSE",
+   "bar": 5
+  },
+  {
+   "name": "REFRAIN",
+   "bar": 9
+  },
+  {
+   "name": "CODA",
+   "bar": 13
+  }
+ ],
+ "parts": [
+  {
+   "title": "Flute triplet",
+   "program": 74,
+   "velocity_marks": [
+    [
+     0,
+     105
+    ]
+   ],
+   "bars": [
+    "E4:32 G4:32 B4:32",
+    "F4:32 B4:32 E5:32",
+    "G4:32 F4:32 E4:32",
+    "E4:96",
+    "E4:16 G4:16 B4:32 E5:32",
+    "F4:16 E5:16 B4:32 G4:32",
+    "G4:32 E4:32 B4:16 G4:16",
+    "E4:96",
+    "B4:16 E5:16 G5:32 E5:32",
+    "F4:16 B4:16 E5:32 B4:32",
+    "G4:32 F4:32 E4:16 D4:16",
+    "E4:96",
+    "G4:32 F4:32 E4:32",
+    "B4:32 G4:32 F4:32",
+    "E4:16 F4:16 G4:32 B4:32",
+    "E4:96"
+   ]
+  }
+ ]
+}
