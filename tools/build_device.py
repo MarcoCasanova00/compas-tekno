@@ -67,4 +67,12 @@ subprocess.run([str(LD), "-T", str(BSP/"firmware/app.ld"), "-o", str(elf),
                 str(OUT/"device_bank.o")], check=True)
 subprocess.run([str(OBJCOPY), "-O", "binary", "-j", ".text", str(elf), str(OUT/"app.bin")], check=True)
 subprocess.run([str(OBJDUMP), "-d", str(elf)], stdout=open(OUT/"app.dis", "w"), check=True)
-print("linked", elf, "size", elf.stat().st_size, "| app.bin", (OUT/"app.bin").stat().st_size)
+# Flash budget guard: the FM-1_710 app slot is 0x8DFBC (581,564 B); fail the
+# build at 90% so the pin still fits with margin (packer hard-fails at 100%).
+APP_SLOT = 0x8DFBC
+GUARD = int(APP_SLOT * 0.90)
+app_size = (OUT/"app.bin").stat().st_size
+if app_size > GUARD:
+    raise SystemExit(f"app.bin {app_size} B exceeds the 90% flash guard {GUARD} B (slot {APP_SLOT} B)")
+print("linked", elf, "size", elf.stat().st_size, "| app.bin", app_size,
+      f"({app_size/APP_SLOT*100:.1f}% of slot {APP_SLOT}, guard {GUARD})")

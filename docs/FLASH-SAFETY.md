@@ -9,7 +9,7 @@ the device already uses.
 | Guard | Status |
 |---|---|
 | Boot guard (two failed boots → chip boot mode / UBOOT, USB up) | kept — SDK/SPL path untouched |
-| Recovery gesture (OCT− + OCT+ held 5 s → boot mode) | kept at the boot/BOOT level; the Compás app does **not** implement or reuse it (verified: no long-press handling in `panel.c`) |
+| Recovery gesture (OCT− + OCT+ held 5 s → boot mode) | kept at the boot/BOOT level; the Compás app does **not** implement or reuse it. The only long-press in `panel.c` is the drone latch on drum pads (~0.8 s, pads only — never the OCT± chord) |
 | Update entry on USB-MIDI (the app always accepts a package) | kept — Felucca loader `firmware/compas-tekno-ota.bin` |
 | Watchdog (~8 s) | kept — `fm1_wdt_feed()` in the main loop |
 | RecoveryGuard + supervisor watermark | kept (`board/fm1.c`, `.noinit`) |
@@ -20,7 +20,7 @@ the device already uses.
 
 - Container: 2 entries (flash.bin + ota.bin), both CRC16-valid; chip marker `AC791N`
 - App slot `0x8DFBC` (581,564 B), app CRC16 valid; stripped app == `app.bin`
-- App size 400,484 B → **~181 KB headroom**
+- App size 405,304 B → **~172 KB headroom** (69.7% of the 581,564 B slot; the device build now fails at a 90% guard)
 - Deterministic rebuild: the package is reproduced byte-identical from committed sources
 - Preserve area `0x90000..0x93000` is never written by the update path
 
