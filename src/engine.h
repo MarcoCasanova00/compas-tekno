@@ -22,4 +22,5 @@ int16_t *cp_pcm(void);
 uint8_t *cp_blob(void);
 uint32_t cp_state_bytes(void);
 unsigned cp_bass_style(void);
+void cp_bass_preview(int8_t *out,unsigned style,unsigned cut,unsigned bite);
 #endif

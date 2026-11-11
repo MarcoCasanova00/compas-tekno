@@ -20,7 +20,7 @@ clang --target=wasm32 -fuse-ld=lld -Oz -std=c11 -Wall -Wextra \
   -Wl,--export=web_now_ms -Wl,--export=web_seq_playing \
   -Wl,--export=web_kb_mode -Wl,--export=web_cmd -Wl,--export=web_tempo \
   -Wl,--export=web_score -Wl,--export=web_score_count -Wl,--export=web_score_title \
-  -Wl,--export=web_bass_style -Wl,--export=web_board \
+  -Wl,--export=web_bass_style -Wl,--export=web_board -Wl,--export=web_bass_preview -Wl,--export=web_preview_buf \
   -Wl,--export=web_study -Wl,--export=web_mutes -Wl,--export=_initialize \
   web/emu-fw/emu_full.c src/engine.c board/board.c board/panel.c board/piano.c \
   -o "$OUT" 2>&1 | grep -v "^ \|^web/emu-fw/emu_full.c:.*warning: conflicting types" || true

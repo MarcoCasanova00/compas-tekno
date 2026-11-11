@@ -354,6 +354,16 @@ static inline int32_t moog_filter(int32_t in, int32_t cutoff, int32_t res,
     int32_t o2 = moog_stage(o1, cutoff, s2);
     return moog_stage(o2, cutoff, s3);
 }
+/* Gentle 2-pole analog LP (state-variable) — keeps harmonics audible while
+ * retaining warmth. Used in series for a 4-pole feel without the heavy
+ * single-pole roll-off of the ladder stages. */
+static inline int32_t analog_lp2(int32_t x, int32_t cutoff, int32_t res,
+                                 int32_t *lp, int32_t *bp)
+{
+    *lp += ((cutoff * (*bp)) >> 8);
+    *bp += ((cutoff * (x - *lp - ((res * (*bp)) >> 8))) >> 8);
+    return *lp;
+}
 
 /* Trance lead (Da Hool "Love Parade" style): two detuned saws through a
  * band-pass state-variable filter, with a triangle LFO on the cutoff at a
@@ -372,15 +382,48 @@ static int32_t ensemble_brightness(int32_t envelope,int32_t tilt)
     return bright<0?0:bright>12?12:bright;
 }
 
-void cp_bass_preview(int8_t *out,unsigned acid,unsigned cut,unsigned bite)
+static int32_t bass_steady(unsigned style,unsigned cut,unsigned bite,uint32_t phase)
 {
     int32_t low=0, band=0;
-    int32_t brightness=ensemble_brightness(28672,ensemble_tilt(cut,bite));
-    /* One reference cycle at 172 Hz, following one filter settling cycle. */
+    switch(style) {
+    case BASS_ACID:
+        return acid_wave(phase<<2,38+(int32_t)cut/2,178-(int32_t)bite,&low,&band);
+    case BASS_MOOG: {
+        int32_t s0=0,s1=0,s2=0,s3=0;
+        int32_t core=saw(phase)+saw(phase*3u/2u)+saw(phase>>1)+tri(phase*2u)/2;
+        int32_t cutoff=240+cut*6+96;
+        int32_t res=120+bite;
+        int32_t lp=0,bp=0;
+        int32_t sig=analog_lp2(analog_lp2(core,cutoff,res,&lp,&bp),cutoff,res,&lp,&bp)+core/5;
+        if(sig>24000) sig=24000+(sig-24000)/2;
+        else if(sig<-24000) sig=-24000-(-24000-sig)/2;
+        return sig;
+    }
+    case BASS_LOVE_PARADE: {
+        int32_t sawA=(int32_t)(phase>>16)-32768;
+        int32_t sawB=(int32_t)((phase*5u/4u)>>16)-32768;
+        int32_t core=(sawA+sawB)/2+sawA/4;
+        int32_t cutoff=160+tri(phase<<1)/3+24;
+        int32_t damp=150-bite;
+        int32_t sig=trance_bp(core,cutoff,damp,&low,&band);
+        sig+=(sig*21)/256; sig+=core/8;
+        return sig;
+    }
+    default: {
+        uint32_t lfo=phase;
+        int32_t wobble=(int32_t)(tri(lfo)>>9);
+        int32_t breath=(int32_t)((phase*2654435761u)>>16)-32768;
+        int32_t bright=ensemble_brightness(28672,ensemble_tilt(cut,bite));
+        int32_t sig=(tri(phase)*13+tri(phase*3u/2u)*bright+breath/64)/20;
+        return sig*2;
+    }
+    }
+}
+void cp_bass_preview(int8_t *out,unsigned style,unsigned cut,unsigned bite)
+{
+    /* One reference cycle at ~172 Hz. */
     for(unsigned i=0; i<512u; ++i) {
-        uint32_t phase=i<<24;
-        int32_t value=acid?acid_wave(phase,38+(int32_t)cut/2,178-(int32_t)bite,&low,&band):
-            ensemble_wave(phase,phase*2u,brightness);
+        int32_t value=bass_steady(style,cut,bite,(uint32_t)i<<24);
         if(i>=256u && !(i&3u)) out[(i-256u)/4u]=(int8_t)(value/256);
     }
 }
@@ -394,9 +437,10 @@ static int32_t bass_sample(Voice *v)
         int32_t distance=(int32_t)bass.target-(int32_t)v->da;
         v->da=(uint32_t)((int32_t)v->da+distance/128);
         v->a+=v->da;
-        int32_t cutoff=10+bass.cut/2+(v->env>>10);
+        int32_t cutoff=14+bass.cut/2+(v->env>>8);
         int32_t damping=178-bass.bite;
         signal=acid_wave(v->a,cutoff,damping,&bass.low,&bass.band);
+        signal+=saw(v->a>>1)/5;   /* sub octave for weight */
     } else if(bass.style==BASS_LOVE_PARADE) {
         /* Two saws, one detuned; LFO moves the band-pass at quarter notes. */
         static uint32_t love_lfo, love_detune;
@@ -414,17 +458,23 @@ static int32_t bass_sample(Voice *v)
         signal += (signal * 21) / 256;   /* ~21% drive */
         signal += core/8;                /* keep some raw saw body */
     } else if(bass.style==BASS_MOOG) {
-        /* Minimoog: three saw oscillators (two slightly detuned + sub
-         * octave) through the ladder. Cutoff follows the envelope; the
-         * bite knob adds resonance. Rich, obviously not sine. */
-        static uint32_t moog_detune;
+        /* Minimoog-style: three detuned saws + a soft 2nd harmonic, through
+         * the ladder with a higher cutoff floor, then saturation. Slow
+         * drift mimics analog component instability. Clearly not a sine. */
+        static uint32_t moog_detune, analog_drift;
         moog_detune+=0x00030000u;
+        analog_drift+=(v->a>>16)+(v->b>>24)+0x00000111u;
+        uint32_t detune=moog_detune+((analog_drift>>8)&0x1FFu);
         v->a+=v->da; v->b+=v->db;
-        int32_t core=saw(v->a)+saw(v->b+moog_detune)+saw(v->a>>1);
-        int32_t cutoff=40+bass.cut*4+(v->env>>7);
-        int32_t res=96+bass.bite*2;
-        int32_t filtered=moog_filter(core,cutoff,res,&bass.s0,&bass.s1,&bass.s2,&bass.s3);
-        signal=filtered+core/8;   /* wet+dry: saw body stays through */
+        int32_t core=saw(v->a)+saw(v->b+detune)+saw(v->a>>1)+tri(v->a*2u)/2;
+        int32_t cutoff=240+bass.cut*6+(v->env>>5);
+        int32_t res=120+bass.bite;
+        int32_t lp=0,bp=0;
+        int32_t filtered=analog_lp2(analog_lp2(core,cutoff,res,&lp,&bp),cutoff,res,&lp,&bp);
+        signal=filtered+core/5;
+        /* soft saturator: keeps the drive while avoiding harsh aliasing */
+        if(signal>24000) signal=24000+(signal-24000)/2;
+        else if(signal<-24000) signal=-24000-(-24000-signal)/2;
     } else {
         /* Shamanic breathy flute: soft triangle partials, slow vibrato
          * (~5.4 Hz), a gentle attack ramp and a thin breath-noise bed. */
@@ -448,7 +498,7 @@ static int32_t bass_sample(Voice *v)
     static int32_t bass_hp;
     int32_t hp=out-bass_hp;
     bass_hp+=hp/64;
-    return hp*2/3;
+    return hp/2;
 }
 #endif
 static int32_t sample(Voice *v) {
@@ -593,6 +643,10 @@ uint32_t cp_render(uint32_t count) {
         }
         if(mix>32767 || mix<-32768) board_mix_clip();
         mix=(mix>32767 ? 32767 : mix < -32768 ? -32768 : mix)/2 + board_rack_sample();
+        /* soft crest limiter: keeps the pcm output within ~12-bit range
+         * (float ceiling ~1.0) without flattening the groove dynamics */
+        if(mix>3000) mix=3000+((mix-3000)/3);
+        else if(mix<-3000) mix=-3000-((-3000-mix)/3);
         if(mix>32767 || mix<-32768) board_mix_clip();
 #endif
         s.phase+=s.p.bpm*4u;

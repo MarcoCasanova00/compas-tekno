@@ -305,6 +305,9 @@ uint32_t web_cmd(uint32_t cmd, uint32_t a, uint32_t b) {
 }
 uint32_t web_board(uint32_t cmd, uint32_t a, uint32_t b) { return board_submit((BoardCommand){cmd, a, b}); }
 uint32_t web_bass_style(void) { return cp_bass_style(); }
+void web_bass_preview(int8_t *out, unsigned style) { cp_bass_preview(out, style, 50, 50); }
+static int8_t web_pv_buf[512];
+uint32_t web_preview_buf(void) { return (uint32_t)(uintptr_t)web_pv_buf; }
 uint32_t web_score(uint32_t id) { return board_submit((BoardCommand){BOARD_PIANO_CUE, id, 0}); }
 uint32_t web_score_count(void) { return piano_count(); }
 /* Tekno score titles for the browser selector (ids 29..31, appended to
