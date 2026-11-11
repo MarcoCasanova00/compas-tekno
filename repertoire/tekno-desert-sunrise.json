@@ -1,0 +1,61 @@
+{
+ "title": "DESERT TRIBE · Egyptian spiral",
+ "composer": "SANTO CENTER theory · Compás TEKNO",
+ "edition": "Tekno score (phrygian / dorian b2 / double-harmonic)",
+ "source": "SANTO CENTER lead theory (DESERT TRIBE · Egyptian spiral)",
+ "scope": "16 bars, 4/4 @ 155 BPM, solo FM-1 lead",
+ "ppq": 24,
+ "meter": [
+  4,
+  4
+ ],
+ "preview_bpm": 155,
+ "form": [
+  {
+   "name": "INTRO",
+   "bar": 1
+  },
+  {
+   "name": "VERSE",
+   "bar": 5
+  },
+  {
+   "name": "REFRAIN",
+   "bar": 9
+  },
+  {
+   "name": "CODA",
+   "bar": 13
+  }
+ ],
+ "parts": [
+  {
+   "title": "Desert spiral sunrise",
+   "program": 74,
+   "velocity_marks": [
+    [
+     0,
+     100
+    ]
+   ],
+   "bars": [
+    "E5:48 G#5:24 B5:24",
+    "A5:48 G#5:24 F5:24",
+    "E5:72 F5:24",
+    "E5:96",
+    "B5:48 A5:24 G#5:24",
+    "F5:48 E5:24 D#5:24",
+    "E5:72 B5:24",
+    "E5:96",
+    "G#5:48 B5:24 C6:24",
+    "B5:48 A5:24 G#5:24",
+    "A5:48 G#5:24 F5:24",
+    "E5:96",
+    "D#5:48 F5:24 G#5:24",
+    "B5:48 G#5:24 F5:24",
+    "E5:72 D#5:24",
+    "E5:96"
+   ]
+  }
+ ]
+}

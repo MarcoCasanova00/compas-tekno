@@ -17,6 +17,9 @@ void board_hanan_step(unsigned step, unsigned accented);
 void board_kumbia_export(uint8_t settings[KUMBIA_SETTINGS]);
 int board_kumbia_restore(const uint8_t settings[KUMBIA_SETTINGS]);
 #endif
+/* Tekno scores (piano pieces) — available on every build; 66 stays clear of
+ * the HANAN command block (61..65). */
+enum { BOARD_PIANO_CUE=66 };
 enum { RACK_HIT_STRENGTH, RACK_ACCENT_STRENGTH, RACK_LEVEL };
 enum { BOARD_OVERLAY_ALL=4 }; /* BOARD_OVERLAY_LEVEL lane: shift all four lanes, b=delta+128 */
 enum { BASS_ENSEMBLE, BASS_ACID };

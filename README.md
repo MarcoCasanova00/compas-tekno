@@ -41,6 +41,9 @@ know, re-voiced and re-skinned. **A light fork, end to end.**
   with save/recall.
 - **Browser emulator** — the full firmware (board+panel+stage+engine) compiled
   to WASM runs in your browser, same code path as the device.
+- **Tekno scores** — three SANTO CENTER-theory lead pieces (phrygian flute,
+  dorian-b2 hypnotic ostinato, egyptian spiral) selectable from the emulator's
+  SCORES menu: 16-bar compact tables, ~no flash cost.
 
 ## ▶️ Try it in the browser
 

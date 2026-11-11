@@ -313,10 +313,12 @@ unsigned piano_can_hold(void)
     return bar>=3 && (bar&1u) && score->bars[bar]-score->bars[bar-2]==2u*score->pulse_ticks*score->beats;
 }
 
-#ifdef COMPAS_EMU_STORE
+unsigned piano_count(void)
+{
+    return (unsigned)(sizeof scores / sizeof *scores);
+}
 unsigned piano_id_valid(unsigned id, unsigned guide)
 {
     if(!id) return !guide;
-    return id<=sizeof scores/sizeof *scores && (!guide || scores[id-1].guide_count);
+    return id<=piano_count() && (!guide || scores[id-1].guide_count);
 }
-#endif

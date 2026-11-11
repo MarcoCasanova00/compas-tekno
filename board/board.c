@@ -994,6 +994,23 @@ static unsigned apply(BoardCommand cmd)
         if (cmd.a>1) return CP_RANGE;
         accent=cmd.a;
         return CP_OK;
+    case BOARD_PIANO_CUE:
+        /* Start a score (piano piece) from the compiled table. Scores play
+         * like a saved piano song: pick the piece, then PLAY. Low flash
+         * cost — the tables are shared with the existing piano player. */
+        if(!piano_id_valid(cmd.a,0) || cp_status(CP_PLAYING)) return CP_RANGE;
+        queued_song=SET_SLOTS;queued_groove=BOARD_GROOVE_PRESETS;
+        active_part=queued_part=PART_NONE;
+        queued_energy=3;next_bar=0;
+        phrases=remaining_phrases=0;
+        overlay_hits=groove_count_enabled=0;
+        board_roll_keys=0;
+        clear_recording();
+        rack_sequence=board_rhythm_only=0;
+        for(unsigned r=0;r<CP_ROLES;++r) assigned[r]=0;
+        board_piano_selected=cmd.a;
+        piano_running=piano_hold=piano_guide=piano_perc_muted=0;
+        return CP_OK;
     case CP_HIT:
         if(board_piano_selected) return CP_NO_ROLE;
         return cp_command(CP_HIT,cmd.a,accent ? 124 : 92);

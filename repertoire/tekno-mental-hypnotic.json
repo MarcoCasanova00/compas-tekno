@@ -1,0 +1,61 @@
+{
+ "title": "MENTAL HYPNOTIC · Dorian b2",
+ "composer": "SANTO CENTER theory · Compás TEKNO",
+ "edition": "Tekno score (phrygian / dorian b2 / double-harmonic)",
+ "source": "SANTO CENTER lead theory (MENTAL HYPNOTIC · Dorian b2)",
+ "scope": "16 bars, 4/4 @ 155 BPM, solo FM-1 lead",
+ "ppq": 24,
+ "meter": [
+  4,
+  4
+ ],
+ "preview_bpm": 155,
+ "form": [
+  {
+   "name": "INTRO",
+   "bar": 1
+  },
+  {
+   "name": "VERSE",
+   "bar": 5
+  },
+  {
+   "name": "REFRAIN",
+   "bar": 9
+  },
+  {
+   "name": "CODA",
+   "bar": 13
+  }
+ ],
+ "parts": [
+  {
+   "title": "Mental hypnotic ostinato",
+   "program": 74,
+   "velocity_marks": [
+    [
+     0,
+     100
+    ]
+   ],
+   "bars": [
+    "D5:12 Eb5:12 G5:12 A5:12 G5:12 Eb5:12 D5:12 R:12",
+    "D5:24 G5:24 A5:24 G5:24",
+    "D5:12 Eb5:12 G5:12 Eb5:12 D5:12 R:12 A5:12 R:12",
+    "D5:96",
+    "G5:24 A5:24 G5:24 Eb5:24",
+    "A5:24 G5:24 Eb5:24 D5:24",
+    "D5:24 Eb5:24 G5:24 A5:24",
+    "D5:48 A5:24 R:24",
+    "A5:24 G5:24 Eb5:24 G5:24",
+    "G5:24 A5:24 G5:24 Eb5:24",
+    "D5:24 Eb5:24 G5:24 Eb5:24",
+    "D5:72 A5:24",
+    "G5:24 Eb5:24 D5:24 Eb5:24",
+    "A5:24 G5:24 Eb5:24 D5:24",
+    "D5:48 G5:24 R:24",
+    "D5:96"
+   ]
+  }
+ ]
+}

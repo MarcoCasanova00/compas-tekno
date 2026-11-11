@@ -299,6 +299,20 @@ uint32_t web_now_ms(void) { return host_ms; }
 uint32_t web_seq_playing(void) { return cp_status(CP_PLAYING); }
 uint32_t web_kb_mode(void) { return 0; }
 uint32_t web_cmd(uint32_t cmd, uint32_t a, uint32_t b) { return cp_command(cmd, a, b); }
+uint32_t web_score(uint32_t id) { return board_submit((BoardCommand){BOARD_PIANO_CUE, id, 0}); }
+uint32_t web_score_count(void) { return piano_count(); }
+/* Tekno score titles for the browser selector (ids 29..31, appended to
+ * repertoire/board-scores.json). Score tables live in the same piano.inc
+ * the device uses — this is UI metadata only. */
+uint32_t web_score_title(uint32_t id) {
+    static const char *const titles[] = {
+        [29] = "TRIBAL TEKNO · Phrygian flute",
+        [30] = "MENTAL HYPNOTIC · Dorian b2",
+        [31] = "DESERT TRIBE · Egyptian spiral",
+    };
+    if (id >= 29 && id <= 31 && titles[id]) return (uint32_t)(uintptr_t)titles[id];
+    return 0;
+}
 uint32_t web_tempo(void) { return cp_status(CP_TEMPO); }
 uint32_t web_study(void) { return cp_status(CP_STUDY_ID); }
 void _initialize(void) {}   /* WASI reactor no-op for the worklet's guarded call */

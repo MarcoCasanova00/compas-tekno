@@ -7,6 +7,8 @@ enum { PIANO_FORM_COUNT_IN, PIANO_FORM_INTRO, PIANO_FORM_VERSE, PIANO_FORM_REFRA
 /* Saved score IDs follow the append-only repertoire/board-scores.json registry. */
 enum { PIANO_SCORE_CIELITO=7, PIANO_SCORE_CUCARACHA=8, PIANO_SCORE_TEODORA=20, PIANO_SCORE_JURAME=23, PIANO_SCORE_JURAME_SONG=24 };
 void piano_start(unsigned id,unsigned count_in);
+unsigned piano_count(void);
+unsigned piano_id_valid(unsigned id, unsigned guide);
 /* Twelve nearest keys: -6 through +5 semitones; zero retains printed pitch. */
 void piano_transpose(int semitones);
 unsigned piano_step(void);
